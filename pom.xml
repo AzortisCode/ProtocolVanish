@@ -42,6 +42,11 @@
             <version>4.4.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.comphenix.packetwrapper</groupId>
+            <artifactId>PacketWrapper</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
     <build>
