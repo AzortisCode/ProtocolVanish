@@ -24,13 +24,13 @@ public class ServerListPacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         WrappedServerPing ping = event.getPacket().getServerPings().read(0);
 
-        Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
+        Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
         // TODO add check to see if the online player count needs to be changed
-        int vanishedPlayerCount = vanishedPlayers.size();
+        int vanishedPlayerCount = onlineVanishedPlayers.size();
         ping.setPlayersOnline(Bukkit.getOnlinePlayers().size() - vanishedPlayerCount);
         //TODO add check to see if the player list needs to be changed
         List<WrappedGameProfile> wrappedGameProfiles = new ArrayList<>(ping.getPlayers());
-        wrappedGameProfiles.removeIf((WrappedGameProfile wrappedGameProfile) -> vanishedPlayers.contains(wrappedGameProfile.getUUID()));
+        wrappedGameProfiles.removeIf((WrappedGameProfile wrappedGameProfile) -> onlineVanishedPlayers.contains(wrappedGameProfile.getUUID()));
         ping.setPlayers(wrappedGameProfiles);
     }
 }
