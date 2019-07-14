@@ -1,6 +1,7 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.visibility.VanishedPlayer;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -24,7 +25,13 @@ public class PlayerInfoPacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
         List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
-        playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID()));
+        playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
+            if(onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID())){
+                VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(playerInfoData.getProfile().getUUID());
+                return vanishedPlayer.isHidden(event.getPlayer());
+            }
+            return false;
+        });
         event.getPacket().getPlayerInfoDataLists().write(0, playerInfoDataList);
     }
 }

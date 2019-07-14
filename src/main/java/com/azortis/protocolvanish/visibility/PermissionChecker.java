@@ -11,6 +11,10 @@ public class PermissionChecker {
         this.plugin = plugin;
     }
 
+    public boolean hasPermissionToVanish(Player player){
+        return getPermissionLevel(player, "use") > 0;
+    }
+
     public boolean hasPermissionToSee(Player hider, Player viewer){
         int hiderLevel = getPermissionLevel(hider, "use");
         int viewerLevel = getPermissionLevel(viewer, "see");

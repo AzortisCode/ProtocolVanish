@@ -28,7 +28,15 @@ public class VisibilityManager {
 
     public void setVanished(UUID uuid, boolean vanished){
         if(vanishedPlayers.contains(uuid) && vanished)return;
-
+        if(vanished){
+            vanishedPlayers.add(uuid);
+            vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid)));
+            playerHider.hidePlayer(uuid);
+        }else{
+            vanishedPlayers.remove(uuid);
+            playerHider.showPlayer(uuid);
+            vanishedPlayerMap.remove(uuid);
+        }
     }
 
     public boolean isVanished(UUID uuid){
