@@ -21,7 +21,7 @@ public class VanishStateManager {
     private ProtocolVanish plugin;
 
     public VanishStateManager(ProtocolVanish plugin){
-
+        this.plugin = plugin;
     }
 
     public void vanishPlayer(UUID uuid){
