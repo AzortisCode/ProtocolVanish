@@ -5,6 +5,7 @@ import com.azortis.azortislib.command.CommandBuilder;
 import com.azortis.azortislib.command.IAlCommandExecutor;
 import com.azortis.azortislib.command.IAlTabCompleter;
 import com.azortis.protocolvanish.ProtocolVanish;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,8 +29,10 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
         Player p = (Player)commandSender;
         if(plugin.getVisibilityManager().isVanished(p.getUniqueId())){
             plugin.getVisibilityManager().setVanished(p.getUniqueId(), false);
+            commandSender.sendMessage(ChatColor.GREEN + "You're no longer vanished!");
         }else{
             plugin.getVisibilityManager().setVanished(p.getUniqueId(), true);
+            commandSender.sendMessage(ChatColor.GREEN + "You're vanished!");
         }
         return true;
     }
