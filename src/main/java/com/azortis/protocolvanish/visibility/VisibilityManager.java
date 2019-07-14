@@ -13,15 +13,15 @@ import java.util.UUID;
 
 public class VisibilityManager {
 
+    private ProtocolVanish plugin;
     private PlayerHider playerHider;
 
     private Collection<UUID> vanishedPlayers = new ArrayList<>();
     private HashMap<UUID, VanishedPlayer> vanishedPlayerMap = new HashMap<>();
-    private PermissionChecker permissionChecker;
 
     public VisibilityManager(ProtocolVanish plugin){
+        this.plugin = plugin;
         this.playerHider = new PlayerHider(plugin);
-        this.permissionChecker = new PermissionChecker(plugin);
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerListPacketListener(plugin));
     }
@@ -30,7 +30,7 @@ public class VisibilityManager {
         if(vanishedPlayers.contains(uuid) && vanished)return;
         if(vanished){
             vanishedPlayers.add(uuid);
-            vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid)));
+            vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
             playerHider.hidePlayer(uuid);
         }else{
             vanishedPlayers.remove(uuid);
@@ -56,8 +56,5 @@ public class VisibilityManager {
     public VanishedPlayer getVanishedPlayer(UUID uuid){
         return vanishedPlayerMap.get(uuid);
     }
-
-    public PermissionChecker getPermissionChecker() {
-        return permissionChecker;
-    }
+    
 }
