@@ -1,12 +1,15 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.comphenix.packetwrapper.WrapperPlayServerPlayerInfo;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.PlayerInfoData;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public class PlayerInfoPacketListener extends PacketAdapter {
 
@@ -19,7 +22,9 @@ public class PlayerInfoPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        WrapperPlayServerPlayerInfo wpspi = new WrapperPlayServerPlayerInfo();
-        
+        Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
+        List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
+        playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> vanishedPlayers.contains(playerInfoData.getProfile().getUUID()));
+        event.getPacket().getPlayerInfoDataLists().write(0, playerInfoDataList);
     }
 }
