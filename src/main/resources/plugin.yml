@@ -1,5 +1,5 @@
 name: ProtocolVanish
 authors: [YourPalJake, X1XX]
 main: com.azortis.protocolvanish.ProtocolVanish
-version: v1.0
+version: 1.0
 depend: [ProtocolLib]

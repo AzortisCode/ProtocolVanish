@@ -1,6 +1,7 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.visibility.packetlisteners.PlayerInfoPacketListener;
 import com.azortis.protocolvanish.visibility.packetlisteners.ServerListPacketListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -14,16 +15,17 @@ import java.util.UUID;
 public class VisibilityManager {
 
     private ProtocolVanish plugin;
-    private PlayerHider playerHider;
+    private VanishStateManager vanishStateManager;
 
     private Collection<UUID> vanishedPlayers = new ArrayList<>();
     private HashMap<UUID, VanishedPlayer> vanishedPlayerMap = new HashMap<>();
 
     public VisibilityManager(ProtocolVanish plugin){
         this.plugin = plugin;
-        this.playerHider = new PlayerHider(plugin);
+        this.vanishStateManager = new VanishStateManager(plugin);
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerListPacketListener(plugin));
+        protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
     }
 
     public void setVanished(UUID uuid, boolean vanished){
@@ -31,10 +33,10 @@ public class VisibilityManager {
         if(vanished){
             vanishedPlayers.add(uuid);
             vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
-            playerHider.hidePlayer(uuid);
+            vanishStateManager.vanishPlayer(uuid);
         }else{
             vanishedPlayers.remove(uuid);
-            playerHider.showPlayer(uuid);
+            vanishStateManager.unVanishPlayer(uuid);
             vanishedPlayerMap.remove(uuid);
         }
     }

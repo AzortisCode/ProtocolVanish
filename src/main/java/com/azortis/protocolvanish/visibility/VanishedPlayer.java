@@ -21,26 +21,27 @@ public class VanishedPlayer {
         return player;
     }
 
-    public boolean isHidden(Player viewer){
+    public boolean isVanished(Player viewer){
         return hiddenFromViewers.contains(viewer);
     }
 
     /**
-     * Set the player hidden from the viewer
+     * Set the player vanished from the viewer
      *
      * @param viewer The viewer
-     * @param hidden If the player should be hidden
+     * @param vanished If the player should be vanished
      * @return If the state has changed
      */
-    public boolean setHidden(Player viewer, boolean hidden){
-        if(hiddenFromViewers.contains(viewer) && hidden)return false;
-        if(!hiddenFromViewers.contains(viewer) && hidden){
+    public boolean setVanished(Player viewer, boolean vanished){
+        if(viewer == player)return false;
+        if(hiddenFromViewers.contains(viewer) && vanished)return false;
+        if(!hiddenFromViewers.contains(viewer) && vanished){
             if(plugin.getPermissionManager().hasPermissionToSee(this.player, viewer)){
                 return false;
             }
             hiddenFromViewers.add(viewer);
             return true;
-        }else if(hiddenFromViewers.contains(viewer) && !hidden){
+        }else if(hiddenFromViewers.contains(viewer) && !vanished){
             hiddenFromViewers.remove(viewer);
             return true;
         }

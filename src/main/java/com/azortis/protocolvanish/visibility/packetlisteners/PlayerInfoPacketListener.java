@@ -28,7 +28,7 @@ public class PlayerInfoPacketListener extends PacketAdapter {
         playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
             if(onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID())){
                 VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(playerInfoData.getProfile().getUUID());
-                return vanishedPlayer.isHidden(event.getPlayer());
+                return vanishedPlayer.isVanished(event.getPlayer());
             }
             return false;
         });
