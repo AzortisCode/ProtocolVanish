@@ -56,5 +56,5 @@ public class VisibilityManager {
     public VanishedPlayer getVanishedPlayer(UUID uuid){
         return vanishedPlayerMap.get(uuid);
     }
-    
+
 }
