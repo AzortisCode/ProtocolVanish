@@ -16,7 +16,7 @@ public class ServerListPacketListener extends PacketAdapter {
     private ProtocolVanish plugin;
 
     public ServerListPacketListener(ProtocolVanish plugin){
-        super(plugin, ListenerPriority.NORMAL, PacketType.Status.Server.SERVER_INFO);
+        super(plugin, ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO);
         this.plugin = plugin;
     }
 

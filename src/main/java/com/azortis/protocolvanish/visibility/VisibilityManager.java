@@ -3,6 +3,7 @@ package com.azortis.protocolvanish.visibility;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.visibility.packetlisteners.PlayerInfoPacketListener;
 import com.azortis.protocolvanish.visibility.packetlisteners.ServerListPacketListener;
+import com.azortis.protocolvanish.visibility.packetlisteners.TabCompletePacketListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
@@ -26,6 +27,7 @@ public class VisibilityManager {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerListPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
+        protocolManager.addPacketListener(new TabCompletePacketListener(plugin));
     }
 
     public void setVanished(UUID uuid, boolean vanished){

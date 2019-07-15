@@ -41,7 +41,7 @@ public class VisibilityChanger {
 
     private void sendSpawnPlayerPacket(Player receiver, Player vanishedPlayer){
         if(ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)){
-            ProtocolLibrary.getProtocolManager().updateEntity(vanishedPlayer, Collections.singletonList(vanishedPlayer));
+            ProtocolLibrary.getProtocolManager().updateEntity(vanishedPlayer, Collections.singletonList(receiver));
         }
     }
 
@@ -65,7 +65,7 @@ public class VisibilityChanger {
 
         int ping = plugin.getAzortisLib().getCraftManager().getPlayer().getPing(vanishedPlayer);
         GameMode gameMode = vanishedPlayer.getGameMode();
-        PlayerInfoData pid = new PlayerInfoData(WrappedGameProfile.fromPlayer(vanishedPlayer), ping, EnumWrappers.NativeGameMode.fromBukkit(gameMode), WrappedChatComponent.fromText(vanishedPlayer.getDisplayName()));
+        PlayerInfoData pid = new PlayerInfoData(WrappedGameProfile.fromPlayer(vanishedPlayer), ping, EnumWrappers.NativeGameMode.fromBukkit(gameMode), WrappedChatComponent.fromText(vanishedPlayer.getPlayerListName()));
         packetContainer.getPlayerInfoDataLists().write(0, Collections.singletonList(pid));
         try{
             ProtocolLibrary.getProtocolManager().sendServerPacket(receiver, packetContainer);
