@@ -19,12 +19,16 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.visibility.packetlisteners.GeneralEntityPacketListener;
 import com.azortis.protocolvanish.visibility.packetlisteners.PlayerInfoPacketListener;
 import com.azortis.protocolvanish.visibility.packetlisteners.ServerListPacketListener;
 import com.azortis.protocolvanish.visibility.packetlisteners.TabCompletePacketListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,6 +50,7 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new ServerListPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new TabCompletePacketListener(plugin));
+        protocolManager.addPacketListener(new GeneralEntityPacketListener(plugin));
     }
 
     public void setVanished(UUID uuid, boolean vanished){
@@ -59,6 +64,15 @@ public class VisibilityManager {
             visibilityChanger.showPlayer(uuid);
             vanishedPlayerMap.remove(uuid);
         }
+    }
+
+    public Player getPlayerFromEntityID(int entityId, World world){
+        Entity entity = ProtocolLibrary.getProtocolManager().getEntityFromID(world, entityId);
+
+        if(entity instanceof Player){
+            return (Player)entity;
+        }
+        return null;
     }
 
     public boolean isVanished(UUID uuid){

@@ -1,3 +1,10 @@
 {
-
+  "command": {
+    "name": "vanish",
+    "description": "Vanish yourself to other players!",
+    "usage": "&c/vanish [On|Off]",
+    "aliases": [
+      "v"
+    ]
+  }
 }

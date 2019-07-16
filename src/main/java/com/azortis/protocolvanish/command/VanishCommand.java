@@ -45,14 +45,19 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
     @Override
     public boolean onCommand(CommandSender commandSender, AlCommand alCommand, String s, String[] strings) {
         Player p = (Player)commandSender;
-        if(plugin.getVisibilityManager().isVanished(p.getUniqueId())){
-            plugin.getVisibilityManager().setVanished(p.getUniqueId(), false);
-            commandSender.sendMessage(ChatColor.GREEN + "You're no longer vanished!");
+        if(plugin.getPermissionManager().hasPermissionToVanish(p)) {
+            if (plugin.getVisibilityManager().isVanished(p.getUniqueId())) {
+                plugin.getVisibilityManager().setVanished(p.getUniqueId(), false);
+                commandSender.sendMessage(ChatColor.GREEN + "You're no longer vanished!");
+            } else {
+                plugin.getVisibilityManager().setVanished(p.getUniqueId(), true);
+                commandSender.sendMessage(ChatColor.GREEN + "You're vanished!");
+            }
+            return true;
         }else{
-            plugin.getVisibilityManager().setVanished(p.getUniqueId(), true);
-            commandSender.sendMessage(ChatColor.GREEN + "You're vanished!");
+            p.sendMessage(ChatColor.RED + "You have no permission to perform this!");
         }
-        return true;
+        return false;
     }
 
     @Override
