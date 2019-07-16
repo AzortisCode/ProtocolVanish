@@ -28,7 +28,7 @@ public class VanishedPlayer {
 
     private Player player;
     private ProtocolVanish plugin;
-    private Collection<Player> hiddenFromViewers = new ArrayList<>();
+    private Collection<Player> hiddenFrom = new ArrayList<>();
 
     VanishedPlayer(Player player, ProtocolVanish plugin){
         this.player = player;
@@ -40,7 +40,15 @@ public class VanishedPlayer {
     }
 
     public boolean isVanished(Player viewer){
-        return hiddenFromViewers.contains(viewer);
+        return hiddenFrom.contains(viewer);
+    }
+
+    public Collection<Player> getHiddenFrom(){
+        return hiddenFrom;
+    }
+
+    public void clearHiddenFrom(){
+        hiddenFrom.clear();
     }
 
     /**
@@ -52,15 +60,15 @@ public class VanishedPlayer {
      */
     public boolean setVanished(Player viewer, boolean vanished){
         if(viewer == player)return false;
-        if(hiddenFromViewers.contains(viewer) && vanished)return false;
-        if(!hiddenFromViewers.contains(viewer) && vanished){
+        if(hiddenFrom.contains(viewer) && vanished)return false;
+        if(!hiddenFrom.contains(viewer) && vanished){
             if(plugin.getPermissionManager().hasPermissionToSee(this.player, viewer)){
                 return false;
             }
-            hiddenFromViewers.add(viewer);
+            hiddenFrom.add(viewer);
             return true;
-        }else if(hiddenFromViewers.contains(viewer) && !vanished){
-            hiddenFromViewers.remove(viewer);
+        }else if(hiddenFrom.contains(viewer) && !vanished){
+            hiddenFrom.remove(viewer);
             return true;
         }
         return false;

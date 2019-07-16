@@ -19,10 +19,7 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.packetlisteners.GeneralEntityPacketListener;
-import com.azortis.protocolvanish.visibility.packetlisteners.PlayerInfoPacketListener;
-import com.azortis.protocolvanish.visibility.packetlisteners.ServerListPacketListener;
-import com.azortis.protocolvanish.visibility.packetlisteners.TabCompletePacketListener;
+import com.azortis.protocolvanish.visibility.packetlisteners.*;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
@@ -47,10 +44,12 @@ public class VisibilityManager {
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.addPacketListener(new ServerListPacketListener(plugin));
+        protocolManager.addPacketListener(new ServerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new TabCompletePacketListener(plugin));
         protocolManager.addPacketListener(new GeneralEntityPacketListener(plugin));
+        protocolManager.addPacketListener(new NamedSoundEffectPacketListener(plugin));
+        protocolManager.addPacketListener(new WorldParticlePacketListener(plugin));
     }
 
     public void setVanished(UUID uuid, boolean vanished){

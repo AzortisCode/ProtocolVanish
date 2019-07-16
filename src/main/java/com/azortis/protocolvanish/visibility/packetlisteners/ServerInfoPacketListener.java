@@ -29,11 +29,11 @@ import org.bukkit.Bukkit;
 
 import java.util.*;
 
-public class ServerListPacketListener extends PacketAdapter {
+public class ServerInfoPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public ServerListPacketListener(ProtocolVanish plugin){
+    public ServerInfoPacketListener(ProtocolVanish plugin){
         super(plugin, ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO);
         this.plugin = plugin;
     }

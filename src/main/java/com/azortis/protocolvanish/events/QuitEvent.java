@@ -18,5 +18,29 @@
 
 package com.azortis.protocolvanish.events;
 
-public class QuitEvent {
+import com.azortis.protocolvanish.ProtocolVanish;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+public class QuitEvent implements Listener {
+
+    private ProtocolVanish plugin;
+
+    public QuitEvent(ProtocolVanish plugin){
+        this.plugin = plugin;
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event){
+        Player player = event.getPlayer();
+        if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
+            plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).clearHiddenFrom();
+            event.setQuitMessage("");
+        }
+    }
+
 }
