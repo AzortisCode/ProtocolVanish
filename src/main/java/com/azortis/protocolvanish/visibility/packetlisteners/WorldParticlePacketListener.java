@@ -39,7 +39,7 @@ public class WorldParticlePacketListener extends PacketAdapter {
     }
 
     @Override
-    public void onPacketReceiving(PacketEvent event) {
+    public void onPacketSending(PacketEvent event) {
         if(event.getPacket().getParticles().read(0) == EnumWrappers.Particle.BLOCK_DUST){
             float x = event.getPacket().getFloat().read(0);
             float y = event.getPacket().getFloat().read(1);
