@@ -24,6 +24,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 
 import java.util.Collection;
@@ -46,7 +47,7 @@ public class PlayerInfoPacketListener extends PacketAdapter {
         playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
             if(onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID())){
                 VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(playerInfoData.getProfile().getUUID());
-                return vanishedPlayer.isVanished(event.getPlayer());
+                return vanishedPlayer.isVanished(event.getPlayer()) && event.getPacket().getPlayerInfoAction().read(0) != EnumWrappers.PlayerInfoAction.REMOVE_PLAYER;
             }
             return false;
         });
