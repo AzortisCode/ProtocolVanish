@@ -56,11 +56,10 @@ public class GeneralEntityPacketListener extends PacketAdapter {
             int[] entityIds = event.getPacket().getIntegerArrays().read(0);
             List<Integer> entityIdList = new ArrayList<>();
             for(int entityId : entityIds){
-                if(plugin.getVisibilityManager().isVanished(plugin.getVisibilityManager().getPlayerFromEntityID
-                        (entityId, event.getPlayer().getWorld()).getUniqueId()) &&
+                Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
+                if(player != null && plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
                         !plugin.getVisibilityManager().getVanishedPlayer
-                                (plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld())
-                                        .getUniqueId()).isVanished(event.getPlayer()))entityIdList.add(entityId);
+                                (player.getUniqueId()).isVanished(event.getPlayer()))entityIdList.add(entityId);
             }
             if(entityIdList.size() >= 1){
                 event.getPacket().getIntegerArrays().write(0, entityIdList.stream().mapToInt(i->i).toArray());
