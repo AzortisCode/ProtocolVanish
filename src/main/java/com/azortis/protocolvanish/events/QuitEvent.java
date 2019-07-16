@@ -25,6 +25,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
+
 public class QuitEvent implements Listener {
 
     private ProtocolVanish plugin;
@@ -40,6 +42,9 @@ public class QuitEvent implements Listener {
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
             plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).clearHiddenFrom();
             event.setQuitMessage("");
+        }
+        for(UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
+            plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, false);
         }
     }
 
