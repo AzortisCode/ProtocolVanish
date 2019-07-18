@@ -6,5 +6,9 @@
     "aliases": [
       "v"
     ]
-  }
+  },
+  "serverList":[{
+    "adjustPlayerCount": true,
+    "adjustListOfPlayers": true
+  }]
 }

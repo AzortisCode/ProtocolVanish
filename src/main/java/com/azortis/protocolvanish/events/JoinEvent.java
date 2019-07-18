@@ -19,8 +19,11 @@
 package com.azortis.protocolvanish.events;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -30,12 +33,14 @@ public class JoinEvent implements Listener {
 
     public JoinEvent(ProtocolVanish plugin){
         this.plugin = plugin;
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())){
+            event.getPlayer().sendMessage(ChatColor.GREEN + "You joined silently.");
             event.setJoinMessage("");
         }
     }

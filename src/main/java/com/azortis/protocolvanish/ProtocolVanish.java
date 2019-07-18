@@ -32,6 +32,7 @@ public final class ProtocolVanish extends JavaPlugin {
     private AzortisLib azortisLib;
     private PermissionManager permissionManager;
     private VisibilityManager visibilityManager;
+    private StorageManager storageManager;
 
     @Override
     public void onEnable() {
@@ -42,6 +43,7 @@ public final class ProtocolVanish extends JavaPlugin {
         }
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
+        this.storageManager = new StorageManager(this);
 
         new VanishCommand(this);
         new LoginEvent(this);
@@ -65,4 +67,9 @@ public final class ProtocolVanish extends JavaPlugin {
     public VisibilityManager getVisibilityManager() {
         return visibilityManager;
     }
+
+    public StorageManager getStorageManager() {
+        return storageManager;
+    }
+
 }

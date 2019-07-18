@@ -22,6 +22,7 @@ import com.azortis.protocolvanish.ProtocolVanish;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -36,7 +37,7 @@ public class QuitEvent implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {

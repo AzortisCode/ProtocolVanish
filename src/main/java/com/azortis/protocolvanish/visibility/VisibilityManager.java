@@ -54,6 +54,7 @@ public class VisibilityManager {
 
     public void setVanished(UUID uuid, boolean vanished){
         if(vanishedPlayers.contains(uuid) && vanished)return;
+        plugin.getStorageManager().setVanished(uuid, vanished);
         if(vanished){
             vanishedPlayers.add(uuid);
             vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
@@ -75,6 +76,10 @@ public class VisibilityManager {
     }
 
     public boolean isVanished(UUID uuid){
+        if(!vanishedPlayers.contains(uuid) && plugin.getStorageManager().isVanished(uuid)){
+            vanishedPlayers.add(uuid);
+            vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
+        }
         return vanishedPlayers.contains(uuid);
     }
 
