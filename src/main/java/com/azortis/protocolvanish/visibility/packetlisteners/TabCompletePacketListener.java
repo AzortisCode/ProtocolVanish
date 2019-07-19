@@ -39,16 +39,18 @@ public class TabCompletePacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        Suggestions suggestions = event.getPacket().getSpecificModifier(Suggestions.class).read(0);
-        suggestions.getList().removeIf((Suggestion suggestion) -> {
-            if(!suggestion.getText().contains("/")) {
-                Player player = Bukkit.getPlayer(suggestion.getText());
-                if(player != null && plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(player.getUniqueId())) {
-                    return plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).isVanished(event.getPlayer());
+        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("TabComplete")) {
+            Suggestions suggestions = event.getPacket().getSpecificModifier(Suggestions.class).read(0);
+            suggestions.getList().removeIf((Suggestion suggestion) -> {
+                if (!suggestion.getText().contains("/")) {
+                    Player player = Bukkit.getPlayer(suggestion.getText());
+                    if (player != null && plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(player.getUniqueId())) {
+                        return plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).isVanished(event.getPlayer());
+                    }
                 }
-            }
-            return false;
-        });
-        event.getPacket().getSpecificModifier(Suggestions.class).write(0, suggestions);
+                return false;
+            });
+            event.getPacket().getSpecificModifier(Suggestions.class).write(0, suggestions);
+        }
     }
 }

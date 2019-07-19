@@ -25,6 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ public class QuitEvent implements Listener {
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
             plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).clearHiddenFrom();
+            player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
             event.setQuitMessage("");
         }
         for(UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){

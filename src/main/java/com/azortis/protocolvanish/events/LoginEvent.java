@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -39,8 +40,11 @@ public class LoginEvent implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerLoginEvent event){
+    public void onPlayerLogin(PlayerLoginEvent event){
         Player player = event.getPlayer();
+        if(plugin.getVisibilityManager().isVanished(player.getUniqueId())){
+            player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
+        }
         Collection<UUID> onlineVanishedPlayer = plugin.getVisibilityManager().getOnlineVanishedPlayers();
         for (UUID uuid : onlineVanishedPlayer){
             VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);

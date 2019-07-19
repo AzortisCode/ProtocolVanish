@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.VisibilitySettingsWrapper;
 import com.azortis.protocolvanish.visibility.packetlisteners.*;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -27,10 +28,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class VisibilityManager {
 
@@ -43,6 +41,7 @@ public class VisibilityManager {
     public VisibilityManager(ProtocolVanish plugin){
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
+        validateSettings();
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
@@ -50,6 +49,34 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new GeneralEntityPacketListener(plugin));
         protocolManager.addPacketListener(new NamedSoundEffectPacketListener(plugin));
         protocolManager.addPacketListener(new WorldParticlePacketListener(plugin));
+    }
+
+    private void validateSettings(){
+        boolean valid = true;
+        VisibilitySettingsWrapper visibilitySettings = plugin.getSettingsManager().getVisibilitySettings();
+        List<String> enabledPacketListeners = visibilitySettings.getEnabledPacketListeners();
+        if(!(!enabledPacketListeners.contains("GeneralEntity") && enabledPacketListeners.contains("PlayerInfo"))){
+            enabledPacketListeners.add("GeneralEntity");
+            valid = false;
+        }
+        if(!(!enabledPacketListeners.contains("ServerInfo") && (visibilitySettings.getAdjustOnlinePlayerCount() || visibilitySettings.getAdjustOnlinePlayerList()))){
+            enabledPacketListeners.add("ServerInfo");
+            valid = false;
+        }
+        if(!(!(visibilitySettings.getAdjustOnlinePlayerList() && visibilitySettings.getAdjustOnlinePlayerCount()) && enabledPacketListeners.contains("ServerInfo"))){
+            enabledPacketListeners.remove("ServerInfo");
+            valid = false;
+        }
+        if(!(!enabledPacketListeners.contains("PlayerInfo") && enabledPacketListeners.contains("TabComplete"))){
+            enabledPacketListeners.remove("TabComplete");
+            valid = false;
+        }
+        if(!valid){
+            plugin.getAzortisLib().getLogger().warning("You're invisibility settings are invalid, adding some values...");
+            visibilitySettings.setEnabledPacketListeners(enabledPacketListeners);
+            visibilitySettings.save();
+            plugin.getSettingsManager().saveFile();
+        }
     }
 
     public void setVanished(UUID uuid, boolean vanished){

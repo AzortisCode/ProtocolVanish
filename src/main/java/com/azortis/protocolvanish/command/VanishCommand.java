@@ -37,7 +37,8 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
     public VanishCommand(ProtocolVanish plugin){
         this.plugin = plugin;
         AlCommand command = new CommandBuilder()
-                .setName("vanish").build();
+                .setName("vanish")
+                .setDescription("Vanish yourself from other players!").build();
         command.setExecutor(this);
         plugin.getAzortisLib().getCommandManager().register("vanish", command);
     }

@@ -42,15 +42,17 @@ public class PlayerInfoPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
-        List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
-        playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
-            if(onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID())){
-                VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(playerInfoData.getProfile().getUUID());
-                return vanishedPlayer.isVanished(event.getPlayer()) && event.getPacket().getPlayerInfoAction().read(0) != EnumWrappers.PlayerInfoAction.REMOVE_PLAYER;
-            }
-            return false;
-        });
-        event.getPacket().getPlayerInfoDataLists().write(0, playerInfoDataList);
+        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("PlayerInfo")) {
+            Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
+            List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
+            playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
+                if (onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID())) {
+                    VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(playerInfoData.getProfile().getUUID());
+                    return vanishedPlayer.isVanished(event.getPlayer()) && event.getPacket().getPlayerInfoAction().read(0) != EnumWrappers.PlayerInfoAction.REMOVE_PLAYER;
+                }
+                return false;
+            });
+            event.getPacket().getPlayerInfoDataLists().write(0, playerInfoDataList);
+        }
     }
 }

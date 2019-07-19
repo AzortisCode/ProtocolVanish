@@ -40,18 +40,20 @@ public class WorldParticlePacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if(event.getPacket().getParticles().read(0) == EnumWrappers.Particle.BLOCK_DUST){
-            float x = event.getPacket().getFloat().read(0);
-            float y = event.getPacket().getFloat().read(1);
-            float z = event.getPacket().getFloat().read(2);
+        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("WorldParticle")) {
+            if (event.getPacket().getParticles().read(0) == EnumWrappers.Particle.BLOCK_DUST) {
+                float x = event.getPacket().getFloat().read(0);
+                float y = event.getPacket().getFloat().read(1);
+                float z = event.getPacket().getFloat().read(2);
 
-            for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
-                VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);
-                if(vanishedPlayer.isVanished(event.getPlayer()) &&
-                        event.getPlayer().getWorld().equals(vanishedPlayer.getPlayer().getWorld()) &&
-                        vanishedPlayer.getPlayer().getLocation().distanceSquared
-                                (new Location(vanishedPlayer.getPlayer().getWorld(), x, y, z)) < 3.0D)
-                    event.setCancelled(true);
+                for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
+                    VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);
+                    if (vanishedPlayer.isVanished(event.getPlayer()) &&
+                            event.getPlayer().getWorld().equals(vanishedPlayer.getPlayer().getWorld()) &&
+                            vanishedPlayer.getPlayer().getLocation().distanceSquared
+                                    (new Location(vanishedPlayer.getPlayer().getWorld(), x, y, z)) < 3.0D)
+                        event.setCancelled(true);
+                }
             }
         }
     }

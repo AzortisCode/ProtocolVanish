@@ -20,7 +20,6 @@ package com.azortis.protocolvanish;
 
 import com.azortis.azortislib.database.IDatabase;
 import com.azortis.azortislib.database.SQLiteSettings;
-import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.UUID;
@@ -32,7 +31,6 @@ public class StorageManager {
 
     public StorageManager(ProtocolVanish plugin){
         this.plugin = plugin;
-        if(!plugin.getDataFolder().exists())plugin.getDataFolder().mkdir();
         SQLiteSettings sqLiteSettings = new SQLiteSettings("storage", plugin.getDataFolder().getPath());
         plugin.getAzortisLib().getDatabaseManager().useSQLite(sqLiteSettings);
         this.database = plugin.getAzortisLib().getDatabaseManager().getDatabase();

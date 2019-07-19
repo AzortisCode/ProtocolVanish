@@ -40,15 +40,18 @@ public class ServerInfoPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
-
-        Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
-        // TODO add check to see if the online player count needs to be changed
-        int vanishedPlayerCount = onlineVanishedPlayers.size();
-        serverPing.setPlayersOnline(Bukkit.getOnlinePlayers().size() - vanishedPlayerCount);
-        //TODO add check to see if the player list needs to be changed
-        List<WrappedGameProfile> wrappedGameProfiles = new ArrayList<>(serverPing.getPlayers());
-        wrappedGameProfiles.removeIf((WrappedGameProfile wrappedGameProfile) -> onlineVanishedPlayers.contains(wrappedGameProfile.getUUID()));
-        serverPing.setPlayers(wrappedGameProfiles);
+        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("ServerInfo")) {
+            WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
+            Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
+            if(plugin.getSettingsManager().getVisibilitySettings().getAdjustOnlinePlayerCount()) {
+                int vanishedPlayerCount = onlineVanishedPlayers.size();
+                serverPing.setPlayersOnline(Bukkit.getOnlinePlayers().size() - vanishedPlayerCount);
+            }
+            if(plugin.getSettingsManager().getVisibilitySettings().getAdjustOnlinePlayerList()) {
+                List<WrappedGameProfile> wrappedGameProfiles = new ArrayList<>(serverPing.getPlayers());
+                wrappedGameProfiles.removeIf((WrappedGameProfile wrappedGameProfile) -> onlineVanishedPlayers.contains(wrappedGameProfile.getUUID()));
+                serverPing.setPlayers(wrappedGameProfiles);
+            }
+        }
     }
 }

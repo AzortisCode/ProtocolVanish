@@ -26,11 +26,13 @@ import com.comphenix.protocol.wrappers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.UUID;
 
+@SuppressWarnings("all")
 public class VisibilityChanger {
 
     private ProtocolVanish plugin;
@@ -40,6 +42,7 @@ public class VisibilityChanger {
     }
 
     void vanishPlayer(UUID uuid){
+        Bukkit.getPlayer(uuid).setMetadata("vanished", new FixedMetadataValue(plugin, true));
         for (Player player : Bukkit.getOnlinePlayers()){
             if(plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, true)){
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), true);
@@ -49,6 +52,7 @@ public class VisibilityChanger {
     }
 
     void showPlayer(UUID uuid){
+        Bukkit.getPlayer(uuid).setMetadata("vanished", new FixedMetadataValue(plugin, false));
         for (Player player : Bukkit.getOnlinePlayers()){
             if(plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, false)){
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), false);

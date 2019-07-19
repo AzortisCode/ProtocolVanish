@@ -1,0 +1,15 @@
+{
+  "visibilitySettings": {
+    "enabledPacketListener": [
+      "GeneralEntity",
+      "NamedSound",
+      "PlayerInfo",
+      "TabComplete",
+      "WorldParticle"
+    ],
+    "externalVisibility": {
+      "adjustOnlinePlayerCount": true,
+      "adjustOnlinePlayerList": true
+    }
+  }
+}

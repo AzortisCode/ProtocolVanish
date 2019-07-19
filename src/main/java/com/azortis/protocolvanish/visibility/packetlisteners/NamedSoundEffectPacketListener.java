@@ -40,18 +40,20 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if(event.getPacket().getSoundCategories().read(0) == EnumWrappers.SoundCategory.PLAYERS){
-            int x = event.getPacket().getIntegers().read(0) / 8;
-            int y = event.getPacket().getIntegers().read(1) / 8;
-            int z = event.getPacket().getIntegers().read(2) / 8;
+        if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
+            if (event.getPacket().getSoundCategories().read(0) == EnumWrappers.SoundCategory.PLAYERS) {
+                int x = event.getPacket().getIntegers().read(0) / 8;
+                int y = event.getPacket().getIntegers().read(1) / 8;
+                int z = event.getPacket().getIntegers().read(2) / 8;
 
-            for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
-                VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);
-                if(vanishedPlayer.isVanished(event.getPlayer()) &&
-                        event.getPlayer().getWorld().equals(vanishedPlayer.getPlayer().getWorld()) &&
-                        vanishedPlayer.getPlayer().getLocation().distanceSquared
-                                (new Location(vanishedPlayer.getPlayer().getWorld(), x, y, z)) < 2.D)
-                    event.setCancelled(true);
+                for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
+                    VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);
+                    if (vanishedPlayer.isVanished(event.getPlayer()) &&
+                            event.getPlayer().getWorld().equals(vanishedPlayer.getPlayer().getWorld()) &&
+                            vanishedPlayer.getPlayer().getLocation().distanceSquared
+                                    (new Location(vanishedPlayer.getPlayer().getWorld(), x, y, z)) < 2.D)
+                        event.setCancelled(true);
+                }
             }
         }
     }

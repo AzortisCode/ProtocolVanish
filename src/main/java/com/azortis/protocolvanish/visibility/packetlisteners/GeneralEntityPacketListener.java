@@ -47,35 +47,37 @@ public class GeneralEntityPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if(event.getPacket().getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN){
-            UUID playerUUID = event.getPacket().getUUIDs().read(0);
-            if(plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(playerUUID)
-                    && plugin.getVisibilityManager().getVanishedPlayer(playerUUID).isVanished(event.getPlayer()))
+        if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
+            if (event.getPacket().getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
+                UUID playerUUID = event.getPacket().getUUIDs().read(0);
+                if (plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(playerUUID)
+                        && plugin.getVisibilityManager().getVanishedPlayer(playerUUID).isVanished(event.getPlayer()))
+                    event.setCancelled(true);
+            } else if (event.getPacket().getType() == PacketType.Play.Server.ENTITY_DESTROY) {
+                int[] entityIds = event.getPacket().getIntegerArrays().read(0);
+                List<Integer> entityIdList = new ArrayList<>();
+                for (int entityId : entityIds) {
+                    Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
+                    if (player != null && plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
+                            !plugin.getVisibilityManager().getVanishedPlayer
+                                    (player.getUniqueId()).isVanished(event.getPlayer())) entityIdList.add(entityId);
+                }
+                if (entityIdList.size() >= 1) {
+                    event.getPacket().getIntegerArrays().write(0, entityIdList.stream().mapToInt(i -> i).toArray());
+                    return;
+                }
                 event.setCancelled(true);
-        }else if(event.getPacket().getType() == PacketType.Play.Server.ENTITY_DESTROY){
-            int[] entityIds = event.getPacket().getIntegerArrays().read(0);
-            List<Integer> entityIdList = new ArrayList<>();
-            for(int entityId : entityIds){
+            } else {
+                int entityId;
+                if (event.getPacket().getType() == PacketType.Play.Server.COLLECT) {
+                    entityId = event.getPacket().getIntegers().read(1);
+                } else entityId = event.getPacket().getIntegers().read(0);
                 Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
-                if(player != null && plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
-                        !plugin.getVisibilityManager().getVanishedPlayer
-                                (player.getUniqueId()).isVanished(event.getPlayer()))entityIdList.add(entityId);
+                if (player != null
+                        && plugin.getVisibilityManager().isVanished(player.getUniqueId())
+                        && plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).isVanished(event.getPlayer()))
+                    event.setCancelled(true);
             }
-            if(entityIdList.size() >= 1){
-                event.getPacket().getIntegerArrays().write(0, entityIdList.stream().mapToInt(i->i).toArray());
-                return;
-            }
-            event.setCancelled(true);
-        }else{
-            int entityId;
-            if(event.getPacket().getType() == PacketType.Play.Server.COLLECT){
-                entityId = event.getPacket().getIntegers().read(1);
-            }else entityId = event.getPacket().getIntegers().read(0);
-            Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
-            if(player != null
-                    && plugin.getVisibilityManager().isVanished(player.getUniqueId())
-                    && plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).isVanished(event.getPlayer()))
-                event.setCancelled(true);
         }
     }
 }
