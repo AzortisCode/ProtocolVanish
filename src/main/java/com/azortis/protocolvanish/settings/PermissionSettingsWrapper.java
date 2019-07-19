@@ -18,60 +18,52 @@
 
 package com.azortis.protocolvanish.settings;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class CommandSettingsWrapper {
+public class PermissionSettingsWrapper {
 
     private SettingsManager parent;
     private Map<String, Object> settingsMap;
 
-    public CommandSettingsWrapper(SettingsManager parent, Object settingsMap){
+    public PermissionSettingsWrapper(SettingsManager parent, Object settingsMap){
         this.parent = parent;
         this.settingsMap = (Map<String, Object>) settingsMap;
     }
 
-    public String getName(){
-        return (String) settingsMap.get("name");
+    public boolean getEnableSeePermission(){
+        return (Boolean) settingsMap.get("enableSeePermission");
     }
 
-    public void setName(String name){
-        settingsMap.remove("name");
-        settingsMap.put("name", name);
+    public void setEnableSeePermission(boolean enableSeePermission){
+        settingsMap.remove("enableSeePermission");
+        settingsMap.put("enableSeePermission", enableSeePermission);
     }
 
-    public String getDescription(){
-        return (String) settingsMap.get("description");
+    public boolean getEnableLayeredPermissions(){
+        return (Boolean) settingsMap.get("enableLayeredPermissions");
     }
 
-    public void setDescription(String description){
-        settingsMap.remove("description");
-        settingsMap.put("description", description);
+    public void setEnableLayeredPermissions(boolean enableLayeredPermissions){
+        settingsMap.remove("enableLayeredPermissions");
+        settingsMap.put("enableLayeredPermissions", enableLayeredPermissions);
     }
 
-    public String getUsage(){
-        return (String) settingsMap.get("usage");
+    public int getMaxLevel(){
+        Number maxLevel = (Number) settingsMap.get("maxLevel");
+        return maxLevel.intValue();
     }
 
-    public void setUsage(String usage){
-        settingsMap.remove("usage");
-        settingsMap.put("usage", usage);
-    }
-
-    public List<String> getAliases(){
-        return (List<String>) settingsMap.get("aliases");
-    }
-
-    public void setAliases(List<String> aliases){
-        settingsMap.remove("aliases");
-        settingsMap.put("aliases", aliases);
+    public void setMaxLevel(int maxLevel){
+        settingsMap.remove("maxLevel");
+        settingsMap.put("maxLevel", maxLevel);
     }
 
     public void save(){
         Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
-        parrentSettingsMap.remove("commandSettings");
-        parrentSettingsMap.put("commandSettings", settingsMap);
+        parrentSettingsMap.remove("permissionSettings");
+        parrentSettingsMap.put("permissionSettings", settingsMap);
     }
 
 }

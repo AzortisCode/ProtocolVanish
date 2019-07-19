@@ -43,7 +43,6 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
                 .setPlugin(plugin).build();
         command.setExecutor(this);
         command.setTabCompleter(this);
-        command.addSubCommand("reload", new ReloadSubCommand());
         plugin.getAzortisLib().getCommandManager().register(commandSettings.getName(), command);
     }
 

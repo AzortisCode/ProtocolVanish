@@ -38,7 +38,7 @@ public final class ProtocolVanish extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.azortisLib = new AzortisLib(this, "ProtocolVanish", "§1[§9ProtocolVanish§1]§7");
+        this.azortisLib = new AzortisLib(this, "ProtocolVanish", "§1[§9ProtocolVanish§1]§0");
         if(!Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolLib")){
             azortisLib.getLogger().severe("ProtocolLib isn't present, please install ProtocolLib! Shutting down...");
             Bukkit.getServer().getPluginManager().disablePlugin(this);

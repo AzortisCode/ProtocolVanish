@@ -33,12 +33,13 @@ public class PermissionManager {
     }
 
     public boolean hasPermissionToVanish(Player player){
-        return Permission.USE.getPermissionLevel(player) > 0;
+        return Permission.USE.getPermissionLevel(plugin, player) > 0;
     }
 
     public boolean hasPermissionToSee(Player hider, Player viewer) {
-        int hiderLevel = Permission.USE.getPermissionLevel(hider);
-        int viewerLevel = Permission.SEE.getPermissionLevel(viewer);
+        if(!plugin.getSettingsManager().getPermissionSettings().getEnableSeePermission())return false;
+        int hiderLevel = Permission.USE.getPermissionLevel(plugin, hider);
+        int viewerLevel = Permission.SEE.getPermissionLevel(plugin, viewer);
         return viewerLevel >= hiderLevel;
     }
 
@@ -53,15 +54,16 @@ public class PermissionManager {
             this.permissionNode = permissionNode;
         }
 
-        private int getPermissionLevel(Player player){
+        private int getPermissionLevel(ProtocolVanish plugin, Player player){
             if(permissionNode.equals("use") || permissionNode.equals("see")){
-                int maxLevel = 100;
+                int maxLevel = plugin.getSettingsManager().getPermissionSettings().getMaxLevel();
                 int level = player.hasPermission("protocolvanish." + this.permissionNode) ? 1 : 0;
                 for (int i = 1; i <= maxLevel; i++) {
                     if(player.hasPermission("protocolvanish." + this.permissionNode + ".level." + i)){
                         level = i;
                     }
                 }
+                if(level > 0 && !plugin.getSettingsManager().getPermissionSettings().getEnableLayeredPermissions())return 1;
                 return level;
             }
             return 1;

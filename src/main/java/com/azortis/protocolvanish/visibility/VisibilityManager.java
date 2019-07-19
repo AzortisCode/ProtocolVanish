@@ -55,24 +55,24 @@ public class VisibilityManager {
         boolean valid = true;
         VisibilitySettingsWrapper visibilitySettings = plugin.getSettingsManager().getVisibilitySettings();
         List<String> enabledPacketListeners = visibilitySettings.getEnabledPacketListeners();
-        if(!(!enabledPacketListeners.contains("GeneralEntity") && enabledPacketListeners.contains("PlayerInfo"))){
+        if(!enabledPacketListeners.contains("GeneralEntity") && enabledPacketListeners.contains("PlayerInfo")){
             enabledPacketListeners.add("GeneralEntity");
             valid = false;
         }
-        if(!(!enabledPacketListeners.contains("ServerInfo") && (visibilitySettings.getAdjustOnlinePlayerCount() || visibilitySettings.getAdjustOnlinePlayerList()))){
+        if(!enabledPacketListeners.contains("ServerInfo") && (visibilitySettings.getAdjustOnlinePlayerCount() || visibilitySettings.getAdjustOnlinePlayerList())){
             enabledPacketListeners.add("ServerInfo");
             valid = false;
         }
-        if(!(!(visibilitySettings.getAdjustOnlinePlayerList() && visibilitySettings.getAdjustOnlinePlayerCount()) && enabledPacketListeners.contains("ServerInfo"))){
+        if((!visibilitySettings.getAdjustOnlinePlayerList() || !visibilitySettings.getAdjustOnlinePlayerCount()) && enabledPacketListeners.contains("ServerInfo")){
             enabledPacketListeners.remove("ServerInfo");
             valid = false;
         }
-        if(!(!enabledPacketListeners.contains("PlayerInfo") && enabledPacketListeners.contains("TabComplete"))){
+        if(!enabledPacketListeners.contains("PlayerInfo") && enabledPacketListeners.contains("TabComplete")){
             enabledPacketListeners.remove("TabComplete");
             valid = false;
         }
         if(!valid){
-            plugin.getAzortisLib().getLogger().warning("You're invisibility settings are invalid, adding some values...");
+            plugin.getAzortisLib().getLogger().warning("You're invisibility settings are invalid, changing some values...");
             visibilitySettings.setEnabledPacketListeners(enabledPacketListeners);
             visibilitySettings.save();
             plugin.getSettingsManager().saveFile();

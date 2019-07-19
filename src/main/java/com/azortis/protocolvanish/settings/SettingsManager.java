@@ -27,7 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("all")
 public class SettingsManager {
@@ -36,7 +36,7 @@ public class SettingsManager {
     private File settingsFile;
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private HashMap<String, Object> settingsMap;
+    private Map<String, Object> settingsMap;
 
     public SettingsManager(ProtocolVanish plugin){
         this.plugin = plugin;
@@ -44,7 +44,7 @@ public class SettingsManager {
         settingsFile = new File(plugin.getDataFolder(), "settings.json");
         if(!settingsFile.exists())plugin.saveResource(settingsFile.getName(), false);
         try {
-            settingsMap = gson.fromJson(new FileReader(settingsFile), new HashMap<String, Object>().getClass());
+            settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -62,10 +62,14 @@ public class SettingsManager {
 
     public void reloadFile(){
         try{
-            settingsMap = gson.fromJson(new FileReader(settingsFile), new HashMap<String, Object>().getClass());
+            settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public PermissionSettingsWrapper getPermissionSettings(){
+        return new PermissionSettingsWrapper(this, settingsMap.get("permissionSettings"));
     }
 
     public VisibilitySettingsWrapper getVisibilitySettings(){
@@ -76,7 +80,7 @@ public class SettingsManager {
         return new CommandSettingsWrapper(this, settingsMap.get("commandSettings"));
     }
 
-    public HashMap<String, Object> getSettingsMap(){
+    public Map<String, Object> getSettingsMap(){
         return settingsMap;
     }
 

@@ -1,9 +1,15 @@
 {
+  "permissionSettings": {
+    "enableSeePermission": true,
+    "enableLayeredPermissions": true,
+    "maxLevel": 100
+  },
   "visibilitySettings": {
-    "enabledPacketListener": [
+    "enabledPacketListeners": [
       "GeneralEntity",
       "NamedSound",
       "PlayerInfo",
+      "ServerInfo",
       "TabComplete",
       "WorldParticle"
     ],
@@ -15,7 +21,7 @@
   "commandSettings": {
     "name": "vanish",
     "description": "Vanish yourself from other players!",
-    "usage": "&c/vanish [On|Off|Reload] [Player]",
+    "usage": "&c/vanish",
     "aliases": [
       "v",
       "pv",

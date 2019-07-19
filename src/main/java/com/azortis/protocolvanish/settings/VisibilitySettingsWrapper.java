@@ -18,18 +18,18 @@
 
 package com.azortis.protocolvanish.settings;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("all")
 public class VisibilitySettingsWrapper {
 
     private SettingsManager parent;
-    private HashMap<String, Object> settingsMap;
+    private Map<String, Object> settingsMap;
 
     public VisibilitySettingsWrapper(SettingsManager parent, Object settingsMap){
         this.parent = parent;
-        this.settingsMap = (HashMap<String, Object>) settingsMap;
+        this.settingsMap = (Map<String, Object>) settingsMap;
     }
 
     public List<String> getEnabledPacketListeners(){
@@ -42,12 +42,12 @@ public class VisibilitySettingsWrapper {
     }
 
     public boolean getAdjustOnlinePlayerCount(){
-        HashMap<String, Object> externalVisibility = (HashMap<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
         return (Boolean) externalVisibility.get("adjustOnlinePlayerCount");
     }
 
     public void setAdjustOnlinePlayerCount(boolean adjustOnlinePlayerCount){
-        HashMap<String, Object> externalVisibility = (HashMap<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
         externalVisibility.remove("adjustOnlinePlayerCount");
         externalVisibility.put("adjustOnlinePlayerCount", adjustOnlinePlayerCount);
         settingsMap.remove("externalVisibilty");
@@ -55,12 +55,12 @@ public class VisibilitySettingsWrapper {
     }
 
     public boolean getAdjustOnlinePlayerList(){
-        HashMap<String, Object> externalVisibility = (HashMap<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
         return (Boolean) externalVisibility.get("adjustOnlinePlayerCount");
     }
 
     public void setAdjustOnlinePlayerList(boolean adjustOnlinePlayerList){
-        HashMap<String, Object> externalVisibility = (HashMap<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
         externalVisibility.remove("adjustOnlinePlayerList");
         externalVisibility.put("adjustOnlinePlayerList", adjustOnlinePlayerList);
         settingsMap.remove("externalVisibilty");
@@ -68,7 +68,7 @@ public class VisibilitySettingsWrapper {
     }
 
     public void save(){
-        HashMap<String, Object> parrentSettingsMap = parent.getSettingsMap();
+        Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
         parrentSettingsMap.remove("visibilitySettings");
         parrentSettingsMap.put("visibilitySettings", settingsMap);
     }
