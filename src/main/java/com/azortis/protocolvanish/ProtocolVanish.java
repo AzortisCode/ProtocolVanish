@@ -56,6 +56,7 @@ public final class ProtocolVanish extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        settingsManager.saveFile();
         azortisLib.close();
     }
 

@@ -32,7 +32,6 @@ public class VisibilitySettingsWrapper {
         this.settingsMap = (HashMap<String, Object>) settingsMap;
     }
 
-
     public List<String> getEnabledPacketListeners(){
         return (List<String>) settingsMap.get("enabledPacketListeners");
     }
