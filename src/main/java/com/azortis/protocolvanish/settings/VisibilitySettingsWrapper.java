@@ -24,11 +24,11 @@ import java.util.List;
 @SuppressWarnings("all")
 public class VisibilitySettingsWrapper {
 
-    private SettingsManager parrent;
+    private SettingsManager parent;
     private HashMap<String, Object> settingsMap;
 
-    public VisibilitySettingsWrapper(SettingsManager parrent, Object settingsMap){
-        this.parrent = parrent;
+    public VisibilitySettingsWrapper(SettingsManager parent, Object settingsMap){
+        this.parent = parent;
         this.settingsMap = (HashMap<String, Object>) settingsMap;
     }
 
@@ -68,7 +68,7 @@ public class VisibilitySettingsWrapper {
     }
 
     public void save(){
-        HashMap<String, Object> parrentSettingsMap = parrent.getSettingsMap();
+        HashMap<String, Object> parrentSettingsMap = parent.getSettingsMap();
         parrentSettingsMap.remove("visibilitySettings");
         parrentSettingsMap.put("visibilitySettings", settingsMap);
     }

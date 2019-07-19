@@ -11,5 +11,15 @@
       "adjustOnlinePlayerCount": true,
       "adjustOnlinePlayerList": true
     }
+  },
+  "commandSettings": {
+    "name": "vanish",
+    "description": "Vanish yourself from other players!",
+    "usage": "&c/vanish [On|Off|Reload] [Player]",
+    "aliases": [
+      "v",
+      "pv",
+      "protocolvanish"
+    ]
   }
 }

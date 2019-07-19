@@ -51,7 +51,7 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new WorldParticlePacketListener(plugin));
     }
 
-    private void validateSettings(){
+    public void validateSettings(){
         boolean valid = true;
         VisibilitySettingsWrapper visibilitySettings = plugin.getSettingsManager().getVisibilitySettings();
         List<String> enabledPacketListeners = visibilitySettings.getEnabledPacketListeners();

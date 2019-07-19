@@ -72,6 +72,10 @@ public class SettingsManager {
         return new VisibilitySettingsWrapper(this, settingsMap.get("visibilitySettings"));
     }
 
+    public CommandSettingsWrapper getCommandSettings(){
+        return new CommandSettingsWrapper(this, settingsMap.get("commandSettings"));
+    }
+
     public HashMap<String, Object> getSettingsMap(){
         return settingsMap;
     }

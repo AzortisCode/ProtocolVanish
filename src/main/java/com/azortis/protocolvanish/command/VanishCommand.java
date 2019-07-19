@@ -18,11 +18,9 @@
 
 package com.azortis.protocolvanish.command;
 
-import com.azortis.azortislib.command.AlCommand;
-import com.azortis.azortislib.command.CommandBuilder;
-import com.azortis.azortislib.command.IAlCommandExecutor;
-import com.azortis.azortislib.command.IAlTabCompleter;
+import com.azortis.azortislib.command.*;
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -36,11 +34,17 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
 
     public VanishCommand(ProtocolVanish plugin){
         this.plugin = plugin;
+        CommandSettingsWrapper commandSettings = plugin.getSettingsManager().getCommandSettings();
         AlCommand command = new CommandBuilder()
-                .setName("vanish")
-                .setDescription("Vanish yourself from other players!").build();
+                .setName(commandSettings.getName())
+                .setDescription(commandSettings.getDescription())
+                .setUsage(commandSettings.getUsage())
+                .addAliases(commandSettings.getAliases())
+                .setPlugin(plugin).build();
         command.setExecutor(this);
-        plugin.getAzortisLib().getCommandManager().register("vanish", command);
+        command.setTabCompleter(this);
+        command.addSubCommand("reload", new ReloadSubCommand());
+        plugin.getAzortisLib().getCommandManager().register(commandSettings.getName(), command);
     }
 
     @Override
