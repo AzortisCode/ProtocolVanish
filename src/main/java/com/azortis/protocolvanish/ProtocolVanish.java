@@ -31,6 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class ProtocolVanish extends JavaPlugin {
 
     private AzortisLib azortisLib;
+    private Metrics metrics;
     private SettingsManager settingsManager;
     private PermissionManager permissionManager;
     private VisibilityManager visibilityManager;
@@ -39,6 +40,7 @@ public final class ProtocolVanish extends JavaPlugin {
     @Override
     public void onEnable() {
         this.azortisLib = new AzortisLib(this, "ProtocolVanish", "§1[§9ProtocolVanish§1]§0");
+        this.metrics = new Metrics(this);
         if(!Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolLib")){
             azortisLib.getLogger().severe("ProtocolLib isn't present, please install ProtocolLib! Shutting down...");
             Bukkit.getServer().getPluginManager().disablePlugin(this);

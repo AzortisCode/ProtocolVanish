@@ -45,6 +45,7 @@ public class VisibilityChanger {
         Bukkit.getPlayer(uuid).setMetadata("vanished", new FixedMetadataValue(plugin, true));
         for (Player player : Bukkit.getOnlinePlayers()){
             if(plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, true)){
+                player.hidePlayer(plugin, Bukkit.getPlayer(uuid));
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), true);
                 sendEntityDestroyPacket(player, Bukkit.getPlayer(uuid));
             }
@@ -55,6 +56,7 @@ public class VisibilityChanger {
         Bukkit.getPlayer(uuid).setMetadata("vanished", new FixedMetadataValue(plugin, false));
         for (Player player : Bukkit.getOnlinePlayers()){
             if(plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, false)){
+                player.showPlayer(plugin, Bukkit.getPlayer(uuid));
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), false);
                 sendSpawnPlayerPacket(player, Bukkit.getPlayer(uuid));
             }
