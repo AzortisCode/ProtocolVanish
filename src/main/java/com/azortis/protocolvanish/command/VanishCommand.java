@@ -21,6 +21,7 @@ package com.azortis.protocolvanish.command;
 import com.azortis.azortislib.command.*;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
+import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -31,6 +32,7 @@ import java.util.List;
 public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
 
     private ProtocolVanish plugin;
+    private MessageSettingsWrapper messageSettings;
 
     public VanishCommand(ProtocolVanish plugin){
         this.plugin = plugin;
@@ -44,22 +46,23 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
         command.setExecutor(this);
         command.setTabCompleter(this);
         plugin.getAzortisLib().getCommandManager().register(commandSettings.getName(), command);
+        this.messageSettings = plugin.getSettingsManager().getMessageSettings();
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, AlCommand alCommand, String s, String[] strings) {
-        Player p = (Player)commandSender;
-        if(plugin.getPermissionManager().hasPermissionToVanish(p)) {
-            if (plugin.getVisibilityManager().isVanished(p.getUniqueId())) {
-                plugin.getVisibilityManager().setVanished(p.getUniqueId(), false);
-                commandSender.sendMessage(ChatColor.GREEN + "You're no longer vanished!");
+        Player player = (Player)commandSender;
+        if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
+            if (plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
+                plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
             } else {
-                plugin.getVisibilityManager().setVanished(p.getUniqueId(), true);
-                commandSender.sendMessage(ChatColor.GREEN + "You're vanished!");
+                plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
             }
             return true;
         }else{
-            p.sendMessage(ChatColor.RED + "You have no permission to perform this!");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
         }
         return false;
     }

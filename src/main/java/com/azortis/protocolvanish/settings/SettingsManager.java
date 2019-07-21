@@ -34,23 +34,28 @@ public class SettingsManager {
 
     private ProtocolVanish plugin;
     private File settingsFile;
+    private File messageFile;
 
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private Map<String, Object> settingsMap;
+    private Map<String, Object> messageMap;
 
     public SettingsManager(ProtocolVanish plugin){
         this.plugin = plugin;
         if(plugin.getDataFolder().exists())plugin.getDataFolder().mkdir();
         settingsFile = new File(plugin.getDataFolder(), "settings.json");
+        messageFile = new File(plugin.getDataFolder(), "messages.json");
         if(!settingsFile.exists())plugin.saveResource(settingsFile.getName(), false);
+        if(!messageFile.exists())plugin.saveResource(messageFile.getName(), false);
         try {
             settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
+            messageMap = gson.fromJson(new FileReader(messageFile), Map.class);
         }catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    public void saveFile(){
+    public void saveSettingsFile(){
         try {
             final String json = gson.toJson(settingsMap);
             settingsFile.delete();
@@ -60,12 +65,34 @@ public class SettingsManager {
         }
     }
 
-    public void reloadFile(){
+    public void reloadSettingsFile(){
         try{
             settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void saveMessageFile(){
+        try{
+            final String json = gson.toJson(messageMap);
+            messageFile.delete();
+            Files.write(messageFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadMessageFile(){
+        try{
+            messageMap = gson.fromJson(new FileReader(messageFile), Map.class);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public MessageSettingsWrapper getMessageSettings(){
+        return new MessageSettingsWrapper(this, settingsMap.get("messageSettings"), messageMap.get("messages"));
     }
 
     public PermissionSettingsWrapper getPermissionSettings(){
@@ -82,6 +109,10 @@ public class SettingsManager {
 
     public Map<String, Object> getSettingsMap(){
         return settingsMap;
+    }
+
+    public Map<String, Object> getMessageMap(){
+        return messageMap;
     }
 
 }

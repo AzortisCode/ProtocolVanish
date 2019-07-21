@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.events;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,18 +31,25 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class JoinEvent implements Listener {
 
     private ProtocolVanish plugin;
+    private MessageSettingsWrapper messageSettings;
 
     public JoinEvent(ProtocolVanish plugin){
         this.plugin = plugin;
+        this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        if(plugin.getVisibilityManager().isVanished(player.getUniqueId())){
-            event.getPlayer().sendMessage(ChatColor.GREEN + "You joined silently.");
+        if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && messageSettings.getHideRealJoinQuitMessages()){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
             event.setJoinMessage("");
+            for(Player viewer : Bukkit.getOnlinePlayers()){
+                if(plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer){
+                    viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherJoinedSilently").replaceAll("\\{player}", player.getName())));
+                }
+            }
         }
     }
 

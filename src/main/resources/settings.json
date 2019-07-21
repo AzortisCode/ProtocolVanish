@@ -1,4 +1,11 @@
 {
+  "messageSettings": {
+    "broadCastFakeQuitOnVanish": true,
+    "broadCastFakeJoinOnReappear": true,
+    "announceVanishStateToAdmins": true,
+    "sendFakeJoinQuitMessagesOnlyToUsers": true,
+    "hideRealJoinQuitMessages": true
+  },
   "permissionSettings": {
     "enableSeePermission": true,
     "enableLayeredPermissions": true,

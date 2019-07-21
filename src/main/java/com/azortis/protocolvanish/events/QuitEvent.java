@@ -19,7 +19,9 @@
 package com.azortis.protocolvanish.events;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,9 +34,11 @@ import java.util.UUID;
 public class QuitEvent implements Listener {
 
     private ProtocolVanish plugin;
+    private MessageSettingsWrapper messageSettings;
 
     public QuitEvent(ProtocolVanish plugin){
         this.plugin = plugin;
+        this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -44,7 +48,14 @@ public class QuitEvent implements Listener {
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
             plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).clearHiddenFrom();
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
-            event.setQuitMessage("");
+            if(messageSettings.getHideRealJoinQuitMessages()){
+                event.setQuitMessage("");
+                for (Player viewer : Bukkit.getOnlinePlayers()){
+                    if(plugin.getPermissionManager().hasPermissionToSee(player, viewer)  && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer){
+                        viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherLeftSilently").replaceAll("\\{player}", player.getName())));
+                    }
+                }
+            }
         }
         for(UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
             plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, false);

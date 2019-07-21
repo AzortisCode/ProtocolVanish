@@ -1,0 +1,14 @@
+{
+  "messages": {
+    "noPermission": "&cYou have no permission to perform this!",
+    "onVanish": "&aYou're now vanished.",
+    "onReappear": "&aYou're no longer vanished.",
+    "joinedSilently": "&aYou've joined silently",
+    "otherJoinedSilently": "&a{player} has joined silently.",
+    "otherLeftSilently": "&a{player} has left silently.",
+    "vanishMessage": "&e{player} left the game",
+    "reappearMessage": "&e{player} joined the game",
+    "vanishMessageWithPerm": "&a{player} has gone in vanish.",
+    "reappearMessageWithPerm": "&a{player} has gone out of vanish."
+  }
+}

@@ -19,11 +19,13 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -36,9 +38,11 @@ import java.util.UUID;
 public class VisibilityChanger {
 
     private ProtocolVanish plugin;
+    private MessageSettingsWrapper messageSettings;
 
     VisibilityChanger(ProtocolVanish plugin){
         this.plugin = plugin;
+        this.messageSettings = plugin.getSettingsManager().getMessageSettings();
     }
 
     void vanishPlayer(UUID uuid){
@@ -48,7 +52,11 @@ public class VisibilityChanger {
                 player.hidePlayer(plugin, Bukkit.getPlayer(uuid));
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), true);
                 sendEntityDestroyPacket(player, Bukkit.getPlayer(uuid));
+                if(messageSettings.getBroadCastFakeQuitOnVanish())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", Bukkit.getPlayer(uuid).getName())));
+            }else if(messageSettings.getAnnounceVanishStateToAdmins() && player != Bukkit.getPlayer(uuid)){
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessageWithPerm").replaceAll("\\{player}", Bukkit.getPlayer(uuid).getName())));
             }
+            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", Bukkit.getPlayer(uuid).getName())));
         }
     }
 
@@ -59,7 +67,11 @@ public class VisibilityChanger {
                 player.showPlayer(plugin, Bukkit.getPlayer(uuid));
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), false);
                 sendSpawnPlayerPacket(player, Bukkit.getPlayer(uuid));
+                if(messageSettings.getBroadCastFakeJoinOnReappear())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", Bukkit.getPlayer(uuid).getName())));
+            }else if(messageSettings.getAnnounceVanishStateToAdmins() && player != Bukkit.getPlayer(uuid)){
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessageWithPerm").replaceAll("\\{player}", Bukkit.getPlayer(uuid).getName())));
             }
+            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", Bukkit.getPlayer(uuid).getName())));
         }
     }
 

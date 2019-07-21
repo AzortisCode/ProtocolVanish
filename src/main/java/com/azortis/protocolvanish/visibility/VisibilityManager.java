@@ -75,7 +75,7 @@ public class VisibilityManager {
             plugin.getAzortisLib().getLogger().warning("You're invisibility settings are invalid, changing some values...");
             visibilitySettings.setEnabledPacketListeners(enabledPacketListeners);
             visibilitySettings.save();
-            plugin.getSettingsManager().saveFile();
+            plugin.getSettingsManager().saveSettingsFile();
         }
     }
 
