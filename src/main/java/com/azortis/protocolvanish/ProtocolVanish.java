@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish;
 
 import com.azortis.azortislib.AzortisLib;
+import com.azortis.protocolvanish.api.VanishAPI;
 import com.azortis.protocolvanish.command.VanishCommand;
 import com.azortis.protocolvanish.events.JoinEvent;
 import com.azortis.protocolvanish.events.LoginEvent;
@@ -54,6 +55,8 @@ public final class ProtocolVanish extends JavaPlugin {
         new LoginEvent(this);
         new JoinEvent(this);
         new QuitEvent(this);
+
+        VanishAPI.setPlugin(this);
     }
 
     @Override

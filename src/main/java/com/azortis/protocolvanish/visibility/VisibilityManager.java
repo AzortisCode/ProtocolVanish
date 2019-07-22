@@ -19,6 +19,8 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.api.PlayerReappearEvent;
+import com.azortis.protocolvanish.api.PlayerVanishEvent;
 import com.azortis.protocolvanish.settings.VisibilitySettingsWrapper;
 import com.azortis.protocolvanish.visibility.packetlisteners.*;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -81,15 +83,24 @@ public class VisibilityManager {
 
     public void setVanished(UUID uuid, boolean vanished){
         if(vanishedPlayers.contains(uuid) && vanished)return;
-        plugin.getStorageManager().setVanished(uuid, vanished);
         if(vanished){
-            vanishedPlayers.add(uuid);
-            vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
-            visibilityChanger.vanishPlayer(uuid);
+            PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(Bukkit.getPlayer(uuid));
+            Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
+            if(!playerVanishEvent.isCancelled()) {
+                vanishedPlayers.add(uuid);
+                vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
+                plugin.getStorageManager().setVanished(uuid, true);
+                visibilityChanger.vanishPlayer(uuid);
+            }
         }else{
-            vanishedPlayers.remove(uuid);
-            visibilityChanger.showPlayer(uuid);
-            vanishedPlayerMap.remove(uuid);
+            PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
+            Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
+            if(!playerReappearEvent.isCancelled()) {
+                vanishedPlayers.remove(uuid);
+                plugin.getStorageManager().setVanished(uuid, false);
+                visibilityChanger.showPlayer(uuid);
+                vanishedPlayerMap.remove(uuid);
+            }
         }
     }
 
