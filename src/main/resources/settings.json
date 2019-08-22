@@ -1,10 +1,18 @@
 {
+  "invisibilitySettings": {
+    "nightVisionEffect": true,
+    "disableDamage": true,
+    "disableHunger": true,
+    "disableLivingEntityTarget": true,
+    "disableExpPickup": true
+  },
   "messageSettings": {
     "broadCastFakeQuitOnVanish": true,
     "broadCastFakeJoinOnReappear": true,
     "announceVanishStateToAdmins": true,
     "sendFakeJoinQuitMessagesOnlyToUsers": true,
-    "hideRealJoinQuitMessages": true
+    "hideRealJoinQuitMessages": true,
+    "displayActionBar": true
   },
   "permissionSettings": {
     "enableSeePermission": true,

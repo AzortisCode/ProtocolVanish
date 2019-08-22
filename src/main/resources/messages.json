@@ -9,6 +9,7 @@
     "vanishMessage": "&e{player} left the game",
     "reappearMessage": "&e{player} joined the game",
     "vanishMessageWithPerm": "&a{player} has gone in vanish.",
-    "reappearMessageWithPerm": "&a{player} has gone out of vanish."
+    "reappearMessageWithPerm": "&a{player} has gone out of vanish.",
+    "actionBarMsg": "&aYou're in vanish."
   }
 }

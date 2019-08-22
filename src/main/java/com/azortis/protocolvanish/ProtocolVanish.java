@@ -21,9 +21,7 @@ package com.azortis.protocolvanish;
 import com.azortis.azortislib.AzortisLib;
 import com.azortis.protocolvanish.api.VanishAPI;
 import com.azortis.protocolvanish.command.VanishCommand;
-import com.azortis.protocolvanish.events.JoinEvent;
-import com.azortis.protocolvanish.events.LoginEvent;
-import com.azortis.protocolvanish.events.QuitEvent;
+import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.visibility.VisibilityManager;
 import org.bukkit.Bukkit;
@@ -52,9 +50,12 @@ public final class ProtocolVanish extends JavaPlugin {
         this.storageManager = new StorageManager(this);
 
         new VanishCommand(this);
-        new LoginEvent(this);
-        new JoinEvent(this);
-        new QuitEvent(this);
+        new PlayerLoginListener(this);
+        new PlayerJoinListener(this);
+        new PlayerQuitListener(this);
+        new EntityDamageListener(this);
+        new FoodLevelChangeListener(this);
+        new EntityTargetLivingEntityListener(this);
 
         VanishAPI.setPlugin(this);
     }

@@ -16,10 +16,12 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.events;
+package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
+import com.azortis.protocolvanish.utils.ExpReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,15 +29,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-public class JoinEvent implements Listener {
+public class PlayerJoinListener implements Listener {
 
     private ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
+    private InvisibilitySettingsWrapper invisibilitySettings;
 
-    public JoinEvent(ProtocolVanish plugin){
+    public PlayerJoinListener(ProtocolVanish plugin){
         this.plugin = plugin;
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
+        this.invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -43,6 +49,8 @@ public class JoinEvent implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && messageSettings.getHideRealJoinQuitMessages()){
+            if(invisibilitySettings.getNightVisionEffect())player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+            if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, false);
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
             event.setJoinMessage("");
             for(Player viewer : Bukkit.getOnlinePlayers()){

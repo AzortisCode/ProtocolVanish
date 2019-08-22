@@ -87,6 +87,15 @@ public class MessageSettingsWrapper {
         settingsMap.put("hideRealJoinQuitMessages", hideRealJoinQuitMessages);
     }
 
+    public boolean getDisplayActionBar(){
+        return (Boolean) settingsMap.get("displayActionBar");
+    }
+
+    public void setDisplayActionBar(boolean displayActionBar){
+        settingsMap.remove("displayActionBar");
+        settingsMap.put("displayActionBar", displayActionBar);
+    }
+
     public void save(){
         Map<String, Object> parentSettingsMap = parent.getSettingsMap();
         parentSettingsMap.remove("messageSettings");

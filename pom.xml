@@ -6,7 +6,7 @@
 
     <groupId>com.azortis</groupId>
     <artifactId>protocolvanish</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
 
     <repositories>
         <repository>

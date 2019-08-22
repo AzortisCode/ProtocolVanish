@@ -16,39 +16,31 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.events;
+package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.VanishedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
-import java.util.Collection;
-import java.util.UUID;
-
-public class LoginEvent implements Listener {
+public class FoodLevelChangeListener implements Listener {
 
     private ProtocolVanish plugin;
 
-    public LoginEvent(ProtocolVanish plugin){
+    public FoodLevelChangeListener(ProtocolVanish plugin){
         this.plugin = plugin;
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event){
-        Player player = event.getPlayer();
-        if(plugin.getVisibilityManager().isVanished(player.getUniqueId())){
-            player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
-        }
-        Collection<UUID> onlineVanishedPlayer = plugin.getVisibilityManager().getOnlineVanishedPlayers();
-        for (UUID uuid : onlineVanishedPlayer){
-            VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);
-            vanishedPlayer.setVanished(player, true);
+    public void onFoodLevelChange(FoodLevelChangeEvent event){
+        if(event.getEntity() instanceof Player){
+            Player player = (Player)event.getEntity();
+            if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && plugin.getSettingsManager().getInvisibilitySettings().getDisableHunger() && player.getFoodLevel() > event.getFoodLevel()){
+                event.setCancelled(true);
+            }
         }
     }
 

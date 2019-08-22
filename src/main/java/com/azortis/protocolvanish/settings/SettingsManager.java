@@ -99,6 +99,10 @@ public class SettingsManager {
         return new PermissionSettingsWrapper(this, settingsMap.get("permissionSettings"));
     }
 
+    public InvisibilitySettingsWrapper getInvisibilitySettings(){
+        return new InvisibilitySettingsWrapper(this, settingsMap.get("invisibilitySettings"));
+    }
+
     public VisibilitySettingsWrapper getVisibilitySettings(){
         return new VisibilitySettingsWrapper(this, settingsMap.get("visibilitySettings"));
     }
