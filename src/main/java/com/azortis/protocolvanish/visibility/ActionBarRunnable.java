@@ -44,12 +44,12 @@ public class ActionBarRunnable implements Runnable{
         if(plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
             for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
                 try {
-                    PacketContainer actionBarPacket = new PacketContainer(PacketType.Play.Server.CHAT);
-                    actionBarPacket.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
-                    actionBarPacket.getChatComponents().write(0, WrappedChatComponent.fromText
+                    PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.CHAT);
+                    packetContainer.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
+                    packetContainer.getChatComponents().write(0, WrappedChatComponent.fromText
                             (ChatColor.translateAlternateColorCodes('&',
                                     plugin.getSettingsManager().getMessageSettings().getMessage("actionBarMsg"))));
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(Bukkit.getPlayer(uuid), actionBarPacket);
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(Bukkit.getPlayer(uuid), packetContainer);
                 }catch (InvocationTargetException ex){
                     ex.printStackTrace();
                 }

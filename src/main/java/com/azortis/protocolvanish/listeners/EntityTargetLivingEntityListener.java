@@ -41,9 +41,11 @@ public class EntityTargetLivingEntityListener implements Listener {
         if(event.getTarget() instanceof Player){
             Player player = (Player)event.getTarget();
             if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-                if (event.getEntity() instanceof ExperienceOrb && plugin.getSettingsManager().getInvisibilitySettings().getDisableExpPickup()) {
+                if (event.getEntity() instanceof ExperienceOrb
+                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableExpPickup()) {
                     event.setTarget(null);
-                }else if(event.getEntity() instanceof LivingEntity && plugin.getSettingsManager().getInvisibilitySettings().getDisableLivingEntityTarget()){
+                }else if(event.getEntity() instanceof LivingEntity
+                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableLivingEntityTarget()){
                     event.setTarget(null);
                 }
             }

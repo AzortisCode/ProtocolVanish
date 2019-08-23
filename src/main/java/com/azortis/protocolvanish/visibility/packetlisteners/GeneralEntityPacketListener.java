@@ -68,10 +68,17 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                 }
                 event.setCancelled(true);
             } else {
-                int entityId;
+                int entityId = event.getPacket().getIntegers().read(0);
                 if (event.getPacket().getType() == PacketType.Play.Server.COLLECT) {
-                    entityId = event.getPacket().getIntegers().read(1);
-                } else entityId = event.getPacket().getIntegers().read(0);
+                    // To disable the exp pickup animation in case the receiver is vanished
+                    Player player = plugin.getVisibilityManager().getPlayerFromEntityID(event.getPacket().getIntegers().read(1), event.getPlayer().getWorld());
+                    if(player != null
+                            && plugin.getSettingsManager().getInvisibilitySettings().getDisableExpPickup()
+                            && plugin.getVisibilityManager().isVanished(player.getUniqueId()) && player == event.getPlayer()
+                            && event.getPacket().getIntegers().read(2) == 1){
+                        event.setCancelled(true);
+                    }else entityId = event.getPacket().getIntegers().read(1);
+                }
                 Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
                 if (player != null
                         && plugin.getVisibilityManager().isVanished(player.getUniqueId())

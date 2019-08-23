@@ -18,23 +18,20 @@
 
 package com.azortis.protocolvanish.utils;
 
-import com.comphenix.protocol.reflect.FuzzyReflection;
-import com.comphenix.protocol.utility.MinecraftReflection;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+        import com.comphenix.protocol.utility.MinecraftReflection;
+        import org.bukkit.Bukkit;
+        import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+        import java.lang.reflect.Field;
+        import java.lang.reflect.InvocationTargetException;
+        import java.lang.reflect.Method;
 
 public class ExpReflectionUtil {
 
-    private static Class craftHumanEntityClass;
     private static String expCooldownFieldName;
 
     public static void setExpPickup(Player player, boolean pickup){
-        if(craftHumanEntityClass == null){
-            craftHumanEntityClass = MinecraftReflection.getCraftBukkitClass("entity.CraftHumanEntity");
+        if(expCooldownFieldName == null){
             String minecraftVersion = MinecraftReflection.getPackageVersion();
             switch (minecraftVersion){
                 case "v1_13_R2":

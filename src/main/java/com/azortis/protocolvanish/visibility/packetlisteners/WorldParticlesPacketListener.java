@@ -29,11 +29,11 @@ import org.bukkit.Location;
 
 import java.util.UUID;
 
-public class WorldParticlePacketListener extends PacketAdapter {
+public class WorldParticlesPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public WorldParticlePacketListener(ProtocolVanish plugin){
+    public WorldParticlesPacketListener(ProtocolVanish plugin){
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.WORLD_PARTICLES);
         this.plugin = plugin;
     }

@@ -50,7 +50,7 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new TabCompletePacketListener(plugin));
         protocolManager.addPacketListener(new GeneralEntityPacketListener(plugin));
         protocolManager.addPacketListener(new NamedSoundEffectPacketListener(plugin));
-        protocolManager.addPacketListener(new WorldParticlePacketListener(plugin));
+        protocolManager.addPacketListener(new WorldParticlesPacketListener(plugin));
         new ActionBarRunnable(plugin);
     }
 

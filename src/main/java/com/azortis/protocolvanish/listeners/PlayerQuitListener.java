@@ -21,7 +21,6 @@ package com.azortis.protocolvanish.listeners;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import com.azortis.protocolvanish.settings.VisibilitySettingsWrapper;
 import com.azortis.protocolvanish.utils.ExpReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
