@@ -21,6 +21,7 @@ package com.azortis.protocolvanish.settings;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -52,6 +53,12 @@ public class SettingsManager {
             messageMap = gson.fromJson(new FileReader(messageFile), Map.class);
         }catch (IOException e){
             e.printStackTrace();
+        }
+        if(messageMap.get("messageVersion") == null || settingsMap.get("settingsVersion") == null
+                || (String)settingsMap.get("settingsVersion") != "1.0"
+                || (String)messageMap.get("messageVersion") != "1.0"){
+            plugin.getAzortisLib().getLogger().severe("Outdated config files. Please update them! Shutting down...");
+            Bukkit.getPluginManager().disablePlugin(plugin);
         }
     }
 

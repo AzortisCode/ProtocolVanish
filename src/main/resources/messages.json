@@ -13,5 +13,6 @@
     "actionBarMsg": "&aYou're in vanish.",
     "enabledItemPickup": "&aYou've enabled item pickup.",
     "disabledItemPickup": "&aYou've disabled item pickup."
-  }
+  },
+  "messageVersion": "1.0"
 }
