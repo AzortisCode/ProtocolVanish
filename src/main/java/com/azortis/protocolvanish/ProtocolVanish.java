@@ -46,13 +46,6 @@ public final class ProtocolVanish extends JavaPlugin {
             return;
         }
         this.settingsManager = new SettingsManager(this);
-        if(settingsManager.getMessageMap().get("messageVersion") == null || settingsManager.getSettingsMap().get("settingsVersion") == null
-                || settingsManager.getSettingsMap().get("settingsVersion") != "1.0"
-                || settingsManager.getMessageMap().get("messageVersion") != "1.0"){
-            this.azortisLib.getLogger().severe("Outdated config files. Please update them! Shutting down...");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
         this.storageManager = new StorageManager(this);
@@ -76,6 +69,10 @@ public final class ProtocolVanish extends JavaPlugin {
 
     public AzortisLib getAzortisLib() {
         return azortisLib;
+    }
+
+    public Metrics getMetrics(){
+        return metrics ;
     }
 
     public SettingsManager getSettingsManager() {

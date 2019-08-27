@@ -18,6 +18,7 @@
 
 package com.azortis.protocolvanish.visibility;
 
+import com.azortis.protocolvanish.Metrics;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.api.PlayerReappearEvent;
 import com.azortis.protocolvanish.api.PlayerVanishEvent;
@@ -52,6 +53,7 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new NamedSoundEffectPacketListener(plugin));
         protocolManager.addPacketListener(new WorldParticlesPacketListener(plugin));
         new ActionBarRunnable(plugin);
+        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()-> vanishedPlayers.size()));
     }
 
     private void validateSettings(){

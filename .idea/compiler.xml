@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="protocolvanish" />
         <module name="ProtocolVanish" />
+        <module name="protocolvanish" />
       </profile>
     </annotationProcessing>
   </component>
