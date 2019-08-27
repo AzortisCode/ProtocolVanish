@@ -98,10 +98,10 @@ public class VisibilityManager {
             PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
             Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
             if(!playerReappearEvent.isCancelled()) {
+                vanishedPlayers.remove(uuid);
                 plugin.getStorageManager().setVanished(uuid, false);
                 vanishPlayerMap.get(uuid).setVanishState(false);
                 visibilityChanger.showPlayer(uuid);
-                vanishPlayerMap.remove(uuid);
             }
         }
     }
