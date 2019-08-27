@@ -38,7 +38,7 @@ public class FoodLevelChangeListener implements Listener {
     public void onFoodLevelChange(FoodLevelChangeEvent event){
         if(event.getEntity() instanceof Player){
             Player player = (Player)event.getEntity();
-            if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && plugin.getSettingsManager().getInvisibilitySettings().getDisableHunger() && player.getFoodLevel() > event.getFoodLevel()){
+            if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && plugin.getSettingsManager().getInvisibilitySettings().getDisableHunger() && player.getFoodLevel() >= event.getFoodLevel()){
                 event.setCancelled(true);
             }
         }

@@ -21,7 +21,6 @@ package com.azortis.protocolvanish.listeners;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import com.azortis.protocolvanish.utils.ExpReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -51,10 +50,10 @@ public class PlayerQuitListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-            plugin.getVisibilityManager().getVanishedPlayer(player.getUniqueId()).clearHiddenFrom();
+            plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).clearHiddenFrom();
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
             if(invisibilitySettings.getNightVisionEffect())player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, true);
+            //if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, true);
             if(messageSettings.getHideRealJoinQuitMessages()){
                 event.setQuitMessage("");
                 for (Player viewer : Bukkit.getOnlinePlayers()){
@@ -65,7 +64,7 @@ public class PlayerQuitListener implements Listener {
             }
         }
         for(UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
-            plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, false);
+            plugin.getVisibilityManager().getVanishPlayer(uuid).setVanished(player, false);
         }
     }
 

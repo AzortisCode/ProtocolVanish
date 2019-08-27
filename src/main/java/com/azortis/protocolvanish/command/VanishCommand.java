@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.command;
 
 import com.azortis.azortislib.command.*;
+import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
@@ -50,17 +51,37 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, AlCommand alCommand, String s, String[] strings) {
-        Player player = (Player)commandSender;
+    public boolean onCommand(CommandSender sender, AlCommand alCommand, String label, String[] args) {
+        Player player = (Player)sender;
         if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
-            if (plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-                plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
+            if(args.length == 0){
+                if (plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
+                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
+                } else {
+                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
+                }
+                return true;
             } else {
-                plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
+                if (args[0].equalsIgnoreCase("tipu")) {
+                    if (plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
+                        boolean itemPickup = plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).getItemPickUp();
+                        if (!itemPickup) {
+                            plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).setItemPickUp(true);
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
+                            return true;
+                        } else {
+                            plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).setItemPickUp(false);
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
+                            return true;
+                        }
+                    } else if (!plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                        return false;
+                    }
+                }
             }
-            return true;
         }else{
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
         }

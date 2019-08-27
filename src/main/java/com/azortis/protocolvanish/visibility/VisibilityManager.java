@@ -38,7 +38,7 @@ public class VisibilityManager {
     private VisibilityChanger visibilityChanger;
 
     private Collection<UUID> vanishedPlayers = new ArrayList<>();
-    private HashMap<UUID, VanishedPlayer> vanishedPlayerMap = new HashMap<>();
+    private HashMap<UUID, VanishPlayer> vanishPlayerMap = new HashMap<>();
 
     public VisibilityManager(ProtocolVanish plugin){
         this.plugin = plugin;
@@ -54,7 +54,7 @@ public class VisibilityManager {
         new ActionBarRunnable(plugin);
     }
 
-    public void validateSettings(){
+    private void validateSettings(){
         boolean valid = true;
         VisibilitySettingsWrapper visibilitySettings = plugin.getSettingsManager().getVisibilitySettings();
         List<String> enabledPacketListeners = visibilitySettings.getEnabledPacketListeners();
@@ -89,7 +89,8 @@ public class VisibilityManager {
             Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
             if(!playerVanishEvent.isCancelled()) {
                 vanishedPlayers.add(uuid);
-                vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
+                if(!vanishPlayerMap.containsKey(uuid))vanishPlayerMap.put(uuid, new VanishPlayer(Bukkit.getPlayer(uuid), true, plugin));
+                else vanishPlayerMap.get(uuid).setVanishState(true);
                 plugin.getStorageManager().setVanished(uuid, true);
                 visibilityChanger.vanishPlayer(uuid);
             }
@@ -97,10 +98,10 @@ public class VisibilityManager {
             PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
             Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
             if(!playerReappearEvent.isCancelled()) {
-                vanishedPlayers.remove(uuid);
                 plugin.getStorageManager().setVanished(uuid, false);
+                vanishPlayerMap.get(uuid).setVanishState(false);
                 visibilityChanger.showPlayer(uuid);
-                vanishedPlayerMap.remove(uuid);
+                vanishPlayerMap.remove(uuid);
             }
         }
     }
@@ -117,7 +118,7 @@ public class VisibilityManager {
     public boolean isVanished(UUID uuid){
         if(!vanishedPlayers.contains(uuid) && plugin.getStorageManager().isVanished(uuid)){
             vanishedPlayers.add(uuid);
-            vanishedPlayerMap.put(uuid, new VanishedPlayer(Bukkit.getPlayer(uuid), plugin));
+            vanishPlayerMap.put(uuid, new VanishPlayer(Bukkit.getPlayer(uuid), true, plugin));
         }
         return vanishedPlayers.contains(uuid);
     }
@@ -132,8 +133,9 @@ public class VisibilityManager {
         return onlineVanishedPlayers;
     }
 
-    public VanishedPlayer getVanishedPlayer(UUID uuid){
-        return vanishedPlayerMap.get(uuid);
+    public VanishPlayer getVanishPlayer(UUID uuid){
+        if(!vanishPlayerMap.containsKey(uuid))vanishPlayerMap.put(uuid, new VanishPlayer(Bukkit.getPlayer(uuid), false, plugin));
+        return vanishPlayerMap.get(uuid);
     }
 
 }

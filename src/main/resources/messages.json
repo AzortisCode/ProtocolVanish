@@ -10,6 +10,8 @@
     "reappearMessage": "&e{player} joined the game",
     "vanishMessageWithPerm": "&a{player} has gone in vanish.",
     "reappearMessageWithPerm": "&a{player} has gone out of vanish.",
-    "actionBarMsg": "&aYou're in vanish."
+    "actionBarMsg": "&aYou're in vanish.",
+    "enabledItemPickup": "&aYou've enabled item pickup.",
+    "disabledItemPickup": "&aYou've disabled item pickup."
   }
 }

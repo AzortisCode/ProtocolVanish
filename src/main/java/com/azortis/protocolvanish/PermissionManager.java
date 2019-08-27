@@ -46,6 +46,7 @@ public class PermissionManager {
     public enum Permission{
         USE("use"),
         SEE("see"),
+        CHANGE_ITEM_PICKUP("bypass.itempickup"),
         ADMIN("admin");
 
         private String permissionNode;

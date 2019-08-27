@@ -24,19 +24,35 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class VanishedPlayer {
+public class VanishPlayer {
 
     private Player player;
+    private boolean vanished;
     private ProtocolVanish plugin;
     private Collection<Player> hiddenFrom = new ArrayList<>();
 
-    VanishedPlayer(Player player, ProtocolVanish plugin){
+    //Settings
+    private boolean itemPickUp;
+
+    public VanishPlayer(Player player, boolean vanished, ProtocolVanish plugin){
         this.player = player;
+        this.vanished = vanished;
         this.plugin = plugin;
+
+        //Apply default settings
+        this.itemPickUp = !plugin.getSettingsManager().getInvisibilitySettings().getDisableItemPickup();
     }
 
     public Player getPlayer(){
         return player;
+    }
+
+    public boolean getVanishState(){
+        return vanished;
+    }
+
+    public void setVanishState(boolean vanished){
+        this.vanished = vanished;
     }
 
     public boolean isVanished(Player viewer){
@@ -74,4 +90,11 @@ public class VanishedPlayer {
         return false;
     }
 
+    public boolean getItemPickUp() {
+        return itemPickUp;
+    }
+
+    public void setItemPickUp(boolean itemPickUp) {
+        this.itemPickUp = itemPickUp;
+    }
 }

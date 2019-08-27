@@ -56,6 +56,7 @@ public final class ProtocolVanish extends JavaPlugin {
         new EntityDamageListener(this);
         new FoodLevelChangeListener(this);
         new EntityTargetLivingEntityListener(this);
+        new EntityPickupItemListener(this);
 
         VanishAPI.setPlugin(this);
     }

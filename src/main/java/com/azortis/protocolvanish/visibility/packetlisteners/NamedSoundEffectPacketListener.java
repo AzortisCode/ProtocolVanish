@@ -19,7 +19,7 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.VanishedPlayer;
+import com.azortis.protocolvanish.visibility.VanishPlayer;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -47,11 +47,11 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
                 int z = event.getPacket().getIntegers().read(2) / 8;
 
                 for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
-                    VanishedPlayer vanishedPlayer = plugin.getVisibilityManager().getVanishedPlayer(uuid);
-                    if (vanishedPlayer.isVanished(event.getPlayer()) &&
-                            event.getPlayer().getWorld().equals(vanishedPlayer.getPlayer().getWorld()) &&
-                            vanishedPlayer.getPlayer().getLocation().distanceSquared
-                                    (new Location(vanishedPlayer.getPlayer().getWorld(), x, y, z)) < 2.D)
+                    VanishPlayer vanishPlayer = plugin.getVisibilityManager().getVanishPlayer(uuid);
+                    if (vanishPlayer.isVanished(event.getPlayer()) &&
+                            event.getPlayer().getWorld().equals(vanishPlayer.getPlayer().getWorld()) &&
+                            vanishPlayer.getPlayer().getLocation().distanceSquared
+                                    (new Location(vanishPlayer.getPlayer().getWorld(), x, y, z)) < 2.D)
                         event.setCancelled(true);
                 }
             }

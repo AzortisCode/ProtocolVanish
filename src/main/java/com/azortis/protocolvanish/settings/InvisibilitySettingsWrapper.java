@@ -58,23 +58,30 @@ public class InvisibilitySettingsWrapper {
         settingsMap.put("disableHunger", disableHunger);
     }
 
-    public boolean getDisableLivingEntityTarget(){
-        return (Boolean) settingsMap.get("disableLivingEntityTarget");
+    public boolean getDisableCreatureTarget(){
+        return (Boolean) settingsMap.get("disableCreatureTarget");
     }
 
-    public void setDisableMobTarget(boolean disableLivingEntityTarget){
-        settingsMap.remove("disableLivingEntityTarget");
-        settingsMap.put("disableLivingEntityTarget", disableLivingEntityTarget);
+    public void setCreatureTarget(boolean disableCreatureTarget){
+        settingsMap.remove("disableCreatureTarget");
+        settingsMap.put("disableCreatureTarget", disableCreatureTarget);
     }
 
-    public boolean getDisableExpPickup(){
+    public boolean getDisableItemPickup(){ return (Boolean) settingsMap.get("disableItemPickup"); }
+
+    public void setDisableItemPickup(boolean disableItemPickup){
+        settingsMap.remove("disableItemPickup");
+        settingsMap.put("disableItemPickup", disableItemPickup);
+    }
+
+    /*public boolean getDisableExpPickup(){
         return (Boolean) settingsMap.get("disableExpPickup");
     }
 
     public void setDisableExpPickup(boolean disableExpPickup){
         settingsMap.remove("disableExpPickup");
         settingsMap.put("disableExpPickup", disableExpPickup);
-    }
+    }*/
 
     public void save(){
         Map<String, Object> parrentSettingsMap = parent.getSettingsMap();

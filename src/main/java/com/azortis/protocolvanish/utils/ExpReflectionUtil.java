@@ -18,13 +18,13 @@
 
 package com.azortis.protocolvanish.utils;
 
-        import com.comphenix.protocol.utility.MinecraftReflection;
-        import org.bukkit.Bukkit;
-        import org.bukkit.entity.Player;
+import com.comphenix.protocol.utility.MinecraftReflection;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
-        import java.lang.reflect.Field;
-        import java.lang.reflect.InvocationTargetException;
-        import java.lang.reflect.Method;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ExpReflectionUtil {
 
@@ -45,7 +45,7 @@ public class ExpReflectionUtil {
             }
         }
         try {
-            Method getHandle = player.getClass().getSuperclass().getMethod("getHandle");
+            Method getHandle = player.getClass().getSuperclass().getDeclaredMethod("getHandle");
             Object entityHuman = getHandle.invoke(player);
             Field expCooldownField = MinecraftReflection.getEntityHumanClass().getDeclaredField(expCooldownFieldName);
             if(!pickup){

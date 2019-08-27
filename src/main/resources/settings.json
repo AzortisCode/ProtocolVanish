@@ -3,8 +3,8 @@
     "nightVisionEffect": true,
     "disableDamage": true,
     "disableHunger": true,
-    "disableLivingEntityTarget": true,
-    "disableExpPickup": true
+    "disableCreatureTarget": true,
+    "disableItemPickup": true
   },
   "messageSettings": {
     "broadCastFakeQuitOnVanish": true,

@@ -20,39 +20,27 @@ package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 
-public class EntityTargetLivingEntityListener implements Listener {
+public class EntityPickupItemListener implements Listener {
 
     private ProtocolVanish plugin;
 
-    public EntityTargetLivingEntityListener(ProtocolVanish plugin){
+    public EntityPickupItemListener(ProtocolVanish plugin){
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event){
-        if(event.getTarget() instanceof Player){
-            Player player = (Player)event.getTarget();
-            if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-                /*if (event.getEntity() instanceof ExperienceOrb
-                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableExpPickup()) {
-                    event.setTarget(null);
-                    event.setCancelled(true);
-                }*/
-                if(event.getEntity() instanceof LivingEntity
-                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableCreatureTarget()){
-                    event.setTarget(null);
-                    event.setCancelled(true);
-                }
-            }
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityPickupItem(EntityPickupItemEvent event){
+        if(event.getEntity() instanceof Player){
+            Player player = (Player)event.getEntity();
+            if(plugin.getVisibilityManager().isVanished(player.getUniqueId())
+                    && !plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).getItemPickUp())event.setCancelled(true);
         }
     }
-
 }

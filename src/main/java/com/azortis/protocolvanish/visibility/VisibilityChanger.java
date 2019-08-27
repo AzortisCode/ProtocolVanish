@@ -21,7 +21,6 @@ package com.azortis.protocolvanish.visibility;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import com.azortis.protocolvanish.utils.ExpReflectionUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
@@ -55,14 +54,14 @@ public class VisibilityChanger {
     void vanishPlayer(UUID uuid){
         Bukkit.getPlayer(uuid).setMetadata("vanished", new FixedMetadataValue(plugin, true));
         if(invisibilitySettings.getNightVisionEffect())Bukkit.getPlayer(uuid).addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-        if(invisibilitySettings.getDisableExpPickup())ExpReflectionUtil.setExpPickup(Bukkit.getPlayer(uuid), false);
-        if(invisibilitySettings.getDisableLivingEntityTarget()){
+        //if(invisibilitySettings.getDisableExpPickup())ExpReflectionUtil.setExpPickup(Bukkit.getPlayer(uuid), false);
+        if(invisibilitySettings.getDisableCreatureTarget()){
             for (Mob mob : Bukkit.getPlayer(uuid).getWorld().getEntitiesByClass(Mob.class)){
                 if(mob.getTarget() == Bukkit.getPlayer(uuid))mob.setTarget(null);
             }
         }
         for (Player player : Bukkit.getOnlinePlayers()){
-            if(plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, true)){
+            if(plugin.getVisibilityManager().getVanishPlayer(uuid).setVanished(player, true)){
                 player.hidePlayer(plugin, Bukkit.getPlayer(uuid));
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), true);
                 sendEntityDestroyPacket(player, Bukkit.getPlayer(uuid));
@@ -77,9 +76,9 @@ public class VisibilityChanger {
     void showPlayer(UUID uuid){
         Bukkit.getPlayer(uuid).setMetadata("vanished", new FixedMetadataValue(plugin, false));
         if(invisibilitySettings.getNightVisionEffect())Bukkit.getPlayer(uuid).removePotionEffect(PotionEffectType.NIGHT_VISION);
-        if(invisibilitySettings.getDisableExpPickup())ExpReflectionUtil.setExpPickup(Bukkit.getPlayer(uuid), true);
+        //if(invisibilitySettings.getDisableExpPickup())ExpReflectionUtil.setExpPickup(Bukkit.getPlayer(uuid), true);
         for (Player player : Bukkit.getOnlinePlayers()){
-            if(plugin.getVisibilityManager().getVanishedPlayer(uuid).setVanished(player, false)){
+            if(plugin.getVisibilityManager().getVanishPlayer(uuid).setVanished(player, false)){
                 player.showPlayer(plugin, Bukkit.getPlayer(uuid));
                 sendPlayerInfoPacket(player, Bukkit.getPlayer(uuid), false);
                 sendSpawnPlayerPacket(player, Bukkit.getPlayer(uuid));

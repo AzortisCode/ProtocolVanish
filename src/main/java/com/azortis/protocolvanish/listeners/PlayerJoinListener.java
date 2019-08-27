@@ -21,7 +21,6 @@ package com.azortis.protocolvanish.listeners;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import com.azortis.protocolvanish.utils.ExpReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -50,7 +49,7 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && messageSettings.getHideRealJoinQuitMessages()){
             if(invisibilitySettings.getNightVisionEffect())player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-            if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, false);
+            //if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, false);
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
             event.setJoinMessage("");
             for(Player viewer : Bukkit.getOnlinePlayers()){
