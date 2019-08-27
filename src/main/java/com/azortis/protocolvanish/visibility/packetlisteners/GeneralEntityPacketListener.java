@@ -62,7 +62,9 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                         entityIdList.add(entityId);
                     } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
                             !plugin.getVisibilityManager().getVanishPlayer
-                                    (player.getUniqueId()).isVanished(event.getPlayer())) entityIdList.add(entityId);
+                                    (player.getUniqueId()).isVanished(event.getPlayer())){
+                        entityIdList.add(entityId);
+                    } else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId()))entityIdList.add(entityId);
                 }
                 if (entityIdList.size() >= 1) {
                     event.getPacket().getIntegerArrays().write(0, entityIdList.stream().mapToInt(i->i).toArray());
