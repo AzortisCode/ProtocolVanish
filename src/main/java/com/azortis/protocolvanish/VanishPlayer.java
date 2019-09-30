@@ -16,20 +16,15 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.visibility;
+package com.azortis.protocolvanish;
 
-import com.azortis.protocolvanish.ProtocolVanish;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class VanishPlayer {
 
     private Player player;
     private boolean vanished;
     private ProtocolVanish plugin;
-    private Collection<Player> hiddenFrom = new ArrayList<>();
 
     //Settings
     private boolean itemPickUp;
@@ -53,41 +48,6 @@ public class VanishPlayer {
 
     public void setVanishState(boolean vanished){
         this.vanished = vanished;
-    }
-
-    public boolean isVanished(Player viewer){
-        return hiddenFrom.contains(viewer);
-    }
-
-    public Collection<Player> getHiddenFrom(){
-        return hiddenFrom;
-    }
-
-    public void clearHiddenFrom(){
-        hiddenFrom.clear();
-    }
-
-    /**
-     * Set the player vanished from the viewer
-     *
-     * @param viewer The viewer
-     * @param vanished If the player should be vanished
-     * @return If the state has changed
-     */
-    public boolean setVanished(Player viewer, boolean vanished){
-        if(viewer == player)return false;
-        if(hiddenFrom.contains(viewer) && vanished)return false;
-        if(!hiddenFrom.contains(viewer) && vanished){
-            if(plugin.getPermissionManager().hasPermissionToSee(this.player, viewer)){
-                return false;
-            }
-            hiddenFrom.add(viewer);
-            return true;
-        }else if(hiddenFrom.contains(viewer) && !vanished){
-            hiddenFrom.remove(viewer);
-            return true;
-        }
-        return false;
     }
 
     public boolean getItemPickUp() {

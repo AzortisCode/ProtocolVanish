@@ -40,7 +40,7 @@ public class EntityPickupItemListener implements Listener {
         if(event.getEntity() instanceof Player){
             Player player = (Player)event.getEntity();
             if(plugin.getVisibilityManager().isVanished(player.getUniqueId())
-                    && !plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).getItemPickUp())event.setCancelled(true);
+                    && !plugin.getVanishPlayer(player.getUniqueId()).getItemPickUp())event.setCancelled(true);
         }
     }
 }

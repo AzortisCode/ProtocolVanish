@@ -19,7 +19,7 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.VanishPlayer;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -47,8 +47,8 @@ public class WorldParticlesPacketListener extends PacketAdapter {
                 float z = event.getPacket().getFloat().read(2);
 
                 for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
-                    VanishPlayer vanishPlayer = plugin.getVisibilityManager().getVanishPlayer(uuid);
-                    if (vanishPlayer.isVanished(event.getPlayer()) &&
+                    VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+                    if (plugin.getVisibilityManager().isVanishedFrom(vanishPlayer.getPlayer(), event.getPlayer()) &&
                             event.getPlayer().getWorld().equals(vanishPlayer.getPlayer().getWorld()) &&
                             vanishPlayer.getPlayer().getLocation().distanceSquared
                                     (new Location(vanishPlayer.getPlayer().getWorld(), x, y, z)) < 3.0D)

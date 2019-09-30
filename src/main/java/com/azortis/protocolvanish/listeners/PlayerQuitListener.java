@@ -50,7 +50,7 @@ public class PlayerQuitListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
         if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-            plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).clearHiddenFrom();
+            plugin.getVisibilityManager().clearVanishedFrom(player);
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
             if(invisibilitySettings.getNightVisionEffect())player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             //if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, true);
@@ -64,7 +64,7 @@ public class PlayerQuitListener implements Listener {
             }
         }
         for(UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
-            plugin.getVisibilityManager().getVanishPlayer(uuid).setVanished(player, false);
+            plugin.getVisibilityManager().setVanished(Bukkit.getPlayer(uuid), player, false);
         }
     }
 

@@ -19,7 +19,6 @@
 package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.VanishPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,8 +45,7 @@ public class PlayerLoginListener implements Listener {
         }
         Collection<UUID> onlineVanishedPlayer = plugin.getVisibilityManager().getOnlineVanishedPlayers();
         for (UUID uuid : onlineVanishedPlayer){
-            VanishPlayer vanishPlayer = plugin.getVisibilityManager().getVanishPlayer(uuid);
-            vanishPlayer.setVanished(player, true);
+            plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
         }
     }
 

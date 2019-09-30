@@ -23,10 +23,12 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
+@SuppressWarnings("all")
 public class GeneralEntityPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
@@ -51,20 +53,24 @@ public class GeneralEntityPacketListener extends PacketAdapter {
             if (event.getPacket().getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
                 UUID playerUUID = event.getPacket().getUUIDs().read(0);
                 if (plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(playerUUID)
-                        && plugin.getVisibilityManager().getVanishPlayer(playerUUID).isVanished(event.getPlayer()))
+                        && plugin.getVisibilityManager().isVanishedFrom(Bukkit.getPlayer(playerUUID), event.getPlayer()))
                     event.setCancelled(true);
             } else if (event.getPacket().getType() == PacketType.Play.Server.ENTITY_DESTROY) {
                 int[] entityIds = event.getPacket().getIntegerArrays().read(0);
                 List<Integer> entityIdList = new ArrayList<>();
                 for (int entityId : entityIds) {
                     Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
-                    if(player == null){
+                    if(player == null) {
+                        entityIdList.add(entityId);
+                    } else if((boolean)event.getPacket().getMeta("ignoreFilter").get()){
+                        Bukkit.broadcastMessage("debug 1");
                         entityIdList.add(entityId);
                     } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
-                            !plugin.getVisibilityManager().getVanishPlayer
-                                    (player.getUniqueId()).isVanished(event.getPlayer())){
+                            !plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer())){
                         entityIdList.add(entityId);
-                    } else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId()))entityIdList.add(entityId);
+                    } else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())){
+                        entityIdList.add(entityId);
+                    }
                 }
                 if (entityIdList.size() >= 1) {
                     event.getPacket().getIntegerArrays().write(0, entityIdList.stream().mapToInt(i->i).toArray());
@@ -73,11 +79,13 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                 event.setCancelled(true);
             } else {
                 int entityId;
-                if (event.getPacket().getType() == PacketType.Play.Server.COLLECT)entityId = event.getPacket().getIntegers().read(1); else entityId = event.getPacket().getIntegers().read(0);
+                if (event.getPacket().getType() == PacketType.Play.Server.COLLECT)entityId =
+                        event.getPacket().getIntegers().read(1);
+                else entityId = event.getPacket().getIntegers().read(0);
                 Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, event.getPlayer().getWorld());
                 if (player != null
                         && plugin.getVisibilityManager().isVanished(player.getUniqueId())
-                        && plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).isVanished(event.getPlayer()))
+                        && plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer()))
                     event.setCancelled(true);
             }
         }

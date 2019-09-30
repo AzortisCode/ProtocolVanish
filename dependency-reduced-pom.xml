@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.azortis</groupId>
   <artifactId>protocolvanish</artifactId>
-  <version>0.3.3-SNAPSHOT</version>
+  <version>0.3.4-SNAPSHOT</version>
   <build>
     <finalName>ProtocolVanish</finalName>
     <plugins>

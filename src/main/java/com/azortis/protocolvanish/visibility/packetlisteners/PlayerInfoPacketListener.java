@@ -19,13 +19,15 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.VanishPlayer;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,8 +49,8 @@ public class PlayerInfoPacketListener extends PacketAdapter {
             List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
             playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
                 if (onlineVanishedPlayers.contains(playerInfoData.getProfile().getUUID())) {
-                    VanishPlayer vanishPlayer = plugin.getVisibilityManager().getVanishPlayer(playerInfoData.getProfile().getUUID());
-                    return vanishPlayer.isVanished(event.getPlayer()) && event.getPacket().getPlayerInfoAction().read(0) != EnumWrappers.PlayerInfoAction.REMOVE_PLAYER;
+                    Player player = Bukkit.getPlayer(playerInfoData.getProfile().getUUID());
+                    return plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer()) && event.getPacket().getPlayerInfoAction().read(0) != EnumWrappers.PlayerInfoAction.REMOVE_PLAYER;
                 }
                 return false;
             });

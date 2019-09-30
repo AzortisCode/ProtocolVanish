@@ -6,7 +6,7 @@
 
     <groupId>com.azortis</groupId>
     <artifactId>protocolvanish</artifactId>
-    <version>0.3.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.azortis</groupId>
             <artifactId>azortislib</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>0.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

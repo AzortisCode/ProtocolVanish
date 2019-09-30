@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
+public class VanishCommand implements ICommandExecutor, ITabCompleter {
 
     private ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
@@ -38,7 +38,7 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
     public VanishCommand(ProtocolVanish plugin){
         this.plugin = plugin;
         CommandSettingsWrapper commandSettings = plugin.getSettingsManager().getCommandSettings();
-        AlCommand command = new CommandBuilder()
+        Command command = new CommandBuilder()
                 .setName(commandSettings.getName())
                 .setDescription(commandSettings.getDescription())
                 .setUsage(commandSettings.getUsage())
@@ -51,7 +51,7 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, AlCommand alCommand, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command alCommand, String label, String[] args) {
         Player player = (Player)sender;
         if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
             if(args.length == 0){
@@ -66,13 +66,13 @@ public class VanishCommand implements IAlCommandExecutor, IAlTabCompleter {
             } else {
                 if (args[0].equalsIgnoreCase("tipu")) {
                     if (plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
-                        boolean itemPickup = plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).getItemPickUp();
+                        boolean itemPickup = plugin.getVanishPlayer(player.getUniqueId()).getItemPickUp();
                         if (!itemPickup) {
-                            plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).setItemPickUp(true);
+                            plugin.getVanishPlayer(player.getUniqueId()).setItemPickUp(true);
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
                             return true;
                         } else {
-                            plugin.getVisibilityManager().getVanishPlayer(player.getUniqueId()).setItemPickUp(false);
+                            plugin.getVanishPlayer(player.getUniqueId()).setItemPickUp(false);
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
                             return true;
                         }

@@ -25,7 +25,11 @@ import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.visibility.VisibilityManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public final class ProtocolVanish extends JavaPlugin {
 
@@ -35,6 +39,8 @@ public final class ProtocolVanish extends JavaPlugin {
     private PermissionManager permissionManager;
     private VisibilityManager visibilityManager;
     private StorageManager storageManager;
+
+    private HashMap<UUID, VanishPlayer> vanishPlayerMap = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -89,6 +95,15 @@ public final class ProtocolVanish extends JavaPlugin {
 
     public StorageManager getStorageManager() {
         return storageManager;
+    }
+
+    public VanishPlayer getVanishPlayer(UUID uuid){
+        if(!vanishPlayerMap.containsKey(uuid))vanishPlayerMap.put(uuid, new VanishPlayer(Bukkit.getPlayer(uuid), false, this));
+        return vanishPlayerMap.get(uuid);
+    }
+
+    public VanishPlayer getVanishPlayer(Player player){
+        return getVanishPlayer(player.getUniqueId());
     }
 
 }

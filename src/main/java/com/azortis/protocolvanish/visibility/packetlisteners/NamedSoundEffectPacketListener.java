@@ -19,13 +19,14 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.visibility.VanishPlayer;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -38,6 +39,7 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("all")
     @Override
     public void onPacketSending(PacketEvent event) {
         if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
@@ -47,11 +49,11 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
                 int z = event.getPacket().getIntegers().read(2) / 8;
 
                 for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
-                    VanishPlayer vanishPlayer = plugin.getVisibilityManager().getVanishPlayer(uuid);
-                    if (vanishPlayer.isVanished(event.getPlayer()) &&
-                            event.getPlayer().getWorld().equals(vanishPlayer.getPlayer().getWorld()) &&
-                            vanishPlayer.getPlayer().getLocation().distanceSquared
-                                    (new Location(vanishPlayer.getPlayer().getWorld(), x, y, z)) < 2.D)
+                    Player player = Bukkit.getPlayer(uuid);
+                    if (plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer()) &&
+                            event.getPlayer().getWorld().equals(player.getWorld()) &&
+                            player.getLocation().distanceSquared
+                                    (new Location(player.getWorld(), x, y, z)) < 2.D)
                         event.setCancelled(true);
                 }
             }
