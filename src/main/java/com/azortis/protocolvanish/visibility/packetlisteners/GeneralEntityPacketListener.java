@@ -63,7 +63,6 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                     if(player == null) {
                         entityIdList.add(entityId);
                     } else if((boolean)event.getPacket().getMeta("ignoreFilter").get()){
-                        Bukkit.broadcastMessage("debug 1");
                         entityIdList.add(entityId);
                     } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
                             !plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer())){

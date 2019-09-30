@@ -36,20 +36,22 @@ public class StorageManager {
         this.database = plugin.getAzortisLib().getDatabaseManager().getDatabase();
         try(Connection connection = database.getConnection()){
             Statement statement = connection.createStatement();
-            statement.execute("CREATE TABLE IF NOT EXISTS userSettings(uuid varchar(36), vanished bool)");
+            statement.execute("CREATE TABLE IF NOT EXISTS userSettings(uuid varchar(36), vanished bool, nightVision bool, hunger bool, damage bool, creatureTarget bool, itemPickup bool)");
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
 
-    public void setVanished(UUID uuid, boolean vanished){
+    @Deprecated
+    public void setVanished(UUID uuid){
         if(!exists(uuid)){
-            createUser(uuid, vanished);
+            createVanishPlayer(uuid, plugin.getVanishPlayer(uuid));
             return;
         }
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
         try(Connection connection = database.getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE userSettings SET vanished=? WHERE uuid=?");
-            preparedStatement.setBoolean(1, vanished);
+            preparedStatement.setBoolean(1, vanishPlayer.isVanished());
             preparedStatement.setString(2, uuid.toString());
             preparedStatement.execute();
             preparedStatement.close();
@@ -58,6 +60,7 @@ public class StorageManager {
         }
     }
 
+    @Deprecated
     public boolean isVanished(UUID uuid){
         boolean vanished;
         try(Connection connection = database.getConnection()){
@@ -79,11 +82,16 @@ public class StorageManager {
         return vanished;
     }
 
-    private void createUser(UUID uuid, boolean vanished){
+    private void createVanishPlayer(UUID uuid, VanishPlayer vanishPlayer){
         try(Connection connection = database.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userSettings VALUES (?,?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userSettings VALUES (?,?,?,?,?,?,?)");
             preparedStatement.setString(1, uuid.toString());
-            preparedStatement.setBoolean(2, vanished);
+            preparedStatement.setBoolean(2, vanishPlayer.isVanished());
+            preparedStatement.setBoolean(3, vanishPlayer.doNightVision());
+            preparedStatement.setBoolean(4, vanishPlayer.doDamage());
+            preparedStatement.setBoolean(5, vanishPlayer.doHunger());
+            preparedStatement.setBoolean(6, vanishPlayer.doCreatureTarget());
+            preparedStatement.setBoolean(7, vanishPlayer.doItemPickUp());
             preparedStatement.execute();
             preparedStatement.close();
         }catch (SQLException e){

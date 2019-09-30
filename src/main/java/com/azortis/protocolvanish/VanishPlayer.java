@@ -27,6 +27,10 @@ public class VanishPlayer {
     private ProtocolVanish plugin;
 
     //Settings
+    private boolean nightVision;
+    private boolean damage;
+    private boolean hunger;
+    private boolean creatureTarget;
     private boolean itemPickUp;
 
     public VanishPlayer(Player player, boolean vanished, ProtocolVanish plugin){
@@ -42,19 +46,52 @@ public class VanishPlayer {
         return player;
     }
 
-    public boolean getVanishState(){
+    public boolean isVanished(){
         return vanished;
     }
 
-    public void setVanishState(boolean vanished){
+    public void setVanish(boolean vanished){
         this.vanished = vanished;
     }
 
-    public boolean getItemPickUp() {
+    public boolean doNightVision() {
+        return nightVision;
+    }
+
+    public void setNightVision(boolean nightVision) {
+        this.nightVision = nightVision;
+    }
+
+    public boolean doDamage() {
+        return damage;
+    }
+
+    public void setDamage(boolean damage) {
+        this.damage = damage;
+    }
+
+    public boolean doHunger() {
+        return hunger;
+    }
+
+    public void setHunger(boolean hunger) {
+        this.hunger = hunger;
+    }
+
+    public boolean doCreatureTarget() {
+        return creatureTarget;
+    }
+
+    public void setCreatureTarget(boolean creatureTarget) {
+        this.creatureTarget = creatureTarget;
+    }
+
+    public boolean doItemPickUp() {
         return itemPickUp;
     }
 
     public void setItemPickUp(boolean itemPickUp) {
         this.itemPickUp = itemPickUp;
     }
+
 }

@@ -97,9 +97,9 @@ public class VisibilityManager {
             Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
             if(!playerVanishEvent.isCancelled()) {
                 vanishedPlayers.add(uuid);
+                plugin.getVanishPlayer(uuid).setVanish(true);
                 vanishedFromMap.put(Bukkit.getPlayer(uuid), new ArrayList<>());
-                plugin.getVanishPlayer(uuid).setVanishState(true);
-                plugin.getStorageManager().setVanished(uuid, true);
+                plugin.getStorageManager().setVanished(uuid);
                 visibilityChanger.vanishPlayer(uuid);
             }
         }else{
@@ -107,8 +107,8 @@ public class VisibilityManager {
             Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
             if(!playerReappearEvent.isCancelled()) {
                 vanishedPlayers.remove(uuid);
-                plugin.getStorageManager().setVanished(uuid, false);
-                plugin.getVanishPlayer(uuid).setVanishState(false);
+                plugin.getVanishPlayer(uuid).setVanish(false);
+                plugin.getStorageManager().setVanished(uuid);
                 visibilityChanger.showPlayer(uuid);
                 clearVanishedFrom(Bukkit.getPlayer(uuid));
             }
@@ -166,7 +166,7 @@ public class VisibilityManager {
     public boolean isVanished(UUID uuid){
         if(!vanishedPlayers.contains(uuid) && plugin.getStorageManager().isVanished(uuid)){
             vanishedPlayers.add(uuid);
-            plugin.getVanishPlayer(uuid).setVanishState(true);
+            plugin.getVanishPlayer(uuid).setVanish(true);
         }
         return vanishedPlayers.contains(uuid);
     }
