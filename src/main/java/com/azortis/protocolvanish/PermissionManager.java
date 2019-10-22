@@ -48,6 +48,8 @@ public class PermissionManager {
         USE("use"),
         SEE("see"),
         CHANGE_ITEM_PICKUP("bypass.itempickup"),
+        CHANGE_CREATURE_TARGET("bypass.creaturetarget"),
+        CHANGE_HUNGER("bypass.hunger"),
         ADMIN("admin");
 
         private String permissionNode;

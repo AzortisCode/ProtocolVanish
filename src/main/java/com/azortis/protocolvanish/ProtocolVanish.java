@@ -23,6 +23,7 @@ import com.azortis.protocolvanish.api.VanishAPI;
 import com.azortis.protocolvanish.command.VanishCommand;
 import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
+import com.azortis.protocolvanish.storage.StorageManager;
 import com.azortis.protocolvanish.visibility.VisibilityManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -52,9 +53,9 @@ public final class ProtocolVanish extends JavaPlugin {
             return;
         }
         this.settingsManager = new SettingsManager(this);
+        this.storageManager = new StorageManager(this);
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
-        this.storageManager = new StorageManager(this);
 
         new VanishCommand(this);
         new PlayerLoginListener(this);
@@ -70,7 +71,7 @@ public final class ProtocolVanish extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        azortisLib.close();
+
     }
 
     public AzortisLib getAzortisLib() {

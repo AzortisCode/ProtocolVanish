@@ -5,7 +5,8 @@
     "port": "3306",
     "database": "database",
     "username": "admin",
-    "password": "admin"
+    "password": "admin",
+    "tablePrefix": "protocolvanish-"
   },
   "invisibilitySettings": {
     "nightVisionEffect": true,
