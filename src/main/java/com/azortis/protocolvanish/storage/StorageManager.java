@@ -19,11 +19,10 @@
 package com.azortis.protocolvanish.storage;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import org.bukkit.plugin.Plugin;
 
 public class StorageManager {
 
-    private Plugin plugin;
+    private ProtocolVanish plugin;
 
     public StorageManager(ProtocolVanish plugin){
         this.plugin = plugin;

@@ -22,55 +22,42 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class VisibilitySettingsWrapper {
-
-    private SettingsManager parent;
-    private Map<String, Object> settingsMap;
+public class VisibilitySettingsWrapper extends SettingsWrapper{
 
     public VisibilitySettingsWrapper(SettingsManager parent, Object settingsMap){
-        this.parent = parent;
-        this.settingsMap = (Map<String, Object>) settingsMap;
+        super(parent, settingsMap, "visibilitySettings");
     }
 
     public List<String> getEnabledPacketListeners(){
-        return (List<String>) settingsMap.get("enabledPacketListeners");
+        return getStringList("enabledPacketListeners");
     }
 
     public void setEnabledPacketListeners(List<String> enabledPacketListeners){
-        settingsMap.remove("enabledPacketListeners");
-        settingsMap.put("enabledPacketListeners", enabledPacketListeners);
+        setStringList("enabledPacketListeners", enabledPacketListeners);
     }
 
     public boolean getAdjustOnlinePlayerCount(){
-        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = getSection("externalVisibility");
         return (Boolean) externalVisibility.get("adjustOnlinePlayerCount");
     }
 
     public void setAdjustOnlinePlayerCount(boolean adjustOnlinePlayerCount){
-        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = getSection("externalVisibility");
         externalVisibility.remove("adjustOnlinePlayerCount");
         externalVisibility.put("adjustOnlinePlayerCount", adjustOnlinePlayerCount);
-        settingsMap.remove("externalVisibilty");
-        settingsMap.put("externalVisibilty", externalVisibility);
+        setSection("externalVisibility", externalVisibility);
     }
 
     public boolean getAdjustOnlinePlayerList(){
-        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = getSection("externalVisibility");
         return (Boolean) externalVisibility.get("adjustOnlinePlayerCount");
     }
 
     public void setAdjustOnlinePlayerList(boolean adjustOnlinePlayerList){
-        Map<String, Object> externalVisibility = (Map<String, Object>) settingsMap.get("externalVisibility");
+        Map<String, Object> externalVisibility = getSection("externalVisibility");
         externalVisibility.remove("adjustOnlinePlayerList");
         externalVisibility.put("adjustOnlinePlayerList", adjustOnlinePlayerList);
-        settingsMap.remove("externalVisibilty");
-        settingsMap.put("externalVisibilty", externalVisibility);
-    }
-
-    public void save(){
-        Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
-        parrentSettingsMap.remove("visibilitySettings");
-        parrentSettingsMap.put("visibilitySettings", settingsMap);
+        setSection("externalVisibility", externalVisibility);
     }
 
 }

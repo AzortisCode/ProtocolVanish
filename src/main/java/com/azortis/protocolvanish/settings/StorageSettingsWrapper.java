@@ -18,5 +18,10 @@
 
 package com.azortis.protocolvanish.settings;
 
-public class StorageSettingsWrapper {
+public class StorageSettingsWrapper extends SettingsWrapper{
+
+    public StorageSettingsWrapper(SettingsManager parent, Object settingsMap){
+        super(parent, settingsMap, "storageSettings");
+    }
+
 }
