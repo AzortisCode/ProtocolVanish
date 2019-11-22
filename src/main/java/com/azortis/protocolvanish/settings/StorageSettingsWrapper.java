@@ -18,10 +18,67 @@
 
 package com.azortis.protocolvanish.settings;
 
+@SuppressWarnings("all")
 public class StorageSettingsWrapper extends SettingsWrapper{
 
     public StorageSettingsWrapper(SettingsManager parent, Object settingsMap){
         super(parent, settingsMap, "storageSettings");
+    }
+
+    public boolean getUseMySQL(){
+        return getBoolean("useMySQL", null);
+    }
+
+    public void setUseMySQL(boolean useMySQL){
+        setBoolean("useMySQL", useMySQL, null);
+    }
+
+    public String getHost(){
+        return getString("host", null);
+    }
+
+    public void setHost(String host){
+        setString("host", host, null);
+    }
+
+    public String getPort(){
+        return getString("port", null);
+    }
+
+    public void setPort(String port){
+        setString("host", port, null);
+    }
+
+    public String getDatabase(){
+        return getString("database", null);
+    }
+
+    public void setDatabase(String database){
+        setString("database", database, null);
+    }
+
+    public String getUsername(){
+        return getString("username", null);
+    }
+
+    public void setUsername(String username){
+        setString("username", username, null);
+    }
+
+    public String getPassword(){
+        return getString("password", null);
+    }
+
+    public void setPassword(String password){
+        setString("password", password, null);
+    }
+
+    public String getTablePrefix(){
+        return getString("tablePrefix", null);
+    }
+
+    public void setTablePrefix(String tablePrefix){
+        setString("tablePrefix", tablePrefix, null);
     }
 
 }

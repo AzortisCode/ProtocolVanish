@@ -111,6 +111,10 @@ public class SettingsManager {
         return new CommandSettingsWrapper(this, settingsMap.get("commandSettings"));
     }
 
+    public StorageSettingsWrapper getStorageSettings(){
+        return new StorageSettingsWrapper(this, settingsMap.get("StorageSettings"));
+    }
+
     public Map<String, Object> getSettingsMap(){
         return settingsMap;
     }
