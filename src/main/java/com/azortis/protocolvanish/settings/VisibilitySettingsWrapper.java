@@ -19,7 +19,6 @@
 package com.azortis.protocolvanish.settings;
 
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("all")
 public class VisibilitySettingsWrapper extends SettingsWrapper{
@@ -29,35 +28,27 @@ public class VisibilitySettingsWrapper extends SettingsWrapper{
     }
 
     public List<String> getEnabledPacketListeners(){
-        return getStringList("enabledPacketListeners");
+        return getStringList("enabledPacketListeners", null);
     }
 
     public void setEnabledPacketListeners(List<String> enabledPacketListeners){
-        setStringList("enabledPacketListeners", enabledPacketListeners);
+        setStringList("enabledPacketListeners", enabledPacketListeners, null);
     }
 
     public boolean getAdjustOnlinePlayerCount(){
-        Map<String, Object> externalVisibility = getSection("externalVisibility");
-        return (Boolean) externalVisibility.get("adjustOnlinePlayerCount");
+        return getBoolean("adjustOnlinePlayerCount", getSection("externalVisibility"));
     }
 
     public void setAdjustOnlinePlayerCount(boolean adjustOnlinePlayerCount){
-        Map<String, Object> externalVisibility = getSection("externalVisibility");
-        externalVisibility.remove("adjustOnlinePlayerCount");
-        externalVisibility.put("adjustOnlinePlayerCount", adjustOnlinePlayerCount);
-        setSection("externalVisibility", externalVisibility);
+        setBoolean("adjustOnlinePlayerCount", adjustOnlinePlayerCount, getSection("externalVisibility"));
     }
 
     public boolean getAdjustOnlinePlayerList(){
-        Map<String, Object> externalVisibility = getSection("externalVisibility");
-        return (Boolean) externalVisibility.get("adjustOnlinePlayerCount");
+        return getBoolean("adjustOnlinePlayerList", getSection("externalVisibility"));
     }
 
     public void setAdjustOnlinePlayerList(boolean adjustOnlinePlayerList){
-        Map<String, Object> externalVisibility = getSection("externalVisibility");
-        externalVisibility.remove("adjustOnlinePlayerList");
-        externalVisibility.put("adjustOnlinePlayerList", adjustOnlinePlayerList);
-        setSection("externalVisibility", externalVisibility);
+        setBoolean("adjustOnlinePlayerList", adjustOnlinePlayerList, getSection("externalVisibility"));
     }
 
 }

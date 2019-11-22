@@ -18,52 +18,35 @@
 
 package com.azortis.protocolvanish.settings;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @SuppressWarnings("all")
-public class PermissionSettingsWrapper {
-
-    private SettingsManager parent;
-    private Map<String, Object> settingsMap;
+public class PermissionSettingsWrapper extends SettingsWrapper{
 
     public PermissionSettingsWrapper(SettingsManager parent, Object settingsMap){
-        this.parent = parent;
-        this.settingsMap = (Map<String, Object>) settingsMap;
+        super(parent, settingsMap, "permissionSettings");
     }
 
     public boolean getEnableSeePermission(){
-        return (Boolean) settingsMap.get("enableSeePermission");
+        return getBoolean("enableSeePermission", null);
     }
 
     public void setEnableSeePermission(boolean enableSeePermission){
-        settingsMap.remove("enableSeePermission");
-        settingsMap.put("enableSeePermission", enableSeePermission);
+        setBoolean("enableSeePermission", enableSeePermission, null);
     }
 
     public boolean getEnableLayeredPermissions(){
-        return (Boolean) settingsMap.get("enableLayeredPermissions");
+        return getBoolean("enableLayeredPermissions", null);
     }
 
     public void setEnableLayeredPermissions(boolean enableLayeredPermissions){
-        settingsMap.remove("enableLayeredPermissions");
-        settingsMap.put("enableLayeredPermissions", enableLayeredPermissions);
+        setBoolean("enableLayeredPermissions", enableLayeredPermissions, null);
     }
 
     public int getMaxLevel(){
-        Number maxLevel = (Number) settingsMap.get("maxLevel");
-        return maxLevel.intValue();
+        return getInteger("maxLevel", null);
     }
 
     public void setMaxLevel(int maxLevel){
-        settingsMap.remove("maxLevel");
-        settingsMap.put("maxLevel", maxLevel);
-    }
-
-    public void save(){
-        Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
-        parrentSettingsMap.remove("permissionSettings");
-        parrentSettingsMap.put("permissionSettings", settingsMap);
+        setInteger("maxLevel", maxLevel, null);
     }
 
 }

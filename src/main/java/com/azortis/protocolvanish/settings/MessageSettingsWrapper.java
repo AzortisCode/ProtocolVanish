@@ -21,15 +21,12 @@ package com.azortis.protocolvanish.settings;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class MessageSettingsWrapper {
+public class MessageSettingsWrapper extends SettingsWrapper{
 
-    private SettingsManager parent;
-    private Map<String, Object> settingsMap;
     private Map<String, Object> messageMap;
 
     public MessageSettingsWrapper(SettingsManager parent, Object settingsMap, Object messageMap){
-        this.parent = parent;
-        this.settingsMap = (Map<String, Object>) settingsMap;
+        super(parent, settingsMap, "messageSettings");
         this.messageMap = (Map<String, Object>) messageMap;
     }
 
@@ -43,64 +40,56 @@ public class MessageSettingsWrapper {
     }
 
     public boolean getBroadCastFakeQuitOnVanish(){
-        return (Boolean) settingsMap.get("broadCastFakeQuitOnVanish");
+        return getBoolean("broadCastFakeQuitOnVanish", null);
     }
 
     public void setBroadCastFakeQuitOnVanish(boolean broadCastFakeQuitOnVanish){
-        settingsMap.remove("broadCastFakeQuitOnVanish");
-        settingsMap.put("broadCastFakeQuitOnVanish", broadCastFakeQuitOnVanish);
+        setBoolean("broadCastFakeQuitOnVanish", broadCastFakeQuitOnVanish, null);
     }
 
     public boolean getBroadCastFakeJoinOnReappear(){
-        return (Boolean) settingsMap.get("broadCastFakeJoinOnReappear");
+        return getBoolean("broadCastFakeJoinOnReappear", null);
     }
 
     public void setBroadCastJoinQuitOnReappear(boolean broadCastFakeJoinOnReappear){
-        settingsMap.remove("broadCastFakeJoinOnReappear");
-        settingsMap.put("broadCastFakeJoinOnReappear", broadCastFakeJoinOnReappear);
+        setBoolean("broadCastFakeJoinOnReappear", broadCastFakeJoinOnReappear, null);
     }
 
     public boolean getAnnounceVanishStateToAdmins(){
-        return (Boolean) settingsMap.get("announceVanishStateToAdmins");
+        return getBoolean("announceVanishStateToAdmins", null);
     }
 
     public void setAnnounceVanishStateToAdmins(boolean announceVanishStateToAdmins){
-        settingsMap.remove("announceVanishStateToAdmins");
-        settingsMap.put("announceVanishStateToAdmins", announceVanishStateToAdmins);
+        setBoolean("announceVanishStateToAdmins", announceVanishStateToAdmins, null);
     }
 
     public boolean getSendFakeJoinQuitMessagesOnlyToUsers(){
-        return (Boolean) settingsMap.get("sendFakeJoinQuitMessagesOnlyToUsers");
+        return getBoolean("sendFakeJoinQuitMessagesOnlyToUsers", null);
     }
 
     public void setSendFakeJoinQuitMessagesOnlyToUsers(boolean sendFakeJoinQuitMessagesOnlyToUsers){
-        settingsMap.remove("sendFakeJoinQuitMessagesOnlyToUsers");
-        settingsMap.put("sendFakeJoinQuitMessagesOnlyToUsers", sendFakeJoinQuitMessagesOnlyToUsers);
+        setBoolean("sendFakeJoinQuitMessagesOnlyToUsers", sendFakeJoinQuitMessagesOnlyToUsers, null);
     }
 
     public boolean getHideRealJoinQuitMessages(){
-        return (Boolean) settingsMap.get("hideRealJoinQuitMessages");
+        return getBoolean("hideRealJoinQuitMessages", null);
     }
 
     public void setHideRealJoinQuitMessages(boolean hideRealJoinQuitMessages){
-        settingsMap.remove("hideRealJoinQuitMessages");
-        settingsMap.put("hideRealJoinQuitMessages", hideRealJoinQuitMessages);
+        setBoolean("hideRealJoinQuitMessages", hideRealJoinQuitMessages, null);
     }
 
     public boolean getDisplayActionBar(){
-        return (Boolean) settingsMap.get("displayActionBar");
+        return getBoolean("displayActionBar", null);
     }
 
     public void setDisplayActionBar(boolean displayActionBar){
-        settingsMap.remove("displayActionBar");
-        settingsMap.put("displayActionBar", displayActionBar);
+        setBoolean("displayActionBar", displayActionBar, null);
     }
 
+    @Override
     public void save(){
-        Map<String, Object> parentSettingsMap = parent.getSettingsMap();
-        parentSettingsMap.remove("messageSettings");
-        parentSettingsMap.put("messageSettings", settingsMap);
-
+        super.save();
         Map<String, Object> parentMessageMap = parent.getMessageMap();
         parentMessageMap.remove("messages");
         parentMessageMap.put("messages", messageMap);

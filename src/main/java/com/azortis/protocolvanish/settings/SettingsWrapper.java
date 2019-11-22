@@ -34,46 +34,110 @@ public class SettingsWrapper {
         this.settingsPath = settingsPath;
     }
 
-    protected String getString(String path){
+    protected String getString(String path, SettingsSection section){
+        if(section != null)return (String) section.sectionMap.get(path);
         return (String) settingsMap.get(path);
     }
 
-    protected void setString(String path, String value){
+    protected void setString(String path, String value, SettingsSection section){
+        if(section != null){
+            section.sectionMap.remove(path);
+            section.sectionMap.put(path, value);
+            section.save();
+            return;
+        }
         settingsMap.remove(path);
         settingsMap.put(path, value);
     }
 
-    protected List<?> getList(String path){
+    public int getInteger(String path, SettingsSection section){
+        if(section != null)return (Integer) section.sectionMap.get(path);
+        return (Integer) settingsMap.get(path);
+    }
+
+    public void setInteger(String path, int value, SettingsSection section){
+        if(section != null){
+            section.sectionMap.remove(path);
+            section.sectionMap.put(path, value);
+            section.save();
+            return;
+        }
+        settingsMap.remove(path);
+        settingsMap.put(path, value);
+    }
+
+    public boolean getBoolean(String path, SettingsSection section){
+        if(section != null)return (Boolean) section.sectionMap.get(path);
+        return (Boolean) settingsMap.get(path);
+    }
+
+    public void setBoolean(String path, boolean value, SettingsSection section){
+        if(section != null){
+            section.sectionMap.remove(path);
+            section.sectionMap.put(path, value);
+            section.save();
+            return;
+        }
+        settingsMap.remove(path);
+        settingsMap.put(path, value);
+    }
+
+    protected List<?> getList(String path, SettingsSection section){
+        if(section != null)return (List<?>) section.sectionMap.get(path);
         return (List<?>) settingsMap.get(path);
     }
 
-    protected void setList(String path, List<?> value){
+    protected void setList(String path, List<?> value, SettingsSection section){
+        if(section != null){
+            section.sectionMap.remove(path);
+            section.sectionMap.put(path, value);
+            section.save();
+            return;
+        }
         settingsMap.remove(path);
         settingsMap.put(path, value);
     }
 
-    protected Map<String, Object> getSection(String path){
-        return (Map<String, Object>) settingsMap.get(path);
-    }
-
-    protected void setSection(String path, Map<String, Object> value){
-        settingsMap.remove(path);
-        settingsMap.put(path, value);
-    }
-
-    protected List<String> getStringList(String path){
+    protected List<String> getStringList(String path, SettingsSection section){
+        if(section != null)return (List<String>) section.sectionMap.get(path);
         return (List<String>) settingsMap.get(path);
     }
 
-    protected void setStringList(String path, List<String> value){
+    protected void setStringList(String path, List<String> value, SettingsSection section){
+        if(section != null){
+            section.sectionMap.remove(path);
+            section.sectionMap.put(path, value);
+            section.save();
+            return;
+        }
         settingsMap.remove(path);
         settingsMap.put(path, value);
+    }
+
+    protected SettingsSection getSection(String path){
+        return new SettingsSection(path);
     }
 
     public void save(){
         Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
         parrentSettingsMap.remove(settingsPath);
         parrentSettingsMap.put(settingsPath, settingsMap);
+    }
+
+    protected class SettingsSection {
+
+        private String path;
+        private Map<String, Object> sectionMap;
+
+        protected SettingsSection(String path){
+            this.path = path;
+            this.sectionMap = (Map<String, Object>) settingsMap.get(path);
+        }
+
+        protected void save(){
+            settingsMap.remove(path);
+            settingsMap.put(path, sectionMap);
+        }
     }
 
 }

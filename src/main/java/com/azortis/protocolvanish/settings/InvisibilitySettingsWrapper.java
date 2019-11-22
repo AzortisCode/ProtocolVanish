@@ -18,75 +18,51 @@
 
 package com.azortis.protocolvanish.settings;
 
-import java.util.Map;
-
 @SuppressWarnings("all")
-public class InvisibilitySettingsWrapper {
-
-    private SettingsManager parent;
-    private Map<String, Object> settingsMap;
+public class InvisibilitySettingsWrapper extends SettingsWrapper{
 
     public InvisibilitySettingsWrapper(SettingsManager parent, Object settingsMap){
-        this.parent = parent;
-        this.settingsMap = (Map<String, Object>) settingsMap;
+        super(parent, settingsMap, "invisibilitySettings");
     }
 
     public boolean getNightVisionEffect(){
-        return (Boolean) settingsMap.get("nightVisionEffect");
+        return getBoolean("nightVisionEffect", null);
     }
 
     public void setNightVisionEffect(boolean nightVisionEffect){
-        settingsMap.remove("nightVisionEffect");
-        settingsMap.put("nightVisionEffect", nightVisionEffect);
+        setBoolean("nightVisionEffect", nightVisionEffect, null);
     }
 
     public boolean getDisableDamage(){
-        return (Boolean) settingsMap.get("disableDamage");
+        return getBoolean("disableDamage", null);
     }
 
     public void setDisableDamage(boolean disableDamage){
-        settingsMap.remove("disableDamage");
-        settingsMap.put("disableDamage", disableDamage);
+        setBoolean("disableDamage", disableDamage, null);
     }
 
     public boolean getDisableHunger(){
-        return (Boolean) settingsMap.get("disableHunger");
+        return getBoolean("disableHunger", null);
     }
 
     public void setDisableHunger(boolean disableHunger){
-        settingsMap.remove("disableHunger");
-        settingsMap.put("disableHunger", disableHunger);
+        setBoolean("disableHunger", disableHunger, null);
     }
 
     public boolean getDisableCreatureTarget(){
-        return (Boolean) settingsMap.get("disableCreatureTarget");
+        return getBoolean("disableCreatureTarget", null);
     }
 
     public void setCreatureTarget(boolean disableCreatureTarget){
-        settingsMap.remove("disableCreatureTarget");
-        settingsMap.put("disableCreatureTarget", disableCreatureTarget);
+        setBoolean("disableCreatureTarget", disableCreatureTarget, null);
     }
 
-    public boolean getDisableItemPickup(){ return (Boolean) settingsMap.get("disableItemPickup"); }
+    public boolean getDisableItemPickup(){
+        return getBoolean("disableItemPickup", null);
+    }
 
     public void setDisableItemPickup(boolean disableItemPickup){
-        settingsMap.remove("disableItemPickup");
-        settingsMap.put("disableItemPickup", disableItemPickup);
-    }
-
-    /*public boolean getDisableExpPickup(){
-        return (Boolean) settingsMap.get("disableExpPickup");
-    }
-
-    public void setDisableExpPickup(boolean disableExpPickup){
-        settingsMap.remove("disableExpPickup");
-        settingsMap.put("disableExpPickup", disableExpPickup);
-    }*/
-
-    public void save(){
-        Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
-        parrentSettingsMap.remove("invisibilitySettings");
-        parrentSettingsMap.put("invisibilitySettings", settingsMap);
+        setBoolean("disableItemPickup", disableItemPickup, null);
     }
 
 }

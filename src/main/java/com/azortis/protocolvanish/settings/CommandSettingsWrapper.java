@@ -22,56 +22,42 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class CommandSettingsWrapper {
-
-    private SettingsManager parent;
-    private Map<String, Object> settingsMap;
+public class CommandSettingsWrapper extends SettingsWrapper{
 
     public CommandSettingsWrapper(SettingsManager parent, Object settingsMap){
-        this.parent = parent;
-        this.settingsMap = (Map<String, Object>) settingsMap;
+        super(parent, settingsMap, "commandSettings");
     }
 
     public String getName(){
-        return (String) settingsMap.get("name");
+        return getString("name", null);
     }
 
     public void setName(String name){
-        settingsMap.remove("name");
-        settingsMap.put("name", name);
+        setString("name", name, null);
     }
 
     public String getDescription(){
-        return (String) settingsMap.get("description");
+        return getString("description", null);
     }
 
     public void setDescription(String description){
-        settingsMap.remove("description");
-        settingsMap.put("description", description);
+        setString("description", description, null);
     }
 
     public String getUsage(){
-        return (String) settingsMap.get("usage");
+        return getString("usage", null);
     }
 
     public void setUsage(String usage){
-        settingsMap.remove("usage");
-        settingsMap.put("usage", usage);
+        setString("usage", usage, null);
     }
 
     public List<String> getAliases(){
-        return (List<String>) settingsMap.get("aliases");
+        return getStringList("aliases", null);
     }
 
     public void setAliases(List<String> aliases){
-        settingsMap.remove("aliases");
-        settingsMap.put("aliases", aliases);
-    }
-
-    public void save(){
-        Map<String, Object> parrentSettingsMap = parent.getSettingsMap();
-        parrentSettingsMap.remove("commandSettings");
-        parrentSettingsMap.put("commandSettings", settingsMap);
+        setStringList("aliases", aliases, null);
     }
 
 }
