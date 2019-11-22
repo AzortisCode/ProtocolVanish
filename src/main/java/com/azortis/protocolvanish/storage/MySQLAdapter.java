@@ -18,22 +18,24 @@
 
 package com.azortis.protocolvanish.storage;
 
-import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 
-public class StorageManager {
+import java.util.UUID;
 
-    private ProtocolVanish plugin;
-    private IDatabase adapter;
+public class MySQLAdapter implements IDatabase{
 
-    public StorageManager(ProtocolVanish plugin){
-        this.plugin = plugin;
-        if(plugin.getSettingsManager().getStorageSettings().getUseMySQL()){
-            this.adapter = new MySQLAdapter();
-        }else{
-            this.adapter = new SQLiteAdapter(plugin);
-        }
+    @Override
+    public boolean hasDatabaseEntry(UUID uuid) {
+        return false;
     }
 
+    @Override
+    public VanishPlayer getVanishPlayer(UUID uuid) {
+        return null;
+    }
 
-
+    @Override
+    public VanishPlayer.PlayerSettings getPlayerPreferences(UUID uuid) {
+        return null;
+    }
 }

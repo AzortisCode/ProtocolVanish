@@ -20,26 +20,19 @@ package com.azortis.protocolvanish;
 
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("all")
 public class VanishPlayer {
 
     private Player player;
     private boolean vanished;
+    private PlayerSettings playerSettings;
     private ProtocolVanish plugin;
 
-    //Settings
-    private boolean nightVision;
-    private boolean damage;
-    private boolean hunger;
-    private boolean creatureTarget;
-    private boolean itemPickUp;
-
-    public VanishPlayer(Player player, boolean vanished, ProtocolVanish plugin){
+    public VanishPlayer(Player player, boolean vanished, PlayerSettings playerSettings, ProtocolVanish plugin){
         this.player = player;
         this.vanished = vanished;
+        this.playerSettings = playerSettings;
         this.plugin = plugin;
-
-        //Apply default settings
-        this.itemPickUp = !plugin.getSettingsManager().getInvisibilitySettings().getDisableItemPickup();
     }
 
     public Player getPlayer(){
@@ -54,44 +47,66 @@ public class VanishPlayer {
         this.vanished = vanished;
     }
 
-    public boolean doNightVision() {
-        return nightVision;
+    public PlayerSettings getPlayerSettings(){
+        return this.playerSettings;
     }
 
-    public void setNightVision(boolean nightVision) {
-        this.nightVision = nightVision;
-    }
+    public class PlayerSettings {
 
-    public boolean doDamage() {
-        return damage;
-    }
+        private boolean nightVision;
+        private boolean damage;
+        private boolean hunger;
+        private boolean creatureTarget;
+        private boolean itemPickUp;
 
-    public void setDamage(boolean damage) {
-        this.damage = damage;
-    }
+        public PlayerSettings(boolean nightVision, boolean damage, boolean hunger, boolean creatureTarget, boolean itemPickUp){
+            this.nightVision = nightVision;
+            this.damage = damage;
+            this.hunger = hunger;
+            this.creatureTarget = creatureTarget;
+            this.itemPickUp = itemPickUp;
+        }
 
-    public boolean doHunger() {
-        return hunger;
-    }
+        public boolean doNightVision() {
+            return nightVision;
+        }
 
-    public void setHunger(boolean hunger) {
-        this.hunger = hunger;
-    }
+        public void setNightVision(boolean nightVision) {
+            this.nightVision = nightVision;
+        }
 
-    public boolean doCreatureTarget() {
-        return creatureTarget;
-    }
+        public boolean doDamage() {
+            return damage;
+        }
 
-    public void setCreatureTarget(boolean creatureTarget) {
-        this.creatureTarget = creatureTarget;
-    }
+        public void setDamage(boolean damage) {
+            this.damage = damage;
+        }
 
-    public boolean doItemPickUp() {
-        return itemPickUp;
-    }
+        public boolean doHunger() {
+            return hunger;
+        }
 
-    public void setItemPickUp(boolean itemPickUp) {
-        this.itemPickUp = itemPickUp;
+        public void setHunger(boolean hunger) {
+            this.hunger = hunger;
+        }
+
+        public boolean doCreatureTarget() {
+            return creatureTarget;
+        }
+
+        public void setCreatureTarget(boolean creatureTarget) {
+            this.creatureTarget = creatureTarget;
+        }
+
+        public boolean doItemPickUp() {
+            return itemPickUp;
+        }
+
+        public void setItemPickUp(boolean itemPickUp) {
+            this.itemPickUp = itemPickUp;
+        }
+
     }
 
 }

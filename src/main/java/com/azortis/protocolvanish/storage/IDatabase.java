@@ -18,8 +18,16 @@
 
 package com.azortis.protocolvanish.storage;
 
+import com.azortis.protocolvanish.VanishPlayer;
+
+import java.util.UUID;
+
 public interface IDatabase {
 
+    boolean hasDatabaseEntry(UUID uuid);
 
+    VanishPlayer getVanishPlayer(UUID uuid);
+
+    VanishPlayer.PlayerSettings getPlayerPreferences(UUID uuid);
 
 }
