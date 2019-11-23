@@ -19,7 +19,9 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.Metrics;
+import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.api.PlayerReappearEvent;
 import com.azortis.protocolvanish.api.PlayerVanishEvent;
 import com.azortis.protocolvanish.settings.VisibilitySettingsWrapper;
@@ -164,10 +166,10 @@ public class VisibilityManager {
      * @return if the player is vanished.
      */
     public boolean isVanished(UUID uuid){
-        /*if(!vanishedPlayers.contains(uuid)){
-            vanishedPlayers.add(uuid);
-            plugin.getVanishPlayer(uuid).setVanish(true);
-        }*/
+        if(!vanishedPlayers.contains(uuid)){
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+            if(vanishPlayer != null && vanishPlayer.isVanished())vanishedPlayers.add(uuid);
+        }
         return vanishedPlayers.contains(uuid);
     }
 

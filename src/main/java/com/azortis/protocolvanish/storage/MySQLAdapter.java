@@ -25,17 +25,27 @@ import java.util.UUID;
 public class MySQLAdapter implements IDatabase{
 
     @Override
-    public boolean hasDatabaseEntry(UUID uuid) {
-        return false;
-    }
-
-    @Override
     public VanishPlayer getVanishPlayer(UUID uuid) {
         return null;
     }
 
     @Override
-    public VanishPlayer.PlayerSettings getPlayerPreferences(UUID uuid) {
+    public VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
         return null;
+    }
+
+    @Override
+    public void saveVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void createVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
+
     }
 }

@@ -12,7 +12,9 @@
     "reappearMessageWithPerm": "&a{player} has gone out of vanish.",
     "actionBarMsg": "&aYou're in vanish.",
     "enabledItemPickup": "&aYou've enabled item pickup.",
-    "disabledItemPickup": "&aYou've disabled item pickup."
+    "disabledItemPickup": "&aYou've disabled item pickup.",
+    "loadingPlayerSettings": "&aYou're vanish settings are being loaded...",
+    "playerSettingsBeenLoaded": "&aYou're vanish settings have been successfully loaded."
   },
   "messageVersion": "1.0"
 }

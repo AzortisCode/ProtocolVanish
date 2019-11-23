@@ -24,10 +24,14 @@ import java.util.UUID;
 
 public interface IDatabase {
 
-    boolean hasDatabaseEntry(UUID uuid);
-
     VanishPlayer getVanishPlayer(UUID uuid);
 
-    VanishPlayer.PlayerSettings getPlayerPreferences(UUID uuid);
+    VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid);
+
+    void saveVanishPlayer(VanishPlayer vanishPlayer);
+
+    void createVanishPlayer(VanishPlayer vanishPlayer);
+
+    void deleteVanishPlayer(VanishPlayer vanishPlayer);
 
 }

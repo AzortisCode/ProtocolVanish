@@ -50,6 +50,7 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
     }
 
+    //TODO rework command, with current player settings system
     @Override
     public boolean onCommand(CommandSender sender, Command alCommand, String label, String[] args) {
         Player player = (Player)sender;
@@ -66,13 +67,13 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
             } else {
                 if (args[0].equalsIgnoreCase("tipu")) {
                     if (plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
-                        boolean itemPickup = plugin.getVanishPlayer(player.getUniqueId()).getItemPickUp();
+                        boolean itemPickup = plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().doItemPickUp();
                         if (!itemPickup) {
-                            plugin.getVanishPlayer(player.getUniqueId()).setItemPickUp(true);
+                            plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().setItemPickUp(true);
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
                             return true;
                         } else {
-                            plugin.getVanishPlayer(player.getUniqueId()).setItemPickUp(false);
+                            plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().setItemPickUp(false);
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
                             return true;
                         }

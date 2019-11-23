@@ -98,8 +98,18 @@ public final class ProtocolVanish extends JavaPlugin {
         return storageManager;
     }
 
+    /**
+     * Gets the vanishPlayer of a specific player.
+     *
+     * @param uuid The {@link UUID} of the player
+     * @return The {@link VanishPlayer} of the player, null if have no permission.
+     */
     public VanishPlayer getVanishPlayer(UUID uuid){
-        if(!vanishPlayerMap.containsKey(uuid))vanishPlayerMap.put(uuid, new VanishPlayer(Bukkit.getPlayer(uuid), false, this));
+        if(!vanishPlayerMap.containsKey(uuid)){
+            VanishPlayer vanishPlayer = storageManager.getVanishPlayer(uuid);
+            if(vanishPlayer != null)vanishPlayerMap.put(uuid, storageManager.getVanishPlayer(uuid));
+            else return null;
+        }
         return vanishPlayerMap.get(uuid);
     }
 

@@ -20,19 +20,16 @@ package com.azortis.protocolvanish;
 
 import org.bukkit.entity.Player;
 
-@SuppressWarnings("all")
+@SuppressWarnings("unused")
 public class VanishPlayer {
 
     private Player player;
     private boolean vanished;
     private PlayerSettings playerSettings;
-    private ProtocolVanish plugin;
 
-    public VanishPlayer(Player player, boolean vanished, PlayerSettings playerSettings, ProtocolVanish plugin){
+    public VanishPlayer(Player player, boolean vanished){
         this.player = player;
         this.vanished = vanished;
-        this.playerSettings = playerSettings;
-        this.plugin = plugin;
     }
 
     public Player getPlayer(){
@@ -51,20 +48,30 @@ public class VanishPlayer {
         return this.playerSettings;
     }
 
-    public class PlayerSettings {
+    public void setPlayerSettings(PlayerSettings playerSettings){
+        this.playerSettings = playerSettings;
+    }
 
+    public static class PlayerSettings {
+
+        private VanishPlayer parent;
         private boolean nightVision;
         private boolean damage;
         private boolean hunger;
         private boolean creatureTarget;
         private boolean itemPickUp;
 
-        public PlayerSettings(boolean nightVision, boolean damage, boolean hunger, boolean creatureTarget, boolean itemPickUp){
+        public PlayerSettings(VanishPlayer parent, boolean nightVision, boolean damage, boolean hunger, boolean creatureTarget, boolean itemPickUp){
+            this.parent = parent;
             this.nightVision = nightVision;
             this.damage = damage;
             this.hunger = hunger;
             this.creatureTarget = creatureTarget;
             this.itemPickUp = itemPickUp;
+        }
+
+        public VanishPlayer getParent() {
+            return parent;
         }
 
         public boolean doNightVision() {

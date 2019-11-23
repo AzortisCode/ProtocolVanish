@@ -18,16 +18,17 @@
 
 package com.azortis.protocolvanish.storage;
 
+import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
+@SuppressWarnings("all")
 public class SQLiteAdapter implements IDatabase{
 
     private ProtocolVanish plugin;
@@ -46,21 +47,61 @@ public class SQLiteAdapter implements IDatabase{
             plugin.getPluginLoader().disablePlugin(plugin);
         }
         this.jdbcurl = "jdbc:sqlite:" + dbFile.getPath();
-    }
-
-    @Override
-    public boolean hasDatabaseEntry(UUID uuid) {
-        return false;
+        createTable();
     }
 
     @Override
     public VanishPlayer getVanishPlayer(UUID uuid) {
+        try(Connection connection = createConnection()){
+            PreparedStatement statement = connection.prepareStatement("SELECT vanished FROM vanishPlayers WHERE uuid=?");
+            statement.setString(1, uuid.toString());
+
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return new VanishPlayer(Bukkit.getPlayer(uuid), resultSet.getBoolean(1));
+            }else if(plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE)){
+                VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), false);
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> createVanishPlayer(vanishPlayer));
+                return vanishPlayer;
+            }
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public VanishPlayer.PlayerSettings getPlayerPreferences(UUID uuid) {
+    public VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
+        try(Connection connection = createConnection()){
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
         return null;
+    }
+
+    @Override
+    public void saveVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void createVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    private void createTable(){
+        try(Connection connection = createConnection()){
+            Statement statement = connection.createStatement();
+            statement.execute("CREATE TABLE vanishPlayers (uuid varchar(36), vanished boolean, playerSettings blob)");
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     private Connection createConnection(){

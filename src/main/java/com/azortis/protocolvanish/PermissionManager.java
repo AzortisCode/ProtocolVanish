@@ -24,7 +24,7 @@ public class PermissionManager {
 
     private ProtocolVanish plugin;
 
-    public PermissionManager(ProtocolVanish plugin){
+    PermissionManager(ProtocolVanish plugin){
         this.plugin = plugin;
     }
 
@@ -47,9 +47,11 @@ public class PermissionManager {
     public enum Permission{
         USE("use"),
         SEE("see"),
-        CHANGE_ITEM_PICKUP("bypass.itempickup"),
-        CHANGE_CREATURE_TARGET("bypass.creaturetarget"),
+        CHANGE_NIGHT_VISION("bypass.nightvision"),
+        CHANGE_DAMAGE("bypass.damage"),
         CHANGE_HUNGER("bypass.hunger"),
+        CHANGE_CREATURE_TARGET("bypass.creaturetarget"),
+        CHANGE_ITEM_PICKUP("bypass.itempickup"),
         ADMIN("admin");
 
         private String permissionNode;
