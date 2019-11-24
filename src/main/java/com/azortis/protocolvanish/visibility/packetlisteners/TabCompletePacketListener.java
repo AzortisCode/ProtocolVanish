@@ -44,7 +44,7 @@ public class TabCompletePacketListener extends PacketAdapter {
             suggestions.getList().removeIf((Suggestion suggestion) -> {
                 if (!suggestion.getText().contains("/")) {
                     Player player = Bukkit.getPlayer(suggestion.getText());
-                    if (player != null && plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(player.getUniqueId())) {
+                    if (player != null && plugin.getVisibilityManager().getVanishedPlayers().contains(player.getUniqueId())) {
                         return plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer());
                     }
                 }

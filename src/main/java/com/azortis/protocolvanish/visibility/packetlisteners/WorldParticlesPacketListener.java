@@ -46,7 +46,7 @@ public class WorldParticlesPacketListener extends PacketAdapter {
                 float y = event.getPacket().getFloat().read(1);
                 float z = event.getPacket().getFloat().read(2);
 
-                for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
+                for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
                     VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
                     if (plugin.getVisibilityManager().isVanishedFrom(vanishPlayer.getPlayer(), event.getPlayer()) &&
                             event.getPlayer().getWorld().equals(vanishPlayer.getPlayer().getWorld()) &&

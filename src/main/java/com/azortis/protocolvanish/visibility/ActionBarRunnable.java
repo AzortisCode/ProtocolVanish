@@ -42,7 +42,7 @@ public class ActionBarRunnable implements Runnable{
     @Override
     public void run() {
         if(plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
-            for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
+            for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
                 try {
                     PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.CHAT);
                     packetContainer.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);

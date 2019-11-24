@@ -36,11 +36,12 @@ public class StorageManager {
 
     public StorageManager(ProtocolVanish plugin){
         this.plugin = plugin;
-        if(plugin.getSettingsManager().getStorageSettings().getUseMySQL()){
+        /*if(plugin.getSettingsManager().getStorageSettings().getUseMySQL()){
             this.adapter = new MySQLAdapter();
         }else{
             this.adapter = new SQLiteAdapter(plugin);
-        }
+        }*/
+        this.adapter = new SQLiteAdapter(plugin);
     }
 
     public VanishPlayer getVanishPlayer(UUID uuid){

@@ -42,7 +42,7 @@ public class ServerInfoPacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("ServerInfo")) {
             WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
-            Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
+            Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
             if(plugin.getSettingsManager().getVisibilitySettings().getAdjustOnlinePlayerCount()) {
                 int vanishedPlayerCount = onlineVanishedPlayers.size();
                 serverPing.setPlayersOnline(Bukkit.getOnlinePlayers().size() - vanishedPlayerCount);
