@@ -24,9 +24,11 @@ import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@SuppressWarnings("all")
 public class StorageManager {
 
     private ProtocolVanish plugin;
@@ -44,11 +46,17 @@ public class StorageManager {
     public VanishPlayer getVanishPlayer(UUID uuid){
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(uuid);
-        if(!plugin.getPermissionManager().hasPermission(vanishPlayer.getPlayer(),PermissionManager.Permission.USE)){
-            //TODO for bungee update, do not touch the player, server will treat it as it doesn't exist.
+
+        //Checks to prevent memory leaks.
+        if(vanishPlayer == null)return null;
+        if(!plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid),PermissionManager.Permission.USE)
+                && !plugin.getSettingsManager().getStorageSettings().getUseMySQL()){
             adapter.deleteVanishPlayer(vanishPlayer);
             return null;
-        }
+        }else if(plugin.getSettingsManager().getStorageSettings().getUseMySQL()
+                && !plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))return null;
+
+        //Apply default settings for the actual to be retrieved later.
         vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(vanishPlayer,
                 invisibilitySettings.getNightVisionEffect(),
                 invisibilitySettings.getDisableDamage(),
@@ -62,13 +70,54 @@ public class StorageManager {
         return vanishPlayer;
     }
 
-    //TODO Change settings to server default, if no bypass permission existing, and save it accordingly.
     private VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid){
         VanishPlayer.PlayerSettings playerSettings = adapter.getPlayerSettings(uuid);
+        Player player = playerSettings.getParent().getPlayer();
+
+        //Permission checks
+        InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
+        PermissionManager permissionManager = plugin.getPermissionManager();
+        boolean valid = true;
+        if(playerSettings.doNightVision() != invisibilitySettings.getNightVisionEffect()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)){
+            valid = false;
+            playerSettings.setNightVision(invisibilitySettings.getNightVisionEffect());
+        }
+        if(playerSettings.getDisableDamage() != invisibilitySettings.getDisableDamage()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_DAMAGE)){
+            valid = false;
+            playerSettings.setDisableDamage(invisibilitySettings.getDisableDamage());
+        }
+        if(playerSettings.getDisableHunger() != invisibilitySettings.getDisableHunger()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
+            valid = false;
+            playerSettings.setDisableHunger(invisibilitySettings.getDisableHunger());
+        }
+        if(playerSettings.getDisableCreatureTarget() != invisibilitySettings.getDisableCreatureTarget()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_CREATURE_TARGET)){
+            valid = false;
+            playerSettings.setDisableCreatureTarget(invisibilitySettings.getDisableCreatureTarget());
+        }
+        if(playerSettings.getDisableItemPickUp() != invisibilitySettings.getDisableItemPickup()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)){
+            valid = false;
+            playerSettings.setDisableItemPickUp(invisibilitySettings.getDisableItemPickup());
+        }
+        if(!valid)adapter.savePlayerSettings(playerSettings);
+
+        //Check if it should send the message(applies if the player joined in vanish)
         if(playerSettings.getParent().isVanished())playerSettings.getParent().getPlayer()
                 .sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getSettingsManager()
                         .getMessageSettings().getMessage("loadingPlayerSettings")));
         return playerSettings;
+    }
+
+    public void saveVanishPlayer(VanishPlayer vanishPlayer){
+
+    }
+
+    public void updateServerInfo(){
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.updateServerInfo());
     }
 
 }

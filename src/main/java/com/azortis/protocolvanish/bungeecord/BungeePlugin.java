@@ -16,26 +16,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.storage;
+package com.azortis.protocolvanish.bungeecord;
 
-import com.azortis.protocolvanish.VanishPlayer;
+import net.md_5.bungee.api.plugin.Plugin;
 
-import java.util.UUID;
+public class BungeePlugin extends Plugin {
 
-public interface IDatabase {
+    @Override
+    public void onEnable() {
 
-    VanishPlayer getVanishPlayer(UUID uuid);
+    }
 
-    VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid);
+    @Override
+    public void onDisable() {
 
-    void saveVanishPlayer(VanishPlayer vanishPlayer);
-
-    void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings);
-
-    void createVanishPlayer(VanishPlayer vanishPlayer);
-
-    void deleteVanishPlayer(VanishPlayer vanishPlayer);
-
-    void updateServerInfo();
-
+    }
 }

@@ -26,6 +26,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -44,9 +46,12 @@ public class PlayerLoginListener implements Listener {
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
         if(vanishPlayer != null && vanishPlayer.isVanished()){
             player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
+            plugin.getVisibilityManager().getVanishedPlayers().add(player.getUniqueId());
+            plugin.getVisibilityManager().getVanishedFromMap().put(player, new ArrayList<>());
+            for (Player viewer : Bukkit.getOnlinePlayers())plugin.getVisibilityManager().setVanished(player, viewer, true);
         }
-        Collection<UUID> onlineVanishedPlayer = plugin.getVisibilityManager().getOnlineVanishedPlayers();
-        for (UUID uuid : onlineVanishedPlayer){
+        Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
+        for (UUID uuid : vanishedPlayers){
             plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
         }
     }

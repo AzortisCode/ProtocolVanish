@@ -35,12 +35,13 @@ public class EntityPickupItemListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    //TODO Rework event with new playerSettings system
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityPickupItem(EntityPickupItemEvent event){
         if(event.getEntity() instanceof Player){
             Player player = (Player)event.getEntity();
             if(plugin.getVisibilityManager().isVanished(player.getUniqueId())
-                    && !plugin.getVanishPlayer(player.getUniqueId()).getItemPickUp())event.setCancelled(true);
+                    && plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().getDisableItemPickUp())event.setCancelled(true);
         }
     }
 }

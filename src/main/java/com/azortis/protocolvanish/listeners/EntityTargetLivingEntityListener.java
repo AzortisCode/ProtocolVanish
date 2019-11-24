@@ -36,6 +36,7 @@ public class EntityTargetLivingEntityListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    //TODO Rework event with new playerSettings system
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event){
         if(event.getTarget() instanceof Player){

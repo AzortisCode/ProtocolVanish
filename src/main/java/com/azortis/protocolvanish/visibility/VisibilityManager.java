@@ -18,13 +18,10 @@
 
 package com.azortis.protocolvanish.visibility;
 
-import com.azortis.protocolvanish.Metrics;
-import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.api.PlayerReappearEvent;
 import com.azortis.protocolvanish.api.PlayerVanishEvent;
-import com.azortis.protocolvanish.settings.VisibilitySettingsWrapper;
 import com.azortis.protocolvanish.visibility.packetlisteners.*;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -46,7 +43,7 @@ public class VisibilityManager {
     public VisibilityManager(ProtocolVanish plugin){
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
-        validateSettings();
+//        validateSettings();
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
@@ -55,10 +52,10 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new NamedSoundEffectPacketListener(plugin));
         protocolManager.addPacketListener(new WorldParticlesPacketListener(plugin));
         new ActionBarRunnable(plugin);
-        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()-> vanishedPlayers.size()));
+//        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()-> vanishedPlayers.size()));
     }
 
-    private void validateSettings(){
+    /*private void validateSettings(){
         boolean valid = true;
         VisibilitySettingsWrapper visibilitySettings = plugin.getSettingsManager().getVisibilitySettings();
         List<String> enabledPacketListeners = visibilitySettings.getEnabledPacketListeners();
@@ -84,7 +81,7 @@ public class VisibilityManager {
             visibilitySettings.save();
             plugin.getSettingsManager().saveSettingsFile();
         }
-    }
+    }*/
 
     /**
      * Make a player vanish or reappear.
@@ -98,21 +95,27 @@ public class VisibilityManager {
             PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(Bukkit.getPlayer(uuid));
             Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
             if(!playerVanishEvent.isCancelled()) {
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+                if(vanishPlayer == null)return; //TODO Log that a player can not vanish if player has no permission.
                 vanishedPlayers.add(uuid);
-                plugin.getVanishPlayer(uuid).setVanish(true);
+                vanishPlayer.setVanish(true);
+                plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
                 vanishedFromMap.put(Bukkit.getPlayer(uuid), new ArrayList<>());
-                //plugin.getStorageManager().setVanished(uuid);
                 visibilityChanger.vanishPlayer(uuid);
+                plugin.getStorageManager().updateServerInfo();
             }
         }else{
             PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
             Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
             if(!playerReappearEvent.isCancelled()) {
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+                if(vanishPlayer == null)return; //TODO Log big error
                 vanishedPlayers.remove(uuid);
-                plugin.getVanishPlayer(uuid).setVanish(false);
-                //plugin.getStorageManager().setVanished(uuid);
+                vanishPlayer.setVanish(false);
+                plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
                 visibilityChanger.showPlayer(uuid);
                 clearVanishedFrom(Bukkit.getPlayer(uuid));
+                plugin.getStorageManager().updateServerInfo();
             }
         }
     }
@@ -166,10 +169,6 @@ public class VisibilityManager {
      * @return if the player is vanished.
      */
     public boolean isVanished(UUID uuid){
-        if(!vanishedPlayers.contains(uuid)){
-            VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
-            if(vanishPlayer != null && vanishPlayer.isVanished())vanishedPlayers.add(uuid);
-        }
         return vanishedPlayers.contains(uuid);
     }
 
@@ -184,7 +183,7 @@ public class VisibilityManager {
     }
 
     /**
-     * Get the {@link Collection} of vanished players.
+     * Get the {@link Collection} of {@link VanishPlayer}.
      *
      * @return A collection of vanished player's their {@link UUID}
      */
@@ -195,12 +194,23 @@ public class VisibilityManager {
     /**
      * Get the {@link Collection} of online vanished players.
      *
+     * @deprecated Plugin no longer stores player UUID's that are not online.
      * @return A collection of online vanished player's their {@link UUID}
      */
+    @Deprecated
     public Collection<UUID> getOnlineVanishedPlayers(){
         Collection<UUID> onlineVanishedPlayers = new ArrayList<>(vanishedPlayers);
         onlineVanishedPlayers.removeIf((UUID uuid) -> Bukkit.getPlayer(uuid) == null);
         return onlineVanishedPlayers;
+    }
+
+    /**
+     * Get the list of the players the {@link Player} is vanished from.
+     *
+     * @return A map with a {@link Collection} of players as value.
+     */
+    public HashMap<Player, Collection<Player>> getVanishedFromMap() {
+        return vanishedFromMap;
     }
 
     /**

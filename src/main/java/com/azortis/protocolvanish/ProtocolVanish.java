@@ -107,7 +107,13 @@ public final class ProtocolVanish extends JavaPlugin {
     public VanishPlayer getVanishPlayer(UUID uuid){
         if(!vanishPlayerMap.containsKey(uuid)){
             VanishPlayer vanishPlayer = storageManager.getVanishPlayer(uuid);
-            if(vanishPlayer != null)vanishPlayerMap.put(uuid, storageManager.getVanishPlayer(uuid));
+            if(vanishPlayer != null){
+                vanishPlayerMap.put(uuid, storageManager.getVanishPlayer(uuid));
+                if(vanishPlayer.isVanished()){
+                    visibilityManager.getVanishedPlayers().add(uuid);
+                    for(Player player : Bukkit.getOnlinePlayers())visibilityManager.setVanished(vanishPlayer.getPlayer(), player, true);
+                }
+            }
             else return null;
         }
         return vanishPlayerMap.get(uuid);
@@ -115,6 +121,10 @@ public final class ProtocolVanish extends JavaPlugin {
 
     public VanishPlayer getVanishPlayer(Player player){
         return getVanishPlayer(player.getUniqueId());
+    }
+
+    public HashMap<UUID, VanishPlayer> getVanishPlayerMap() {
+        return vanishPlayerMap;
     }
 
 }

@@ -44,6 +44,7 @@ public class PlayerJoinListener implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    //TODO Rework event, with new backend system.
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();

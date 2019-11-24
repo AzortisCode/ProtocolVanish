@@ -56,18 +56,18 @@ public class VanishPlayer {
 
         private VanishPlayer parent;
         private boolean nightVision;
-        private boolean damage;
-        private boolean hunger;
-        private boolean creatureTarget;
-        private boolean itemPickUp;
+        private boolean disableDamage;
+        private boolean disableHunger;
+        private boolean disableCreatureTarget;
+        private boolean disableItemPickUp;
 
-        public PlayerSettings(VanishPlayer parent, boolean nightVision, boolean damage, boolean hunger, boolean creatureTarget, boolean itemPickUp){
+        public PlayerSettings(VanishPlayer parent, boolean nightVision, boolean disableDamage, boolean disableHunger, boolean disableCreatureTarget, boolean disableItemPickUp){
             this.parent = parent;
             this.nightVision = nightVision;
-            this.damage = damage;
-            this.hunger = hunger;
-            this.creatureTarget = creatureTarget;
-            this.itemPickUp = itemPickUp;
+            this.disableDamage = disableDamage;
+            this.disableHunger = disableHunger;
+            this.disableCreatureTarget = disableCreatureTarget;
+            this.disableItemPickUp = disableItemPickUp;
         }
 
         public VanishPlayer getParent() {
@@ -82,36 +82,36 @@ public class VanishPlayer {
             this.nightVision = nightVision;
         }
 
-        public boolean doDamage() {
-            return damage;
+        public boolean getDisableDamage() {
+            return disableDamage;
         }
 
-        public void setDamage(boolean damage) {
-            this.damage = damage;
+        public void setDisableDamage(boolean disableDamage) {
+            this.disableDamage = disableDamage;
         }
 
-        public boolean doHunger() {
-            return hunger;
+        public boolean getDisableHunger() {
+            return disableHunger;
         }
 
-        public void setHunger(boolean hunger) {
-            this.hunger = hunger;
+        public void setDisableHunger(boolean disableHunger) {
+            this.disableHunger = disableHunger;
         }
 
-        public boolean doCreatureTarget() {
-            return creatureTarget;
+        public boolean getDisableCreatureTarget() {
+            return disableCreatureTarget;
         }
 
-        public void setCreatureTarget(boolean creatureTarget) {
-            this.creatureTarget = creatureTarget;
+        public void setDisableCreatureTarget(boolean disableCreatureTarget) {
+            this.disableCreatureTarget = disableCreatureTarget;
         }
 
-        public boolean doItemPickUp() {
-            return itemPickUp;
+        public boolean getDisableItemPickUp() {
+            return disableItemPickUp;
         }
 
-        public void setItemPickUp(boolean itemPickUp) {
-            this.itemPickUp = itemPickUp;
+        public void setDisableItemPickUp(boolean disableItemPickUp) {
+            this.disableItemPickUp = disableItemPickUp;
         }
 
     }

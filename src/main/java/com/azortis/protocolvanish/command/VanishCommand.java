@@ -67,13 +67,13 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
             } else {
                 if (args[0].equalsIgnoreCase("tipu")) {
                     if (plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
-                        boolean itemPickup = plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().doItemPickUp();
-                        if (!itemPickup) {
-                            plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().setItemPickUp(true);
+                        boolean itemPickup = plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().getDisableItemPickUp();
+                        if (itemPickup) {
+                            plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().setDisableItemPickUp(true);
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
                             return true;
                         } else {
-                            plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().setItemPickUp(false);
+                            plugin.getVanishPlayer(player.getUniqueId()).getPlayerSettings().setDisableItemPickUp(false);
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
                             return true;
                         }

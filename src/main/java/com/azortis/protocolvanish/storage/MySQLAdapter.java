@@ -40,12 +40,22 @@ public class MySQLAdapter implements IDatabase{
     }
 
     @Override
+    public void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings) {
+
+    }
+
+    @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
 
     }
 
     @Override
     public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void updateServerInfo() {
 
     }
 }

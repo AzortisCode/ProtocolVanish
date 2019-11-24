@@ -18,7 +18,7 @@
 
 package com.azortis.protocolvanish.storage;
 
-import com.azortis.protocolvanish.PermissionManager;
+import com.azortis.protocolvanish.Metrics;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import org.bukkit.Bukkit;
@@ -47,7 +47,17 @@ public class SQLiteAdapter implements IDatabase{
             plugin.getPluginLoader().disablePlugin(plugin);
         }
         this.jdbcurl = "jdbc:sqlite:" + dbFile.getPath();
-        createTable();
+        createTables();
+        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()->{
+            try(Connection connection = createConnection()){
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT playersInVanish FROM serverInfo");
+                return resultSet.getInt(1);
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
+            return 0;
+        }));
     }
 
     @Override
@@ -58,12 +68,13 @@ public class SQLiteAdapter implements IDatabase{
 
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
-                return new VanishPlayer(Bukkit.getPlayer(uuid), resultSet.getBoolean(1));
-            }else if(plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE)){
-                VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), false);
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> createVanishPlayer(vanishPlayer));
+                VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), resultSet.getBoolean(1));
+                resultSet.close();
+                statement.close();
                 return vanishPlayer;
             }
+            resultSet.close();
+            statement.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -86,6 +97,11 @@ public class SQLiteAdapter implements IDatabase{
     }
 
     @Override
+    public void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings) {
+
+    }
+
+    @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
 
     }
@@ -95,10 +111,26 @@ public class SQLiteAdapter implements IDatabase{
 
     }
 
-    private void createTable(){
+    @Override
+    public void updateServerInfo() {
         try(Connection connection = createConnection()){
-            Statement statement = connection.createStatement();
-            statement.execute("CREATE TABLE vanishPlayers (uuid varchar(36), vanished boolean, playerSettings blob)");
+            PreparedStatement statement = connection.prepareStatement("UPDATE serverInfo SET playersInVanish=?");
+            statement.setInt(1, plugin.getVisibilityManager().getVanishedPlayers().size());
+            statement.execute();
+            statement.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void createTables(){
+        try(Connection connection = createConnection()){
+            Statement vanishPlayerStatement = connection.createStatement();
+            vanishPlayerStatement.execute("CREATE TABLE vanishPlayers (uuid varchar(36), vanished boolean, playerSettings blob)");
+
+            Statement serverInfoStatement = connection.createStatement();
+            serverInfoStatement.execute("CREATE TABLE serverInfo (playersInVanish SMALLINT)");
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }

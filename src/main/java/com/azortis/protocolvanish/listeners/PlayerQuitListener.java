@@ -46,6 +46,7 @@ public class PlayerQuitListener implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    //TODO Rework event, with new backend system.
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
