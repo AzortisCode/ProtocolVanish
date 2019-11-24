@@ -183,25 +183,13 @@ public class VisibilityManager {
     }
 
     /**
-     * Get the {@link Collection} of {@link VanishPlayer}.
+     * Get the {@link Collection} of {@link UUID} of online vanished players.
+     *
      *
      * @return A collection of vanished player's their {@link UUID}
      */
     public Collection<UUID> getVanishedPlayers() {
         return vanishedPlayers;
-    }
-
-    /**
-     * Get the {@link Collection} of online vanished players.
-     *
-     * @deprecated Plugin no longer stores player UUID's that are not online.
-     * @return A collection of online vanished player's their {@link UUID}
-     */
-    @Deprecated
-    public Collection<UUID> getOnlineVanishedPlayers(){
-        Collection<UUID> onlineVanishedPlayers = new ArrayList<>(vanishedPlayers);
-        onlineVanishedPlayers.removeIf((UUID uuid) -> Bukkit.getPlayer(uuid) == null);
-        return onlineVanishedPlayers;
     }
 
     /**

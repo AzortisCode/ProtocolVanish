@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-@SuppressWarnings("all")
 public class GeneralEntityPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
@@ -52,7 +51,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
         if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
             if (event.getPacket().getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
                 UUID playerUUID = event.getPacket().getUUIDs().read(0);
-                if (plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(playerUUID)
+                if (plugin.getVisibilityManager().getVanishedPlayers().contains(playerUUID)
                         && plugin.getVisibilityManager().isVanishedFrom(Bukkit.getPlayer(playerUUID), event.getPlayer()))
                     event.setCancelled(true);
             } else if (event.getPacket().getType() == PacketType.Play.Server.ENTITY_DESTROY) {

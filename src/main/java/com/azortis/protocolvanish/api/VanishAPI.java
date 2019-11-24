@@ -33,10 +33,6 @@ public class VanishAPI {
         return plugin.getVisibilityManager().getVanishedPlayers();
     }
 
-    public static Collection<UUID> getOnlineVanishedPlayers(){
-        return plugin.getVisibilityManager().getOnlineVanishedPlayers();
-    }
-
     public static boolean isVanished(UUID uuid){
         return plugin.getVisibilityManager().isVanished(uuid);
     }

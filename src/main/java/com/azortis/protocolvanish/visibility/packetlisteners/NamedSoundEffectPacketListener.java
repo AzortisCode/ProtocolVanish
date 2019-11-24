@@ -39,7 +39,6 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
         this.plugin = plugin;
     }
 
-    @SuppressWarnings("all")
     @Override
     public void onPacketSending(PacketEvent event) {
         if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
@@ -48,7 +47,7 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
                 int y = event.getPacket().getIntegers().read(1) / 8;
                 int z = event.getPacket().getIntegers().read(2) / 8;
 
-                for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
+                for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
                     Player player = Bukkit.getPlayer(uuid);
                     if (plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer()) &&
                             event.getPlayer().getWorld().equals(player.getWorld()) &&

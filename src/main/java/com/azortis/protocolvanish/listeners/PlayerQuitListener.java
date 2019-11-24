@@ -64,7 +64,7 @@ public class PlayerQuitListener implements Listener {
                 }
             }
         }
-        for(UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()){
+        for(UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()){
             plugin.getVisibilityManager().setVanished(Bukkit.getPlayer(uuid), player, false);
         }
     }
