@@ -49,10 +49,11 @@ public class StorageManager {
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(uuid);
 
         //Checks to prevent memory leaks.
-        if(vanishPlayer == null)return null;
+        if(vanishPlayer == null && plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))return createVanishPlayer(uuid);
+        else if(vanishPlayer == null)return null;
         if(!plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid),PermissionManager.Permission.USE)
                 && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true){
-            adapter.deleteVanishPlayer(vanishPlayer);
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.deleteVanishPlayer(vanishPlayer));
             return null;
         }else if(/*plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/ false
                 && !plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))return null;
@@ -117,8 +118,25 @@ public class StorageManager {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.saveVanishPlayer(vanishPlayer));
     }
 
+    public void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings){
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.savePlayerSettings(playerSettings));
+    }
+
     public void updateServerInfo(){
         Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.updateServerInfo());
+    }
+
+    private VanishPlayer createVanishPlayer(UUID uuid){
+        VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), false);
+        InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
+        vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(vanishPlayer,
+                invisibilitySettings.getNightVisionEffect(),
+                invisibilitySettings.getDisableDamage(),
+                invisibilitySettings.getDisableHunger(),
+                invisibilitySettings.getDisableCreatureTarget(),
+                invisibilitySettings.getDisableItemPickup()));
+        adapter.createVanishPlayer(vanishPlayer);
+        return vanishPlayer;
     }
 
 }
