@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,12 +35,12 @@ public class FoodLevelChangeListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    //TODO Rework event with new playerSettings system
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event){
         if(event.getEntity() instanceof Player){
             Player player = (Player)event.getEntity();
-            if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && plugin.getSettingsManager().getInvisibilitySettings().getDisableHunger() && player.getFoodLevel() >= event.getFoodLevel()){
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+            if(vanishPlayer != null && plugin.getVisibilityManager().isVanished(player.getUniqueId()) && vanishPlayer.getPlayerSettings().getDisableHunger() && player.getFoodLevel() >= event.getFoodLevel()){
                 event.setCancelled(true);
             }
         }

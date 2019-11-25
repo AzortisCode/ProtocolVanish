@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,14 +35,13 @@ public class EntityDamageListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    //TODO Rework event with new playerSettings system
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event){
         if(event.getEntity() instanceof Player){
             Player player = (Player)event.getEntity();
-            if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && plugin.getSettingsManager().getInvisibilitySettings().getDisableDamage()){
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+            if(vanishPlayer != null && vanishPlayer.isVanished() && vanishPlayer.getPlayerSettings().getDisableDamage())
                 event.setCancelled(true);
-            }
         }
     }
 

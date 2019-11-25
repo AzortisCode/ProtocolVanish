@@ -18,7 +18,7 @@
 
 package com.azortis.protocolvanish.settings;
 
-@SuppressWarnings("all")
+@SuppressWarnings("")
 public class StorageSettingsWrapper extends SettingsWrapper{
 
     public StorageSettingsWrapper(SettingsManager parent, Object settingsMap){

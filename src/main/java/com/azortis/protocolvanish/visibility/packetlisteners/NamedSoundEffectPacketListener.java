@@ -47,12 +47,13 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
                 int y = event.getPacket().getIntegers().read(1) / 8;
                 int z = event.getPacket().getIntegers().read(2) / 8;
 
+                Player viewer = event.getPlayer();
                 for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
-                    Player player = Bukkit.getPlayer(uuid);
-                    if (plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer()) &&
-                            event.getPlayer().getWorld().equals(player.getWorld()) &&
-                            player.getLocation().distanceSquared
-                                    (new Location(player.getWorld(), x, y, z)) < 2.D)
+                    Player vanishedPlayer = Bukkit.getPlayer(uuid);
+                    if (vanishedPlayer != null && plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer, viewer) &&
+                            viewer.getWorld().equals(vanishedPlayer.getWorld()) &&
+                            vanishedPlayer.getLocation().distanceSquared
+                                    (new Location(vanishedPlayer.getWorld(), x, y, z)) < 2.D)
                         event.setCancelled(true);
                 }
             }

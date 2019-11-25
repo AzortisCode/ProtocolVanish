@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.visibility;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import com.azortis.protocolvanish.utils.ReflectionUtils;
@@ -54,42 +55,44 @@ public class VisibilityChanger {
 
     void vanishPlayer(UUID uuid){
         Player hider = Bukkit.getPlayer(uuid);
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+        if(vanishPlayer == null)return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, true));
-        if(invisibilitySettings.getNightVisionEffect())hider.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-        //if(invisibilitySettings.getDisableExpPickup())ExpReflectionUtil.setExpPickup(Bukkit.getPlayer(uuid), false);
-        if(invisibilitySettings.getDisableCreatureTarget()){
+        if(vanishPlayer.getPlayerSettings().doNightVision())hider.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+        if(vanishPlayer.getPlayerSettings().getDisableCreatureTarget()){
             for (Mob mob : hider.getWorld().getEntitiesByClass(Mob.class)){
                 if(mob.getTarget() == hider)mob.setTarget(null);
             }
         }
-        for (Player player : Bukkit.getOnlinePlayers()){
-            if(plugin.getVisibilityManager().setVanished(hider, player, true)){
-                player.hidePlayer(plugin, hider);
-                sendPlayerInfoPacket(player, hider, true);
-                sendEntityDestroyPacket(player, hider);
-                if(messageSettings.getBroadCastFakeQuitOnVanish())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
-            }else if(messageSettings.getAnnounceVanishStateToAdmins() && player != hider){
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessageWithPerm").replaceAll("\\{player}", hider.getName())));
+        for (Player viewer : Bukkit.getOnlinePlayers()){
+            if(plugin.getVisibilityManager().setVanished(hider, viewer, true)){
+                viewer.hidePlayer(plugin, hider);
+                sendPlayerInfoPacket(viewer, hider, true);
+                sendEntityDestroyPacket(viewer, hider);
+                if(messageSettings.getBroadCastFakeQuitOnVanish())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
+            }else if(messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider){
+                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessageWithPerm").replaceAll("\\{player}", hider.getName())));
             }
-            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
+            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
         }
     }
 
     void showPlayer(UUID uuid){
         Player hider = Bukkit.getPlayer(uuid);
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+        if(vanishPlayer == null)return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, false));
-        if(invisibilitySettings.getNightVisionEffect())hider.removePotionEffect(PotionEffectType.NIGHT_VISION);
-        //if(invisibilitySettings.getDisableExpPickup())ExpReflectionUtil.setExpPickup(Bukkit.getPlayer(uuid), true);
-        for (Player player : Bukkit.getOnlinePlayers()){
-            if(plugin.getVisibilityManager().setVanished(hider, player, false)){
-                player.showPlayer(plugin, hider);
-                sendPlayerInfoPacket(player, hider, false);
-                sendSpawnPlayerPacket(player, hider);
-                if(messageSettings.getBroadCastFakeJoinOnReappear())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
-            }else if(messageSettings.getAnnounceVanishStateToAdmins() && player != hider){
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessageWithPerm").replaceAll("\\{player}", hider.getName())));
+        if(vanishPlayer.getPlayerSettings().doNightVision())hider.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        for (Player viewer : Bukkit.getOnlinePlayers()){
+            if(plugin.getVisibilityManager().setVanished(hider, viewer, false)){
+                viewer.showPlayer(plugin, hider);
+                sendPlayerInfoPacket(viewer, hider, false);
+                sendSpawnPlayerPacket(viewer, hider);
+                if(messageSettings.getBroadCastFakeJoinOnReappear())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
+            }else if(messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider){
+                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessageWithPerm").replaceAll("\\{player}", hider.getName())));
             }
-            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
+            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
         }
     }
 

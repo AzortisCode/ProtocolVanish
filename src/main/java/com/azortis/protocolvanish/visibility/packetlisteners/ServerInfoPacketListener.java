@@ -42,14 +42,14 @@ public class ServerInfoPacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("ServerInfo")) {
             WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
-            Collection<UUID> onlineVanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
+            Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers(); //Only contains vanished players.
             if(plugin.getSettingsManager().getVisibilitySettings().getAdjustOnlinePlayerCount()) {
-                int vanishedPlayerCount = onlineVanishedPlayers.size();
+                int vanishedPlayerCount = vanishedPlayers.size();
                 serverPing.setPlayersOnline(Bukkit.getOnlinePlayers().size() - vanishedPlayerCount);
             }
             if(plugin.getSettingsManager().getVisibilitySettings().getAdjustOnlinePlayerList()) {
                 List<WrappedGameProfile> wrappedGameProfiles = new ArrayList<>(serverPing.getPlayers());
-                wrappedGameProfiles.removeIf((WrappedGameProfile wrappedGameProfile) -> onlineVanishedPlayers.contains(wrappedGameProfile.getUUID()));
+                wrappedGameProfiles.removeIf((WrappedGameProfile wrappedGameProfile) -> vanishedPlayers.contains(wrappedGameProfile.getUUID()));
                 serverPing.setPlayers(wrappedGameProfiles);
             }
         }

@@ -19,13 +19,14 @@
 package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.VanishPlayer;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -46,12 +47,13 @@ public class WorldParticlesPacketListener extends PacketAdapter {
                 float y = event.getPacket().getFloat().read(1);
                 float z = event.getPacket().getFloat().read(2);
 
+                Player viewer = event.getPlayer();
                 for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
-                    VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
-                    if (plugin.getVisibilityManager().isVanishedFrom(vanishPlayer.getPlayer(), event.getPlayer()) &&
-                            event.getPlayer().getWorld().equals(vanishPlayer.getPlayer().getWorld()) &&
-                            vanishPlayer.getPlayer().getLocation().distanceSquared
-                                    (new Location(vanishPlayer.getPlayer().getWorld(), x, y, z)) < 3.0D)
+                    Player vanishedPlayer = Bukkit.getPlayer(uuid);
+                    if (vanishedPlayer != null && plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer,
+                            viewer) && viewer.getWorld().equals(vanishedPlayer.getWorld())
+                            && vanishedPlayer.getLocation().distanceSquared
+                                    (new Location(vanishedPlayer.getWorld(), x, y, z)) < 3.0D)
                         event.setCancelled(true);
                 }
             }

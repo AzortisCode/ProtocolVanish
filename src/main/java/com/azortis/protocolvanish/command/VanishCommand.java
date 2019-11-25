@@ -54,7 +54,7 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command alCommand, String label, String[] args) {
         Player player = (Player)sender;
-        if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
+        /*if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
             if(args.length == 0){
                 if (plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
@@ -86,6 +86,8 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
         }else{
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
         }
+        return false;*/
+
         return false;
     }
 

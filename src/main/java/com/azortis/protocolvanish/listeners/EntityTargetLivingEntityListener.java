@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -36,17 +37,12 @@ public class EntityTargetLivingEntityListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    //TODO Rework event with new playerSettings system
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event){
         if(event.getTarget() instanceof Player){
             Player player = (Player)event.getTarget();
-            if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-                /*if (event.getEntity() instanceof ExperienceOrb
-                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableExpPickup()) {
-                    event.setTarget(null);
-                    event.setCancelled(true);
-                }*/
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+            if(vanishPlayer != null && vanishPlayer.isVanished() && vanishPlayer.getPlayerSettings().getDisableCreatureTarget()) {
                 if(event.getEntity() instanceof LivingEntity
                         && plugin.getSettingsManager().getInvisibilitySettings().getDisableCreatureTarget()){
                     event.setTarget(null);

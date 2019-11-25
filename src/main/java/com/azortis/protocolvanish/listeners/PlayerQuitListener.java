@@ -19,7 +19,7 @@
 package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
-import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,24 +37,23 @@ public class PlayerQuitListener implements Listener {
 
     private ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
-    private InvisibilitySettingsWrapper invisibilitySettings;
 
     public PlayerQuitListener(ProtocolVanish plugin){
         this.plugin = plugin;
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
-        this.invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    //TODO Rework event, with new backend system.
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        if(plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
-            plugin.getVisibilityManager().clearVanishedFrom(player);
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+        if(vanishPlayer != null && vanishPlayer.isVanished()) {
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
-            if(invisibilitySettings.getNightVisionEffect())player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            //if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, true);
+            if(vanishPlayer.getPlayerSettings().doNightVision())player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            plugin.getVanishPlayerMap().remove(player.getUniqueId());
+            plugin.getVisibilityManager().clearVanishedFrom(player);
+            plugin.getVisibilityManager().getVanishedPlayers().remove(player.getUniqueId());
             if(messageSettings.getHideRealJoinQuitMessages()){
                 event.setQuitMessage("");
                 for (Player viewer : Bukkit.getOnlinePlayers()){

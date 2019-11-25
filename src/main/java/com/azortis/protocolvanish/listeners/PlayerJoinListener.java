@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
@@ -35,12 +36,10 @@ public class PlayerJoinListener implements Listener {
 
     private ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
-    private InvisibilitySettingsWrapper invisibilitySettings;
 
     public PlayerJoinListener(ProtocolVanish plugin){
         this.plugin = plugin;
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
-        this.invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -48,11 +47,11 @@ public class PlayerJoinListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        if(plugin.getVisibilityManager().isVanished(player.getUniqueId()) && messageSettings.getHideRealJoinQuitMessages()){
-            if(invisibilitySettings.getNightVisionEffect())player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-            //if(invisibilitySettings.getDisableExpPickup()) ExpReflectionUtil.setExpPickup(player, false);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
-            event.setJoinMessage("");
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+        if(vanishPlayer != null && vanishPlayer.isVanished()){
+            if(vanishPlayer.getPlayerSettings().doNightVision())player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+            if(plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())event.setJoinMessage("");
+            else player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
             for(Player viewer : Bukkit.getOnlinePlayers()){
                 if(plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer){
                     viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherJoinedSilently").replaceAll("\\{player}", player.getName())));
