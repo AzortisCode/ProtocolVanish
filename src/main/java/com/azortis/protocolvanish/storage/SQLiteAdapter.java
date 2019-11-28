@@ -51,11 +51,22 @@ public class SQLiteAdapter implements IDatabase{
         }
         this.jdbcurl = "jdbc:sqlite:" + dbFile.getPath();
         createTables();
+        createServerInfoEntry();
         plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()->{
             try(Connection connection = createConnection()){
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT playersInVanish FROM serverInfo");
-                return resultSet.getInt(1);
+                PreparedStatement statement = connection.prepareStatement("SELECT playersInVanish FROM serverInfo WHERE serverId=?");
+                statement.setInt(1, 1);
+                ResultSet resultSet = statement.executeQuery();
+                if(resultSet.next()){
+                    int playersInVanish = resultSet.getInt(2);
+                    resultSet.close();
+                    statement.close();
+                    connection.close();
+                    return playersInVanish;
+                }
+                resultSet.close();
+                statement.close();
+                connection.close();
             }catch (SQLException ex){
                 ex.printStackTrace();
             }
@@ -74,10 +85,12 @@ public class SQLiteAdapter implements IDatabase{
                 VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), resultSet.getBoolean(1));
                 resultSet.close();
                 statement.close();
+                connection.close();
                 return vanishPlayer;
             }
             resultSet.close();
             statement.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -94,10 +107,12 @@ public class SQLiteAdapter implements IDatabase{
             if(resultSet.next()){
                 VanishPlayer.PlayerSettings playerSettings = gson.fromJson(resultSet.getString(1), VanishPlayer.PlayerSettings.class);
                 resultSet.close();
+                statement.close();
                 connection.close();
                 return playerSettings;
             }
             resultSet.close();
+            statement.close();
             connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
@@ -113,6 +128,7 @@ public class SQLiteAdapter implements IDatabase{
             statement.setString(2, vanishPlayer.getPlayer().getUniqueId().toString());
             statement.execute();
             statement.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -126,6 +142,7 @@ public class SQLiteAdapter implements IDatabase{
             statement.setString(2, playerSettings.getParent().getPlayer().getUniqueId().toString());
             statement.execute();
             statement.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -140,6 +157,7 @@ public class SQLiteAdapter implements IDatabase{
             statement.setString(3, gson.toJson(vanishPlayer.getPlayerSettings()));
             statement.execute();
             statement.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -152,6 +170,7 @@ public class SQLiteAdapter implements IDatabase{
             statement.setString(1, vanishPlayer.getPlayer().getUniqueId().toString());
             statement.execute();
             statement.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -160,10 +179,12 @@ public class SQLiteAdapter implements IDatabase{
     @Override
     public void updateServerInfo() {
         try(Connection connection = createConnection()){
-            PreparedStatement statement = connection.prepareStatement("UPDATE serverInfo SET playersInVanish=?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE serverInfo SET playersInVanish=? WHERE serverId=?");
             statement.setInt(1, plugin.getVisibilityManager().getVanishedPlayers().size());
+            statement.setInt(2, 1);
             statement.execute();
             statement.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -175,7 +196,33 @@ public class SQLiteAdapter implements IDatabase{
             vanishPlayerStatement.execute("CREATE TABLE vanishPlayers (uuid varchar(36), vanished boolean, playerSettings varchar)");
 
             Statement serverInfoStatement = connection.createStatement();
-            serverInfoStatement.execute("CREATE TABLE serverInfo (playersInVanish SMALLINT)");
+            serverInfoStatement.execute("CREATE TABLE serverInfo (serverId SMALLINT, playersInVanish SMALLINT)");
+            connection.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void createServerInfoEntry(){
+        try(Connection connection = createConnection()){
+            PreparedStatement statement = connection.prepareStatement("SELECT playersInVanish FROM serverInfo WHERE serverId=?");
+            statement.setInt(1, 1);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()){
+                resultSet.close();
+                statement.close();
+                connection.close();
+
+                Connection createConnection = createConnection();
+                PreparedStatement createStatement = createConnection.prepareStatement("INSERT INTO serverInfo VALUES (?,?)");
+                createStatement.setInt(1, 1);
+                createStatement.setInt(2, 0);
+                createStatement.execute();
+                createStatement.close();
+                createConnection.close();
+            }
+            resultSet.close();
+            statement.close();
             connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
