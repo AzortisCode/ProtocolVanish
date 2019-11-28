@@ -20,7 +20,6 @@ package com.azortis.protocolvanish.listeners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
-import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,7 +42,6 @@ public class PlayerJoinListener implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    //TODO Rework event, with new backend system.
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
