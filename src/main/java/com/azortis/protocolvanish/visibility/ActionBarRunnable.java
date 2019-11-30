@@ -30,18 +30,18 @@ import org.bukkit.ChatColor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
-public class ActionBarRunnable implements Runnable{
+public class ActionBarRunnable implements Runnable {
 
     private ProtocolVanish plugin;
 
-    public ActionBarRunnable(ProtocolVanish plugin){
+    public ActionBarRunnable(ProtocolVanish plugin) {
         this.plugin = plugin;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 20L);
     }
 
     @Override
     public void run() {
-        if(plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
+        if (plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
             for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
                 try {
                     PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.CHAT);
@@ -50,7 +50,7 @@ public class ActionBarRunnable implements Runnable{
                             (ChatColor.translateAlternateColorCodes('&',
                                     plugin.getSettingsManager().getMessageSettings().getMessage("actionBarMsg"))));
                     ProtocolLibrary.getProtocolManager().sendServerPacket(Bukkit.getPlayer(uuid), packetContainer);
-                }catch (InvocationTargetException ex){
+                } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
             }

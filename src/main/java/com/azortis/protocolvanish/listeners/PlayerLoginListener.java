@@ -35,23 +35,24 @@ public class PlayerLoginListener implements Listener {
 
     private ProtocolVanish plugin;
 
-    public PlayerLoginListener(ProtocolVanish plugin){
+    public PlayerLoginListener(ProtocolVanish plugin) {
         this.plugin = plugin;
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event){
+    public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-        if(vanishPlayer != null && vanishPlayer.isVanished()){
+        if (vanishPlayer != null && vanishPlayer.isVanished()) {
             player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
             plugin.getVisibilityManager().getVanishedPlayers().add(player.getUniqueId());
             plugin.getVisibilityManager().getVanishedFromMap().put(player, new ArrayList<>());
-            for (Player viewer : Bukkit.getOnlinePlayers())plugin.getVisibilityManager().setVanished(player, viewer, true);
+            for (Player viewer : Bukkit.getOnlinePlayers())
+                plugin.getVisibilityManager().setVanished(player, viewer, true);
         }
         Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
-        for (UUID uuid : vanishedPlayers){
+        for (UUID uuid : vanishedPlayers) {
             plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
         }
     }

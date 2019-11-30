@@ -21,33 +21,33 @@ package com.azortis.protocolvanish.settings;
 import java.util.List;
 
 @SuppressWarnings("all")
-public class VisibilitySettingsWrapper extends SettingsWrapper{
+public class VisibilitySettingsWrapper extends SettingsWrapper {
 
-    public VisibilitySettingsWrapper(SettingsManager parent, Object settingsMap){
+    public VisibilitySettingsWrapper(SettingsManager parent, Object settingsMap) {
         super(parent, settingsMap, "visibilitySettings");
     }
 
-    public List<String> getEnabledPacketListeners(){
+    public List<String> getEnabledPacketListeners() {
         return getStringList("enabledPacketListeners", null);
     }
 
-    public void setEnabledPacketListeners(List<String> enabledPacketListeners){
+    public void setEnabledPacketListeners(List<String> enabledPacketListeners) {
         setStringList("enabledPacketListeners", enabledPacketListeners, null);
     }
 
-    public boolean getAdjustOnlinePlayerCount(){
+    public boolean getAdjustOnlinePlayerCount() {
         return getBoolean("adjustOnlinePlayerCount", getSection("externalVisibility"));
     }
 
-    public void setAdjustOnlinePlayerCount(boolean adjustOnlinePlayerCount){
+    public void setAdjustOnlinePlayerCount(boolean adjustOnlinePlayerCount) {
         setBoolean("adjustOnlinePlayerCount", adjustOnlinePlayerCount, getSection("externalVisibility"));
     }
 
-    public boolean getAdjustOnlinePlayerList(){
+    public boolean getAdjustOnlinePlayerList() {
         return getBoolean("adjustOnlinePlayerList", getSection("externalVisibility"));
     }
 
-    public void setAdjustOnlinePlayerList(boolean adjustOnlinePlayerList){
+    public void setAdjustOnlinePlayerList(boolean adjustOnlinePlayerList) {
         setBoolean("adjustOnlinePlayerList", adjustOnlinePlayerList, getSection("externalVisibility"));
     }
 

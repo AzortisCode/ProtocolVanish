@@ -47,7 +47,7 @@ public final class ProtocolVanish extends JavaPlugin {
     public void onEnable() {
         this.azortisLib = new AzortisLib(this, "ProtocolVanish", "§1[§9ProtocolVanish§1]§0");
         this.metrics = new Metrics(this);
-        if(!Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolLib")){
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
             azortisLib.getLogger().severe("ProtocolLib isn't present, please install ProtocolLib! Shutting down...");
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
@@ -78,8 +78,8 @@ public final class ProtocolVanish extends JavaPlugin {
         return azortisLib;
     }
 
-    public Metrics getMetrics(){
-        return metrics ;
+    public Metrics getMetrics() {
+        return metrics;
     }
 
     public SettingsManager getSettingsManager() {
@@ -104,22 +104,22 @@ public final class ProtocolVanish extends JavaPlugin {
      * @param uuid The {@link UUID} of the player
      * @return The {@link VanishPlayer} of the player, null if have no permission.
      */
-    public VanishPlayer getVanishPlayer(UUID uuid){
-        if(!vanishPlayerMap.containsKey(uuid)){
+    public VanishPlayer getVanishPlayer(UUID uuid) {
+        if (!vanishPlayerMap.containsKey(uuid)) {
             VanishPlayer vanishPlayer = storageManager.getVanishPlayer(uuid);
-            if(vanishPlayer != null){
+            if (vanishPlayer != null) {
                 vanishPlayerMap.put(uuid, storageManager.getVanishPlayer(uuid));
-                if(vanishPlayer.isVanished()){
+                if (vanishPlayer.isVanished()) {
                     visibilityManager.getVanishedPlayers().add(uuid);
-                    for(Player player : Bukkit.getOnlinePlayers())visibilityManager.setVanished(vanishPlayer.getPlayer(), player, true);
+                    for (Player player : Bukkit.getOnlinePlayers())
+                        visibilityManager.setVanished(vanishPlayer.getPlayer(), player, true);
                 }
-            }
-            else return null;
+            } else return null;
         }
         return vanishPlayerMap.get(uuid);
     }
 
-    public VanishPlayer getVanishPlayer(Player player){
+    public VanishPlayer getVanishPlayer(Player player) {
         return getVanishPlayer(player.getUniqueId());
     }
 

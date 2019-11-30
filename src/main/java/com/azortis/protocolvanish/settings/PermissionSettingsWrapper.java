@@ -19,33 +19,33 @@
 package com.azortis.protocolvanish.settings;
 
 @SuppressWarnings("all")
-public class PermissionSettingsWrapper extends SettingsWrapper{
+public class PermissionSettingsWrapper extends SettingsWrapper {
 
-    public PermissionSettingsWrapper(SettingsManager parent, Object settingsMap){
+    public PermissionSettingsWrapper(SettingsManager parent, Object settingsMap) {
         super(parent, settingsMap, "permissionSettings");
     }
 
-    public boolean getEnableSeePermission(){
+    public boolean getEnableSeePermission() {
         return getBoolean("enableSeePermission", null);
     }
 
-    public void setEnableSeePermission(boolean enableSeePermission){
+    public void setEnableSeePermission(boolean enableSeePermission) {
         setBoolean("enableSeePermission", enableSeePermission, null);
     }
 
-    public boolean getEnableLayeredPermissions(){
+    public boolean getEnableLayeredPermissions() {
         return getBoolean("enableLayeredPermissions", null);
     }
 
-    public void setEnableLayeredPermissions(boolean enableLayeredPermissions){
+    public void setEnableLayeredPermissions(boolean enableLayeredPermissions) {
         setBoolean("enableLayeredPermissions", enableLayeredPermissions, null);
     }
 
-    public int getMaxLevel(){
+    public int getMaxLevel() {
         return getInteger("maxLevel", null);
     }
 
-    public void setMaxLevel(int maxLevel){
+    public void setMaxLevel(int maxLevel) {
         setInteger("maxLevel", maxLevel, null);
     }
 

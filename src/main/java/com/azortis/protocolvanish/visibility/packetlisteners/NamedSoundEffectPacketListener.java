@@ -34,14 +34,14 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public NamedSoundEffectPacketListener(ProtocolVanish plugin){
+    public NamedSoundEffectPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.NAMED_SOUND_EFFECT);
         this.plugin = plugin;
     }
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
+        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
             if (event.getPacket().getSoundCategories().read(0) == EnumWrappers.SoundCategory.PLAYERS) {
                 int x = event.getPacket().getIntegers().read(0) / 8;
                 int y = event.getPacket().getIntegers().read(1) / 8;

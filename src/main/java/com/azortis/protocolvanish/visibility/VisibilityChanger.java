@@ -47,63 +47,68 @@ public class VisibilityChanger {
     private MessageSettingsWrapper messageSettings;
     private InvisibilitySettingsWrapper invisibilitySettings;
 
-    VisibilityChanger(ProtocolVanish plugin){
+    VisibilityChanger(ProtocolVanish plugin) {
         this.plugin = plugin;
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         this.invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
     }
 
-    void vanishPlayer(UUID uuid){
+    void vanishPlayer(UUID uuid) {
         Player hider = Bukkit.getPlayer(uuid);
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
-        if(vanishPlayer == null)return;
+        if (vanishPlayer == null) return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, true));
-        if(vanishPlayer.getPlayerSettings().doNightVision())hider.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-        if(vanishPlayer.getPlayerSettings().getDisableCreatureTarget()){
-            for (Mob mob : hider.getWorld().getEntitiesByClass(Mob.class)){
-                if(mob.getTarget() == hider)mob.setTarget(null);
+        if (vanishPlayer.getPlayerSettings().doNightVision())
+            hider.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+        if (vanishPlayer.getPlayerSettings().getDisableCreatureTarget()) {
+            for (Mob mob : hider.getWorld().getEntitiesByClass(Mob.class)) {
+                if (mob.getTarget() == hider) mob.setTarget(null);
             }
         }
-        for (Player viewer : Bukkit.getOnlinePlayers()){
-            if(plugin.getVisibilityManager().setVanished(hider, viewer, true)){
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (plugin.getVisibilityManager().setVanished(hider, viewer, true)) {
                 viewer.hidePlayer(plugin, hider);
                 sendPlayerInfoPacket(viewer, hider, true);
                 sendEntityDestroyPacket(viewer, hider);
-                if(messageSettings.getBroadCastFakeQuitOnVanish())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
-            }else if(messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider){
+                if (messageSettings.getBroadCastFakeQuitOnVanish())
+                    viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
+            } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
                 viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessageWithPerm").replaceAll("\\{player}", hider.getName())));
             }
-            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
+            if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
+                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
         }
     }
 
-    void showPlayer(UUID uuid){
+    void showPlayer(UUID uuid) {
         Player hider = Bukkit.getPlayer(uuid);
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
-        if(vanishPlayer == null)return;
+        if (vanishPlayer == null) return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, false));
-        if(vanishPlayer.getPlayerSettings().doNightVision())hider.removePotionEffect(PotionEffectType.NIGHT_VISION);
-        for (Player viewer : Bukkit.getOnlinePlayers()){
-            if(plugin.getVisibilityManager().setVanished(hider, viewer, false)){
+        if (vanishPlayer.getPlayerSettings().doNightVision()) hider.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (plugin.getVisibilityManager().setVanished(hider, viewer, false)) {
                 viewer.showPlayer(plugin, hider);
                 sendPlayerInfoPacket(viewer, hider, false);
                 sendSpawnPlayerPacket(viewer, hider);
-                if(messageSettings.getBroadCastFakeJoinOnReappear())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
-            }else if(messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider){
+                if (messageSettings.getBroadCastFakeJoinOnReappear())
+                    viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
+            } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
                 viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessageWithPerm").replaceAll("\\{player}", hider.getName())));
             }
-            if(!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
+            if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
+                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
         }
     }
 
-    private void sendSpawnPlayerPacket(Player receiver, Player vanishedPlayer){
-        if(ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)){
+    private void sendSpawnPlayerPacket(Player receiver, Player vanishedPlayer) {
+        if (ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)) {
             ProtocolLibrary.getProtocolManager().updateEntity(vanishedPlayer, Collections.singletonList(receiver));
         }
     }
 
-    private void sendEntityDestroyPacket(Player receiver, Player vanishedPlayer){
-        if(ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)) {
+    private void sendEntityDestroyPacket(Player receiver, Player vanishedPlayer) {
+        if (ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)) {
             PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
             packetContainer.setMeta("ignoreFilter", true); // To make sure our packet doesn't get filtered
 
@@ -117,16 +122,16 @@ public class VisibilityChanger {
         }
     }
 
-    private void sendPlayerInfoPacket(Player receiver, Player vanishedPlayer, boolean vanished){
+    private void sendPlayerInfoPacket(Player receiver, Player vanishedPlayer, boolean vanished) {
         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.PLAYER_INFO);
         packetContainer.getPlayerInfoAction().write(0, vanished ? EnumWrappers.PlayerInfoAction.REMOVE_PLAYER : EnumWrappers.PlayerInfoAction.ADD_PLAYER);
 
         GameMode gameMode = vanishedPlayer.getGameMode();
         PlayerInfoData pid = new PlayerInfoData(WrappedGameProfile.fromPlayer(vanishedPlayer), ReflectionUtils.getPing(vanishedPlayer), EnumWrappers.NativeGameMode.fromBukkit(gameMode), WrappedChatComponent.fromText(vanishedPlayer.getPlayerListName()));
         packetContainer.getPlayerInfoDataLists().write(0, Collections.singletonList(pid));
-        try{
+        try {
             ProtocolLibrary.getProtocolManager().sendServerPacket(receiver, packetContainer);
-        }catch (InvocationTargetException e){
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
     }

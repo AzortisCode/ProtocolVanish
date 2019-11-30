@@ -36,22 +36,25 @@ public class PlayerJoinListener implements Listener {
     private ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
 
-    public PlayerJoinListener(ProtocolVanish plugin){
+    public PlayerJoinListener(ProtocolVanish plugin) {
         this.plugin = plugin;
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerJoin(PlayerJoinEvent event){
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-        if(vanishPlayer != null && vanishPlayer.isVanished()){
-            if(vanishPlayer.getPlayerSettings().doNightVision())player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-            if(plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())event.setJoinMessage("");
-            else player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
-            for(Player viewer : Bukkit.getOnlinePlayers()){
-                if(plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer){
+        if (vanishPlayer != null && vanishPlayer.isVanished()) {
+            if (vanishPlayer.getPlayerSettings().doNightVision())
+                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+            if (plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())
+                event.setJoinMessage("");
+            else
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
+            for (Player viewer : Bukkit.getOnlinePlayers()) {
+                if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
                     viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherJoinedSilently").replaceAll("\\{player}", player.getName())));
                 }
             }

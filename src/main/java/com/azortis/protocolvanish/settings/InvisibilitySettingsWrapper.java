@@ -19,49 +19,49 @@
 package com.azortis.protocolvanish.settings;
 
 @SuppressWarnings("all")
-public class InvisibilitySettingsWrapper extends SettingsWrapper{
+public class InvisibilitySettingsWrapper extends SettingsWrapper {
 
-    public InvisibilitySettingsWrapper(SettingsManager parent, Object settingsMap){
+    public InvisibilitySettingsWrapper(SettingsManager parent, Object settingsMap) {
         super(parent, settingsMap, "invisibilitySettings");
     }
 
-    public boolean getNightVisionEffect(){
+    public boolean getNightVisionEffect() {
         return getBoolean("nightVisionEffect", null);
     }
 
-    public void setNightVisionEffect(boolean nightVisionEffect){
+    public void setNightVisionEffect(boolean nightVisionEffect) {
         setBoolean("nightVisionEffect", nightVisionEffect, null);
     }
 
-    public boolean getDisableDamage(){
+    public boolean getDisableDamage() {
         return getBoolean("disableDamage", null);
     }
 
-    public void setDisableDamage(boolean disableDamage){
+    public void setDisableDamage(boolean disableDamage) {
         setBoolean("disableDamage", disableDamage, null);
     }
 
-    public boolean getDisableHunger(){
+    public boolean getDisableHunger() {
         return getBoolean("disableHunger", null);
     }
 
-    public void setDisableHunger(boolean disableHunger){
+    public void setDisableHunger(boolean disableHunger) {
         setBoolean("disableHunger", disableHunger, null);
     }
 
-    public boolean getDisableCreatureTarget(){
+    public boolean getDisableCreatureTarget() {
         return getBoolean("disableCreatureTarget", null);
     }
 
-    public void setCreatureTarget(boolean disableCreatureTarget){
+    public void setCreatureTarget(boolean disableCreatureTarget) {
         setBoolean("disableCreatureTarget", disableCreatureTarget, null);
     }
 
-    public boolean getDisableItemPickup(){
+    public boolean getDisableItemPickup() {
         return getBoolean("disableItemPickup", null);
     }
 
-    public void setDisableItemPickup(boolean disableItemPickup){
+    public void setDisableItemPickup(boolean disableItemPickup) {
         setBoolean("disableItemPickup", disableItemPickup, null);
     }
 

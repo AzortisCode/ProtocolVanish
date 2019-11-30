@@ -28,7 +28,7 @@ public class PlayerVanishEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private boolean cancelled;
 
-    public PlayerVanishEvent(Player player){
+    public PlayerVanishEvent(Player player) {
         super(player);
     }
 

@@ -28,7 +28,7 @@ public class PlayerReappearEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private boolean cancelled;
 
-    public PlayerReappearEvent(Player player){
+    public PlayerReappearEvent(Player player) {
         super(player);
     }
 

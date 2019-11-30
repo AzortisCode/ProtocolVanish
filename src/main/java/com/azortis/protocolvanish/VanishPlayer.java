@@ -27,28 +27,28 @@ public class VanishPlayer {
     private boolean vanished;
     private PlayerSettings playerSettings;
 
-    public VanishPlayer(Player player, boolean vanished){
+    public VanishPlayer(Player player, boolean vanished) {
         this.player = player;
         this.vanished = vanished;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public boolean isVanished(){
+    public boolean isVanished() {
         return vanished;
     }
 
-    public void setVanish(boolean vanished){
+    public void setVanish(boolean vanished) {
         this.vanished = vanished;
     }
 
-    public PlayerSettings getPlayerSettings(){
+    public PlayerSettings getPlayerSettings() {
         return this.playerSettings;
     }
 
-    public void setPlayerSettings(PlayerSettings playerSettings){
+    public void setPlayerSettings(PlayerSettings playerSettings) {
         this.playerSettings = playerSettings;
     }
 
@@ -61,7 +61,7 @@ public class VanishPlayer {
         private boolean disableCreatureTarget;
         private boolean disableItemPickUp;
 
-        public PlayerSettings(VanishPlayer parent, boolean nightVision, boolean disableDamage, boolean disableHunger, boolean disableCreatureTarget, boolean disableItemPickUp){
+        public PlayerSettings(VanishPlayer parent, boolean nightVision, boolean disableDamage, boolean disableHunger, boolean disableCreatureTarget, boolean disableItemPickUp) {
             this.parent = parent;
             this.nightVision = nightVision;
             this.disableDamage = disableDamage;

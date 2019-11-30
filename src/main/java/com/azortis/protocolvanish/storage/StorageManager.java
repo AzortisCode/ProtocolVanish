@@ -34,7 +34,7 @@ public class StorageManager {
     private ProtocolVanish plugin;
     private IDatabase adapter;
 
-    public StorageManager(ProtocolVanish plugin){
+    public StorageManager(ProtocolVanish plugin) {
         this.plugin = plugin;
         /*if(plugin.getSettingsManager().getStorageSettings().getUseMySQL()){
             this.adapter = new MySQLAdapter();
@@ -44,19 +44,21 @@ public class StorageManager {
         this.adapter = new SQLiteAdapter(plugin);
     }
 
-    public VanishPlayer getVanishPlayer(UUID uuid){
+    public VanishPlayer getVanishPlayer(UUID uuid) {
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(uuid);
 
         //Checks to prevent memory leaks.
-        if(vanishPlayer == null && plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))return createVanishPlayer(uuid);
-        else if(vanishPlayer == null)return null;
-        if(!plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid),PermissionManager.Permission.USE)
-                && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true){
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.deleteVanishPlayer(vanishPlayer));
+        if (vanishPlayer == null && plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))
+            return createVanishPlayer(uuid);
+        else if (vanishPlayer == null) return null;
+        if (!plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE)
+                && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.deleteVanishPlayer(vanishPlayer));
             return null;
-        }else if(/*plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/ false
-                && !plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))return null;
+        } else if (/*plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/ false
+                && !plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))
+            return null;
 
         //Apply default settings for the actual to be retrieved later.
         vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(vanishPlayer,
@@ -65,14 +67,14 @@ public class StorageManager {
                 invisibilitySettings.getDisableHunger(),
                 invisibilitySettings.getDisableCreatureTarget(),
                 invisibilitySettings.getDisableItemPickup()));
-        if(vanishPlayer.isVanished())vanishPlayer.getPlayer()
+        if (vanishPlayer.isVanished()) vanishPlayer.getPlayer()
                 .sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getSettingsManager()
                         .getMessageSettings().getMessage("loadingPlayerSettings")));
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> vanishPlayer.setPlayerSettings(getPlayerSettings(uuid)));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> vanishPlayer.setPlayerSettings(getPlayerSettings(uuid)));
         return vanishPlayer;
     }
 
-    private VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid){
+    private VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
         VanishPlayer.PlayerSettings playerSettings = adapter.getPlayerSettings(uuid);
         Player player = playerSettings.getParent().getPlayer();
 
@@ -80,53 +82,53 @@ public class StorageManager {
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         PermissionManager permissionManager = plugin.getPermissionManager();
         boolean valid = true;
-        if(playerSettings.doNightVision() != invisibilitySettings.getNightVisionEffect()
-                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)){
+        if (playerSettings.doNightVision() != invisibilitySettings.getNightVisionEffect()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)) {
             valid = false;
             playerSettings.setNightVision(invisibilitySettings.getNightVisionEffect());
         }
-        if(playerSettings.getDisableDamage() != invisibilitySettings.getDisableDamage()
-                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_DAMAGE)){
+        if (playerSettings.getDisableDamage() != invisibilitySettings.getDisableDamage()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_DAMAGE)) {
             valid = false;
             playerSettings.setDisableDamage(invisibilitySettings.getDisableDamage());
         }
-        if(playerSettings.getDisableHunger() != invisibilitySettings.getDisableHunger()
-                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
+        if (playerSettings.getDisableHunger() != invisibilitySettings.getDisableHunger()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)) {
             valid = false;
             playerSettings.setDisableHunger(invisibilitySettings.getDisableHunger());
         }
-        if(playerSettings.getDisableCreatureTarget() != invisibilitySettings.getDisableCreatureTarget()
-                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_CREATURE_TARGET)){
+        if (playerSettings.getDisableCreatureTarget() != invisibilitySettings.getDisableCreatureTarget()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_CREATURE_TARGET)) {
             valid = false;
             playerSettings.setDisableCreatureTarget(invisibilitySettings.getDisableCreatureTarget());
         }
-        if(playerSettings.getDisableItemPickUp() != invisibilitySettings.getDisableItemPickup()
-                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)){
+        if (playerSettings.getDisableItemPickUp() != invisibilitySettings.getDisableItemPickup()
+                && !permissionManager.hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
             valid = false;
             playerSettings.setDisableItemPickUp(invisibilitySettings.getDisableItemPickup());
         }
-        if(!valid)adapter.savePlayerSettings(playerSettings);
+        if (!valid) adapter.savePlayerSettings(playerSettings);
 
         //Check if it should send the message(applies if the player joined in vanish)
-        if(playerSettings.getParent().isVanished())playerSettings.getParent().getPlayer()
+        if (playerSettings.getParent().isVanished()) playerSettings.getParent().getPlayer()
                 .sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getSettingsManager()
                         .getMessageSettings().getMessage("loadingPlayerSettings")));
         return playerSettings;
     }
 
-    public void saveVanishPlayer(VanishPlayer vanishPlayer){
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.saveVanishPlayer(vanishPlayer));
+    public void saveVanishPlayer(VanishPlayer vanishPlayer) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.saveVanishPlayer(vanishPlayer));
     }
 
-    public void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings){
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.savePlayerSettings(playerSettings));
+    public void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.savePlayerSettings(playerSettings));
     }
 
-    public void updateServerInfo(){
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.updateServerInfo());
+    public void updateServerInfo() {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.updateServerInfo());
     }
 
-    private VanishPlayer createVanishPlayer(UUID uuid){
+    private VanishPlayer createVanishPlayer(UUID uuid) {
         VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), false);
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(vanishPlayer,

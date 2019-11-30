@@ -31,20 +31,20 @@ import java.sql.*;
 import java.util.UUID;
 
 @SuppressWarnings("all")
-public class SQLiteAdapter implements IDatabase{
+public class SQLiteAdapter implements IDatabase {
 
     private ProtocolVanish plugin;
     private String jdbcurl;
     private Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-    SQLiteAdapter(ProtocolVanish plugin){
+    SQLiteAdapter(ProtocolVanish plugin) {
         this.plugin = plugin;
         File dbFile = new File(plugin.getDataFolder(), "storage.db");
-        try{
-            if(!dbFile.exists()){
+        try {
+            if (!dbFile.exists()) {
                 dbFile.createNewFile();
             }
-        }catch (IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
             plugin.getAzortisLib().getLogger().severe("Cannot create database file, shutting down!");
             plugin.getPluginLoader().disablePlugin(plugin);
@@ -52,12 +52,12 @@ public class SQLiteAdapter implements IDatabase{
         this.jdbcurl = "jdbc:sqlite:" + dbFile.getPath();
         createTables();
         createServerInfoEntry();
-        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()->{
-            try(Connection connection = createConnection()){
+        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", () -> {
+            try (Connection connection = createConnection()) {
                 PreparedStatement statement = connection.prepareStatement("SELECT playersInVanish FROM serverInfo WHERE serverId=?");
                 statement.setInt(1, 1);
                 ResultSet resultSet = statement.executeQuery();
-                if(resultSet.next()){
+                if (resultSet.next()) {
                     int playersInVanish = resultSet.getInt(2);
                     resultSet.close();
                     statement.close();
@@ -67,7 +67,7 @@ public class SQLiteAdapter implements IDatabase{
                 resultSet.close();
                 statement.close();
                 connection.close();
-            }catch (SQLException ex){
+            } catch (SQLException ex) {
                 ex.printStackTrace();
             }
             return 0;
@@ -76,12 +76,12 @@ public class SQLiteAdapter implements IDatabase{
 
     @Override
     public VanishPlayer getVanishPlayer(UUID uuid) {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT vanished FROM vanishPlayers WHERE uuid=?");
             statement.setString(1, uuid.toString());
 
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), resultSet.getBoolean(1));
                 resultSet.close();
                 statement.close();
@@ -91,7 +91,7 @@ public class SQLiteAdapter implements IDatabase{
             resultSet.close();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return null;
@@ -99,12 +99,12 @@ public class SQLiteAdapter implements IDatabase{
 
     @Override
     public VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT playerSettings FROM vanishPlayers WHERE uuid=?");
             statement.setString(1, uuid.toString());
 
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 VanishPlayer.PlayerSettings playerSettings = gson.fromJson(resultSet.getString(1), VanishPlayer.PlayerSettings.class);
                 resultSet.close();
                 statement.close();
@@ -114,7 +114,7 @@ public class SQLiteAdapter implements IDatabase{
             resultSet.close();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return null;
@@ -122,35 +122,35 @@ public class SQLiteAdapter implements IDatabase{
 
     @Override
     public void saveVanishPlayer(VanishPlayer vanishPlayer) {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE vanishPlayers SET vanished=? WHERE uuid=?");
             statement.setBoolean(1, vanishPlayer.isVanished());
             statement.setString(2, vanishPlayer.getPlayer().getUniqueId().toString());
             statement.execute();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
     public void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings) {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE vanishPlayers SET playerSettings=? WHERE uuid=?");
             statement.setString(1, gson.toJson(playerSettings));
             statement.setString(2, playerSettings.getParent().getPlayer().getUniqueId().toString());
             statement.execute();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO vanishPlayers (?,?,?)");
             statement.setString(1, vanishPlayer.getPlayer().getUniqueId().toString());
             statement.setBoolean(2, vanishPlayer.isVanished());
@@ -158,57 +158,57 @@ public class SQLiteAdapter implements IDatabase{
             statement.execute();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
     public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM vanishPlayers WHERE uuid=?");
             statement.setString(1, vanishPlayer.getPlayer().getUniqueId().toString());
             statement.execute();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
     public void updateServerInfo() {
-        try(Connection connection = createConnection()){
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE serverInfo SET playersInVanish=? WHERE serverId=?");
             statement.setInt(1, plugin.getVisibilityManager().getVanishedPlayers().size());
             statement.setInt(2, 1);
             statement.execute();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void createTables(){
-        try(Connection connection = createConnection()){
+    private void createTables() {
+        try (Connection connection = createConnection()) {
             Statement vanishPlayerStatement = connection.createStatement();
             vanishPlayerStatement.execute("CREATE TABLE vanishPlayers (uuid varchar(36), vanished boolean, playerSettings varchar)");
 
             Statement serverInfoStatement = connection.createStatement();
             serverInfoStatement.execute("CREATE TABLE serverInfo (serverId SMALLINT, playersInVanish SMALLINT)");
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void createServerInfoEntry(){
-        try(Connection connection = createConnection()){
+    private void createServerInfoEntry() {
+        try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT playersInVanish FROM serverInfo WHERE serverId=?");
             statement.setInt(1, 1);
             ResultSet resultSet = statement.executeQuery();
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 resultSet.close();
                 statement.close();
                 connection.close();
@@ -224,15 +224,15 @@ public class SQLiteAdapter implements IDatabase{
             resultSet.close();
             statement.close();
             connection.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private Connection createConnection(){
-        try{
+    private Connection createConnection() {
+        try {
             return DriverManager.getConnection(jdbcurl);
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return null;

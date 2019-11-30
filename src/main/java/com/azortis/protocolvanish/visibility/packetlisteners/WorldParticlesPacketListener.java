@@ -34,7 +34,7 @@ public class WorldParticlesPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public WorldParticlesPacketListener(ProtocolVanish plugin){
+    public WorldParticlesPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.WORLD_PARTICLES);
         this.plugin = plugin;
     }
@@ -53,7 +53,7 @@ public class WorldParticlesPacketListener extends PacketAdapter {
                     if (vanishedPlayer != null && plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer,
                             viewer) && viewer.getWorld().equals(vanishedPlayer.getWorld())
                             && vanishedPlayer.getLocation().distanceSquared
-                                    (new Location(vanishedPlayer.getWorld(), x, y, z)) < 3.0D)
+                            (new Location(vanishedPlayer.getWorld(), x, y, z)) < 3.0D)
                         event.setCancelled(true);
                 }
             }

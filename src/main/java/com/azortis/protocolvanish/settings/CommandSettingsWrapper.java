@@ -22,41 +22,41 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class CommandSettingsWrapper extends SettingsWrapper{
+public class CommandSettingsWrapper extends SettingsWrapper {
 
-    public CommandSettingsWrapper(SettingsManager parent, Object settingsMap){
+    public CommandSettingsWrapper(SettingsManager parent, Object settingsMap) {
         super(parent, settingsMap, "commandSettings");
     }
 
-    public String getName(){
+    public String getName() {
         return getString("name", null);
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         setString("name", name, null);
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return getString("description", null);
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         setString("description", description, null);
     }
 
-    public String getUsage(){
+    public String getUsage() {
         return getString("usage", null);
     }
 
-    public void setUsage(String usage){
+    public void setUsage(String usage) {
         setString("usage", usage, null);
     }
 
-    public List<String> getAliases(){
+    public List<String> getAliases() {
         return getStringList("aliases", null);
     }
 
-    public void setAliases(List<String> aliases){
+    public void setAliases(List<String> aliases) {
         setStringList("aliases", aliases, null);
     }
 

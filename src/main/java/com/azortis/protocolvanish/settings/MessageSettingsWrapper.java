@@ -21,74 +21,74 @@ package com.azortis.protocolvanish.settings;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class MessageSettingsWrapper extends SettingsWrapper{
+public class MessageSettingsWrapper extends SettingsWrapper {
 
     private Map<String, Object> messageMap;
 
-    public MessageSettingsWrapper(SettingsManager parent, Object settingsMap, Object messageMap){
+    public MessageSettingsWrapper(SettingsManager parent, Object settingsMap, Object messageMap) {
         super(parent, settingsMap, "messageSettings");
         this.messageMap = (Map<String, Object>) messageMap;
     }
 
-    public String getMessage(String messagePath){
+    public String getMessage(String messagePath) {
         return (String) messageMap.get(messagePath);
     }
 
-    public void setMessage(String messagePath, String message){
+    public void setMessage(String messagePath, String message) {
         messageMap.remove(messagePath);
         messageMap.put(messagePath, message);
     }
 
-    public boolean getBroadCastFakeQuitOnVanish(){
+    public boolean getBroadCastFakeQuitOnVanish() {
         return getBoolean("broadCastFakeQuitOnVanish", null);
     }
 
-    public void setBroadCastFakeQuitOnVanish(boolean broadCastFakeQuitOnVanish){
+    public void setBroadCastFakeQuitOnVanish(boolean broadCastFakeQuitOnVanish) {
         setBoolean("broadCastFakeQuitOnVanish", broadCastFakeQuitOnVanish, null);
     }
 
-    public boolean getBroadCastFakeJoinOnReappear(){
+    public boolean getBroadCastFakeJoinOnReappear() {
         return getBoolean("broadCastFakeJoinOnReappear", null);
     }
 
-    public void setBroadCastJoinQuitOnReappear(boolean broadCastFakeJoinOnReappear){
+    public void setBroadCastJoinQuitOnReappear(boolean broadCastFakeJoinOnReappear) {
         setBoolean("broadCastFakeJoinOnReappear", broadCastFakeJoinOnReappear, null);
     }
 
-    public boolean getAnnounceVanishStateToAdmins(){
+    public boolean getAnnounceVanishStateToAdmins() {
         return getBoolean("announceVanishStateToAdmins", null);
     }
 
-    public void setAnnounceVanishStateToAdmins(boolean announceVanishStateToAdmins){
+    public void setAnnounceVanishStateToAdmins(boolean announceVanishStateToAdmins) {
         setBoolean("announceVanishStateToAdmins", announceVanishStateToAdmins, null);
     }
 
-    public boolean getSendFakeJoinQuitMessagesOnlyToUsers(){
+    public boolean getSendFakeJoinQuitMessagesOnlyToUsers() {
         return getBoolean("sendFakeJoinQuitMessagesOnlyToUsers", null);
     }
 
-    public void setSendFakeJoinQuitMessagesOnlyToUsers(boolean sendFakeJoinQuitMessagesOnlyToUsers){
+    public void setSendFakeJoinQuitMessagesOnlyToUsers(boolean sendFakeJoinQuitMessagesOnlyToUsers) {
         setBoolean("sendFakeJoinQuitMessagesOnlyToUsers", sendFakeJoinQuitMessagesOnlyToUsers, null);
     }
 
-    public boolean getHideRealJoinQuitMessages(){
+    public boolean getHideRealJoinQuitMessages() {
         return getBoolean("hideRealJoinQuitMessages", null);
     }
 
-    public void setHideRealJoinQuitMessages(boolean hideRealJoinQuitMessages){
+    public void setHideRealJoinQuitMessages(boolean hideRealJoinQuitMessages) {
         setBoolean("hideRealJoinQuitMessages", hideRealJoinQuitMessages, null);
     }
 
-    public boolean getDisplayActionBar(){
+    public boolean getDisplayActionBar() {
         return getBoolean("displayActionBar", null);
     }
 
-    public void setDisplayActionBar(boolean displayActionBar){
+    public void setDisplayActionBar(boolean displayActionBar) {
         setBoolean("displayActionBar", displayActionBar, null);
     }
 
     @Override
-    public void save(){
+    public void save() {
         super.save();
         Map<String, Object> parentMessageMap = parent.getMessageMap();
         parentMessageMap.remove("messages");

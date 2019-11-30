@@ -32,7 +32,7 @@ public class TabCompletePacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public TabCompletePacketListener(ProtocolVanish plugin){
+    public TabCompletePacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.TAB_COMPLETE);
         this.plugin = plugin;
     }

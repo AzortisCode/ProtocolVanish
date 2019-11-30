@@ -31,18 +31,18 @@ public class EntityPickupItemListener implements Listener {
 
     private ProtocolVanish plugin;
 
-    public EntityPickupItemListener(ProtocolVanish plugin){
+    public EntityPickupItemListener(ProtocolVanish plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onEntityPickupItem(EntityPickupItemEvent event){
-        if(event.getEntity() instanceof Player){
-            Player player = (Player)event.getEntity();
+    public void onEntityPickupItem(EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
             VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-            if(vanishPlayer != null && vanishPlayer.isVanished()
-                    && vanishPlayer.getPlayerSettings().getDisableItemPickUp())event.setCancelled(true);
+            if (vanishPlayer != null && vanishPlayer.isVanished()
+                    && vanishPlayer.getPlayerSettings().getDisableItemPickUp()) event.setCancelled(true);
         }
     }
 }

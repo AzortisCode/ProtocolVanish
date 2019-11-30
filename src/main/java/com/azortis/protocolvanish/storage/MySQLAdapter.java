@@ -22,7 +22,7 @@ import com.azortis.protocolvanish.VanishPlayer;
 
 import java.util.UUID;
 
-public class MySQLAdapter implements IDatabase{
+public class MySQLAdapter implements IDatabase {
 
     @Override
     public VanishPlayer getVanishPlayer(UUID uuid) {

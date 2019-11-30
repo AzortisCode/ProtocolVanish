@@ -29,39 +29,39 @@ public class VanishAPI {
 
     private static ProtocolVanish plugin;
 
-    public static Collection<UUID> getVanishedPlayers(){
+    public static Collection<UUID> getVanishedPlayers() {
         return plugin.getVisibilityManager().getVanishedPlayers();
     }
 
-    public static boolean isVanished(UUID uuid){
+    public static boolean isVanished(UUID uuid) {
         return plugin.getVisibilityManager().isVanished(uuid);
     }
 
-    public static boolean isVanished(Player player){
+    public static boolean isVanished(Player player) {
         return isVanished(player.getUniqueId());
     }
 
-    public static void vanishPlayer(UUID uuid){
+    public static void vanishPlayer(UUID uuid) {
         plugin.getVisibilityManager().setVanished(uuid, true);
     }
 
-    public static void vanishPlayer(Player player){
+    public static void vanishPlayer(Player player) {
         vanishPlayer(player.getUniqueId());
     }
 
-    public static void showPlayer(UUID uuid){
+    public static void showPlayer(UUID uuid) {
         plugin.getVisibilityManager().setVanished(uuid, false);
     }
 
-    public static void showPlayer(Player player){
+    public static void showPlayer(Player player) {
         showPlayer(player.getUniqueId());
     }
 
-    public static boolean hasPermissionToSee(Player hider, Player viewer){
+    public static boolean hasPermissionToSee(Player hider, Player viewer) {
         return plugin.getPermissionManager().hasPermissionToSee(hider, viewer);
     }
 
-    public static void setPlugin(ProtocolVanish paramPlugin){
+    public static void setPlugin(ProtocolVanish paramPlugin) {
         plugin = paramPlugin;
     }
 }

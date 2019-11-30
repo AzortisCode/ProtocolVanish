@@ -34,7 +34,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public GeneralEntityPacketListener(ProtocolVanish plugin){
+    public GeneralEntityPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.NAMED_ENTITY_SPAWN,
                 PacketType.Play.Server.ENTITY_DESTROY, PacketType.Play.Server.ANIMATION,
                 PacketType.Play.Server.BLOCK_BREAK_ANIMATION, PacketType.Play.Server.ENTITY_STATUS,
@@ -52,7 +52,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         Player viewer = event.getPlayer();
         PacketContainer packet = event.getPacket();
-        if(plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
+        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
             if (packet.getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
                 UUID playerUUID = packet.getUUIDs().read(0);
                 if (plugin.getVisibilityManager().getVanishedPlayers().contains(playerUUID)
@@ -63,26 +63,26 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                 List<Integer> entityIdList = new ArrayList<>();
                 for (int entityId : entityIds) {
                     Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, viewer.getWorld());
-                    if(player == null) {
+                    if (player == null) {
                         entityIdList.add(entityId);
-                    } else if((boolean)packet.getMeta("ignoreFilter").get()){
+                    } else if ((boolean) packet.getMeta("ignoreFilter").get()) {
                         entityIdList.add(entityId);
                     } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
-                            !plugin.getVisibilityManager().isVanishedFrom(player, viewer)){
+                            !plugin.getVisibilityManager().isVanishedFrom(player, viewer)) {
                         entityIdList.add(entityId);
-                    } else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())){
+                    } else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
                         entityIdList.add(entityId);
                     }
                 }
                 if (entityIdList.size() >= 1) {
-                    packet.getIntegerArrays().write(0, entityIdList.stream().mapToInt(i->i).toArray());
+                    packet.getIntegerArrays().write(0, entityIdList.stream().mapToInt(i -> i).toArray());
                     return;
                 }
                 event.setCancelled(true);
             } else {
                 int entityId;
-                if (packet.getType() == PacketType.Play.Server.COLLECT)entityId =
-                       packet.getIntegers().read(1);
+                if (packet.getType() == PacketType.Play.Server.COLLECT) entityId =
+                        packet.getIntegers().read(1);
                 else entityId = packet.getIntegers().read(0);
                 Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, viewer.getWorld());
                 if (player != null

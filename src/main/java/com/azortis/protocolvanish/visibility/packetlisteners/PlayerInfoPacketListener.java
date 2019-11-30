@@ -36,7 +36,7 @@ public class PlayerInfoPacketListener extends PacketAdapter {
 
     private ProtocolVanish plugin;
 
-    public PlayerInfoPacketListener(ProtocolVanish plugin){
+    public PlayerInfoPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.PLAYER_INFO);
         this.plugin = plugin;
     }

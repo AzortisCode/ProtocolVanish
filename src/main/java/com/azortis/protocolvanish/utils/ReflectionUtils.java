@@ -27,12 +27,12 @@ import java.lang.reflect.Method;
 
 public class ReflectionUtils {
 
-    public static int getPing(Player player){
-        try{
+    public static int getPing(Player player) {
+        try {
             Field pingField = MinecraftReflection.getEntityPlayerClass().getField("ping");
             Method getHandle = player.getClass().getSuperclass().getMethod("getHandle");
             return (int) pingField.get(getHandle.invoke(player));
-        }catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e){
+        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;

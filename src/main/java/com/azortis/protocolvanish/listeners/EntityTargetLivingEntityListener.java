@@ -32,19 +32,19 @@ public class EntityTargetLivingEntityListener implements Listener {
 
     private ProtocolVanish plugin;
 
-    public EntityTargetLivingEntityListener(ProtocolVanish plugin){
+    public EntityTargetLivingEntityListener(ProtocolVanish plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event){
-        if(event.getTarget() instanceof Player){
-            Player player = (Player)event.getTarget();
+    public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
+        if (event.getTarget() instanceof Player) {
+            Player player = (Player) event.getTarget();
             VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-            if(vanishPlayer != null && vanishPlayer.isVanished() && vanishPlayer.getPlayerSettings().getDisableCreatureTarget()) {
-                if(event.getEntity() instanceof LivingEntity
-                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableCreatureTarget()){
+            if (vanishPlayer != null && vanishPlayer.isVanished() && vanishPlayer.getPlayerSettings().getDisableCreatureTarget()) {
+                if (event.getEntity() instanceof LivingEntity
+                        && plugin.getSettingsManager().getInvisibilitySettings().getDisableCreatureTarget()) {
                     event.setTarget(null);
                     event.setCancelled(true);
                 }

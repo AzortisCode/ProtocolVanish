@@ -24,27 +24,27 @@ public class PermissionManager {
 
     private ProtocolVanish plugin;
 
-    PermissionManager(ProtocolVanish plugin){
+    PermissionManager(ProtocolVanish plugin) {
         this.plugin = plugin;
     }
 
-    public boolean hasPermission(Player player, Permission permission){
-        if(player.hasPermission("protocolvanish." + Permission.ADMIN))return true;
+    public boolean hasPermission(Player player, Permission permission) {
+        if (player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
         return player.hasPermission("protocolvanish." + permission);
     }
 
-    public boolean hasPermissionToVanish(Player player){
+    public boolean hasPermissionToVanish(Player player) {
         return Permission.USE.getPermissionLevel(plugin, player) > 0;
     }
 
     public boolean hasPermissionToSee(Player hider, Player viewer) {
-        if(!plugin.getSettingsManager().getPermissionSettings().getEnableSeePermission())return false;
+        if (!plugin.getSettingsManager().getPermissionSettings().getEnableSeePermission()) return false;
         int hiderLevel = Permission.USE.getPermissionLevel(plugin, hider);
         int viewerLevel = Permission.SEE.getPermissionLevel(plugin, viewer);
         return viewerLevel >= hiderLevel;
     }
 
-    public enum Permission{
+    public enum Permission {
         USE("use"),
         SEE("see"),
         CHANGE_NIGHT_VISION("bypass.nightvision"),
@@ -56,20 +56,21 @@ public class PermissionManager {
 
         private String permissionNode;
 
-        Permission(String permissionNode){
+        Permission(String permissionNode) {
             this.permissionNode = permissionNode;
         }
 
-        private int getPermissionLevel(ProtocolVanish plugin, Player player){
-            if(permissionNode.equals("use") || permissionNode.equals("see")){
+        private int getPermissionLevel(ProtocolVanish plugin, Player player) {
+            if (permissionNode.equals("use") || permissionNode.equals("see")) {
                 int maxLevel = plugin.getSettingsManager().getPermissionSettings().getMaxLevel();
                 int level = player.hasPermission("protocolvanish." + this.permissionNode) ? 1 : 0;
                 for (int i = 1; i <= maxLevel; i++) {
-                    if(player.hasPermission("protocolvanish." + this.permissionNode + ".level." + i)){
+                    if (player.hasPermission("protocolvanish." + this.permissionNode + ".level." + i)) {
                         level = i;
                     }
                 }
-                if(level > 0 && !plugin.getSettingsManager().getPermissionSettings().getEnableLayeredPermissions())return 1;
+                if (level > 0 && !plugin.getSettingsManager().getPermissionSettings().getEnableLayeredPermissions())
+                    return 1;
                 return level;
             }
             return 1;

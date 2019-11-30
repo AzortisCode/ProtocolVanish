@@ -38,32 +38,33 @@ public class PlayerQuitListener implements Listener {
     private ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
 
-    public PlayerQuitListener(ProtocolVanish plugin){
+    public PlayerQuitListener(ProtocolVanish plugin) {
         this.plugin = plugin;
         this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerQuit(PlayerQuitEvent event){
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-        if(vanishPlayer != null && vanishPlayer.isVanished()) {
+        if (vanishPlayer != null && vanishPlayer.isVanished()) {
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
-            if(vanishPlayer.getPlayerSettings().doNightVision())player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            if (vanishPlayer.getPlayerSettings().doNightVision())
+                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             plugin.getVanishPlayerMap().remove(player.getUniqueId());
             plugin.getVisibilityManager().clearVanishedFrom(player);
             plugin.getVisibilityManager().getVanishedPlayers().remove(player.getUniqueId());
-            if(messageSettings.getHideRealJoinQuitMessages()){
+            if (messageSettings.getHideRealJoinQuitMessages()) {
                 event.setQuitMessage("");
-                for (Player viewer : Bukkit.getOnlinePlayers()){
-                    if(plugin.getPermissionManager().hasPermissionToSee(player, viewer)  && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer){
+                for (Player viewer : Bukkit.getOnlinePlayers()) {
+                    if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
                         viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherLeftSilently").replaceAll("\\{player}", player.getName())));
                     }
                 }
             }
         }
-        for(UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()){
+        for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
             plugin.getVisibilityManager().setVanished(Bukkit.getPlayer(uuid), player, false);
         }
     }

@@ -40,74 +40,74 @@ public class SettingsManager {
     private Map<String, Object> settingsMap;
     private Map<String, Object> messageMap;
 
-    public SettingsManager(ProtocolVanish plugin){
+    public SettingsManager(ProtocolVanish plugin) {
         this.plugin = plugin;
-        if(plugin.getDataFolder().exists())plugin.getDataFolder().mkdir();
+        if (plugin.getDataFolder().exists()) plugin.getDataFolder().mkdir();
         settingsFile = new File(plugin.getDataFolder(), "settings.json");
         messageFile = new File(plugin.getDataFolder(), "messages.json");
-        if(!settingsFile.exists())plugin.saveResource(settingsFile.getName(), false);
-        if(!messageFile.exists())plugin.saveResource(messageFile.getName(), false);
+        if (!settingsFile.exists()) plugin.saveResource(settingsFile.getName(), false);
+        if (!messageFile.exists()) plugin.saveResource(messageFile.getName(), false);
         try {
             settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
             messageMap = gson.fromJson(new FileReader(messageFile), Map.class);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveSettingsFile(){
+    public void saveSettingsFile() {
         try {
             final String json = gson.toJson(settingsMap);
             settingsFile.delete();
             Files.write(settingsFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void reloadSettingsFile(){
-        try{
+    public void reloadSettingsFile() {
+        try {
             settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveMessageFile(){
-        try{
+    public void saveMessageFile() {
+        try {
             final String json = gson.toJson(messageMap);
             messageFile.delete();
             Files.write(messageFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void reloadMessageFile(){
-        try{
+    public void reloadMessageFile() {
+        try {
             messageMap = gson.fromJson(new FileReader(messageFile), Map.class);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public MessageSettingsWrapper getMessageSettings(){
+    public MessageSettingsWrapper getMessageSettings() {
         return new MessageSettingsWrapper(this, settingsMap.get("messageSettings"), messageMap.get("messages"));
     }
 
-    public PermissionSettingsWrapper getPermissionSettings(){
+    public PermissionSettingsWrapper getPermissionSettings() {
         return new PermissionSettingsWrapper(this, settingsMap.get("permissionSettings"));
     }
 
-    public InvisibilitySettingsWrapper getInvisibilitySettings(){
+    public InvisibilitySettingsWrapper getInvisibilitySettings() {
         return new InvisibilitySettingsWrapper(this, settingsMap.get("invisibilitySettings"));
     }
 
-    public VisibilitySettingsWrapper getVisibilitySettings(){
+    public VisibilitySettingsWrapper getVisibilitySettings() {
         return new VisibilitySettingsWrapper(this, settingsMap.get("visibilitySettings"));
     }
 
-    public CommandSettingsWrapper getCommandSettings(){
+    public CommandSettingsWrapper getCommandSettings() {
         return new CommandSettingsWrapper(this, settingsMap.get("commandSettings"));
     }
 
@@ -115,11 +115,11 @@ public class SettingsManager {
         return new StorageSettingsWrapper(this, settingsMap.get("StorageSettings"));
     }*/
 
-    public Map<String, Object> getSettingsMap(){
+    public Map<String, Object> getSettingsMap() {
         return settingsMap;
     }
 
-    public Map<String, Object> getMessageMap(){
+    public Map<String, Object> getMessageMap() {
         return messageMap;
     }
 
