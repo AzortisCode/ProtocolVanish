@@ -18,9 +18,7 @@
 
 package com.azortis.protocolvanish;
 
-import com.azortis.azortislib.AzortisLib;
 import com.azortis.protocolvanish.api.VanishAPI;
-import com.azortis.protocolvanish.command.VanishCommand;
 import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.storage.StorageManager;
@@ -34,7 +32,6 @@ import java.util.UUID;
 
 public final class ProtocolVanish extends JavaPlugin {
 
-    private AzortisLib azortisLib;
     private Metrics metrics;
     private SettingsManager settingsManager;
     private PermissionManager permissionManager;
@@ -45,10 +42,9 @@ public final class ProtocolVanish extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.azortisLib = new AzortisLib(this, "ProtocolVanish", "§1[§9ProtocolVanish§1]§0");
         this.metrics = new Metrics(this);
         if (!Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
-            azortisLib.getLogger().severe("ProtocolLib isn't present, please install ProtocolLib! Shutting down...");
+            this.getLogger().severe("ProtocolLib isn't present, please install ProtocolLib! Shutting down...");
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -57,7 +53,7 @@ public final class ProtocolVanish extends JavaPlugin {
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
 
-        new VanishCommand(this);
+//        new VanishCommand(this);
         new PlayerLoginListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
@@ -72,10 +68,6 @@ public final class ProtocolVanish extends JavaPlugin {
     @Override
     public void onDisable() {
 
-    }
-
-    public AzortisLib getAzortisLib() {
-        return azortisLib;
     }
 
     public Metrics getMetrics() {

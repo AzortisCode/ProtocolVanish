@@ -46,7 +46,7 @@ public class SQLiteAdapter implements IDatabase {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            plugin.getAzortisLib().getLogger().severe("Cannot create database file, shutting down!");
+            plugin.getLogger().severe("Cannot create database file, shutting down!");
             plugin.getPluginLoader().disablePlugin(plugin);
         }
         this.jdbcurl = "jdbc:sqlite:" + dbFile.getPath();
