@@ -26,7 +26,7 @@ Add the following to your pom.xml
         <groupId>com.azortis</groupId>
         <artifactId>protocolvanish</artifactId>
         <version>@VERSION</version>
-        <scope>compile</scope>
+        <scope>provided</scope>
     </dependency>
 </dependencies>
 ```
