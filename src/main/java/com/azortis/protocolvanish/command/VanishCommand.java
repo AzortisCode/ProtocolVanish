@@ -29,6 +29,7 @@ import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.command.subcommands.*;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -74,7 +75,7 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
                                 .setExecutor(new ToggleItemPickupSub(plugin))
                                 .addAliases(commandSettings.getSubCommandAliases("toggleItemPickup"))
                 ).build();
-        CommandInjector.injectCommand(command);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> CommandInjector.injectCommand("protocolvanish", command), 20L);
 
     }
 
