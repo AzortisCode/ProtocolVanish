@@ -24,9 +24,14 @@ import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.command.subcommands.*;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
+import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 public class VanishCommand implements ICommandExecutor{
 
@@ -42,7 +47,6 @@ public class VanishCommand implements ICommandExecutor{
                 .addAliases(commandSettings.getAliases())
                 .setPlugin(plugin)
                 .setExecutor(this)
-                .setTabCompleter(new VanishTabCompleter(plugin))
                 .addSubCommands(
                         new SubCommandBuilder()
                                 .setName(commandSettings.getSubCommandName("toggleNightVision"))
@@ -71,6 +75,27 @@ public class VanishCommand implements ICommandExecutor{
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        if(commandSender instanceof ConsoleCommandSender){
+            commandSender.sendMessage("This command cannot be run from console!");
+            return false;
+        }else if(commandSender instanceof Player){
+            Player player = (Player)commandSender;
+            MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
+            if(plugin.getPermissionManager().hasPermissionToVanish(player)){
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer.isVanished()){
+                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
+                }else {
+                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
+                }
+                return true;
+            }else{
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                return false;
+            }
+        }
         return false;
     }
 

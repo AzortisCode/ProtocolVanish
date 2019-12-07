@@ -19,9 +19,8 @@
 package com.azortis.protocolvanish.settings;
 
 import java.util.List;
-import java.util.Map;
 
-@SuppressWarnings("all")
+@SuppressWarnings("unused")
 public class CommandSettingsWrapper extends SettingsWrapper {
 
     public CommandSettingsWrapper(SettingsManager parent, Object settingsMap) {
@@ -58,6 +57,26 @@ public class CommandSettingsWrapper extends SettingsWrapper {
 
     public void setAliases(List<String> aliases) {
         setStringList("aliases", aliases, null);
+    }
+
+    public String getSubCommandName(String subCommand){
+        SettingsSection subCommandSection = getSection("subCommands");
+        return getString("name", subCommandSection.getSubSection(subCommand));
+    }
+
+    public void setSubCommandName(String subCommand, String name){
+        SettingsSection subCommandSection = getSection("subCommands");
+        setString("name", name, subCommandSection.getSubSection(subCommand));
+    }
+
+    public List<String> getSubCommandAliases(String subCommand){
+        SettingsSection subCommandSection = getSection("subCommands");
+        return getStringList("aliases", subCommandSection.getSubSection(subCommand));
+    }
+
+    public void setSubCommandAliases(String subCommand, List<String> aliases){
+        SettingsSection subCommandSection = getSection("subCommands");
+        setStringList("aliases", aliases, subCommandSection.getSubSection(subCommand));
     }
 
 }

@@ -20,8 +20,14 @@ package com.azortis.protocolvanish.command.subcommands;
 
 import com.azortis.azortislib.command.SubCommand;
 import com.azortis.azortislib.command.executors.ISubCommandExecutor;
+import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.VanishPlayer;
+import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 public class ToggleHungerSub implements ISubCommandExecutor {
 
@@ -33,6 +39,28 @@ public class ToggleHungerSub implements ISubCommandExecutor {
 
     @Override
     public boolean onSubCommand(CommandSender commandSender, SubCommand subCommand, String s, String[] strings) {
+        if(commandSender instanceof ConsoleCommandSender){
+            commandSender.sendMessage("This command cannot be run from console!");
+            return false;
+        }else if(commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
+            if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer.getPlayerSettings().getDisableHunger()){
+                    vanishPlayer.getPlayerSettings().setDisableHunger(false);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledHunger")));
+                }else {
+                    vanishPlayer.getPlayerSettings().setDisableHunger(true);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledHunger")));
+                }
+                plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
+                return true;
+            }else {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                return false;
+            }
+        }
         return false;
     }
 }
