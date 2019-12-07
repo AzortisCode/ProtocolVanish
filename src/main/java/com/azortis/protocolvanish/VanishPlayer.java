@@ -54,7 +54,7 @@ public class VanishPlayer {
 
     public static class PlayerSettings {
 
-        private VanishPlayer parent;
+        private transient VanishPlayer parent;
         private boolean nightVision;
         private boolean disableDamage;
         private boolean disableHunger;

@@ -23,17 +23,21 @@ import com.azortis.azortislib.command.CommandInjector;
 import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
+import com.azortis.azortislib.command.executors.ITabCompleter;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.command.subcommands.*;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class VanishCommand implements ICommandExecutor{
+import java.util.List;
+
+public class VanishCommand implements ICommandExecutor, ITabCompleter {
 
     private ProtocolVanish plugin;
 
@@ -47,6 +51,7 @@ public class VanishCommand implements ICommandExecutor{
                 .addAliases(commandSettings.getAliases())
                 .setPlugin(plugin)
                 .setExecutor(this)
+                .setTabCompleter(this)
                 .addSubCommands(
                         new SubCommandBuilder()
                                 .setName(commandSettings.getSubCommandName("toggleNightVision"))
@@ -99,6 +104,8 @@ public class VanishCommand implements ICommandExecutor{
         return false;
     }
 
-
-
+    @Override
+    public List<String> tabComplete(CommandSender commandSender, String s, String[] strings, Location location) {
+        return null;
+    }
 }

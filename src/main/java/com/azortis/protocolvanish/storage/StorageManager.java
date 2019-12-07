@@ -49,15 +49,15 @@ public class StorageManager {
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(uuid);
 
         //Checks to prevent memory leaks.
-        if (vanishPlayer == null && plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))
+        if (vanishPlayer == null && plugin.getPermissionManager().hasPermissionToVanish(vanishPlayer.getPlayer()))
             return createVanishPlayer(uuid);
         else if (vanishPlayer == null) return null;
-        if (!plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE)
+        if (!plugin.getPermissionManager().hasPermissionToVanish(vanishPlayer.getPlayer())
                 && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.deleteVanishPlayer(vanishPlayer));
             return null;
         } else if (/*plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/ false
-                && !plugin.getPermissionManager().hasPermission(Bukkit.getPlayer(uuid), PermissionManager.Permission.USE))
+                && !plugin.getPermissionManager().hasPermissionToVanish(vanishPlayer.getPlayer()))
             return null;
 
         //Apply default settings for the actual to be retrieved later.

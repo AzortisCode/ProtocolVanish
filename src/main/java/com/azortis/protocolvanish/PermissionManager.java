@@ -29,12 +29,12 @@ public class PermissionManager {
     }
 
     public boolean hasPermission(Player player, Permission permission) {
-        if (player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
+        if (player.isOp() || player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
         return player.hasPermission("protocolvanish." + permission);
     }
 
     public boolean hasPermissionToVanish(Player player) {
-        if(player.hasPermission("protocolvanish." + Permission.ADMIN))return true;
+        if(player.isOp() || player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
         return Permission.USE.getPermissionLevel(plugin, player) > 0;
     }
 

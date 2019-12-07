@@ -58,7 +58,7 @@ public class SQLiteAdapter implements IDatabase {
                 statement.setInt(1, 1);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    int playersInVanish = resultSet.getInt(2);
+                    int playersInVanish = resultSet.getInt("playersInVanish");
                     resultSet.close();
                     statement.close();
                     connection.close();
@@ -151,7 +151,7 @@ public class SQLiteAdapter implements IDatabase {
     @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
         try (Connection connection = createConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO vanishPlayers (?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO vanishPlayers VALUES (?,?,?)");
             statement.setString(1, vanishPlayer.getPlayer().getUniqueId().toString());
             statement.setBoolean(2, vanishPlayer.isVanished());
             statement.setString(3, gson.toJson(vanishPlayer.getPlayerSettings()));
@@ -193,10 +193,10 @@ public class SQLiteAdapter implements IDatabase {
     private void createTables() {
         try (Connection connection = createConnection()) {
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.execute("CREATE TABLE vanishPlayers (uuid varchar(36), vanished boolean, playerSettings varchar)");
+            vanishPlayerStatement.execute("CREATE TABLE IF NOT EXISTS vanishPlayers (uuid varchar(36), vanished boolean, playerSettings varchar)");
 
             Statement serverInfoStatement = connection.createStatement();
-            serverInfoStatement.execute("CREATE TABLE serverInfo (serverId SMALLINT, playersInVanish SMALLINT)");
+            serverInfoStatement.execute("CREATE TABLE IF NOT EXISTS serverInfo (serverId SMALLINT, playersInVanish SMALLINT)");
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();

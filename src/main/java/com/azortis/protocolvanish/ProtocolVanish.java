@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish;
 
 import com.azortis.protocolvanish.api.VanishAPI;
+import com.azortis.protocolvanish.command.VanishCommand;
 import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.storage.StorageManager;
@@ -53,7 +54,7 @@ public final class ProtocolVanish extends JavaPlugin {
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
 
-//        new VanishCommand(this);
+        new VanishCommand(this);
         new PlayerLoginListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);

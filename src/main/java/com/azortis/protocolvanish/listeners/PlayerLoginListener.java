@@ -23,6 +23,7 @@ import com.azortis.protocolvanish.VanishPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -40,8 +41,9 @@ public class PlayerLoginListener implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLogin(PlayerLoginEvent event) {
+        if(event.getResult() != PlayerLoginEvent.Result.ALLOWED)return;
         Player player = event.getPlayer();
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
         if (vanishPlayer != null && vanishPlayer.isVanished()) {
