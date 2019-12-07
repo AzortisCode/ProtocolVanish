@@ -75,7 +75,9 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
                                 .setExecutor(new ToggleItemPickupSub(plugin))
                                 .addAliases(commandSettings.getSubCommandAliases("toggleItemPickup"))
                 ).build();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> CommandInjector.injectCommand("protocolvanish", command), 20L);
+        if(command == null)Bukkit.getLogger().severe("Command is null");
+        if(command.getName() == null)Bukkit.getLogger().severe("Name is null");
+        CommandInjector.injectCommand("protocolvanish", command);
 
     }
 
