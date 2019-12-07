@@ -55,7 +55,7 @@ public class VisibilityChanger {
 
     void vanishPlayer(UUID uuid) {
         Player hider = Bukkit.getPlayer(uuid);
-        VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(hider);
         if (vanishPlayer == null) return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, true));
         if (vanishPlayer.getPlayerSettings().doNightVision())
@@ -82,7 +82,7 @@ public class VisibilityChanger {
 
     void showPlayer(UUID uuid) {
         Player hider = Bukkit.getPlayer(uuid);
-        VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(hider);
         if (vanishPlayer == null) return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, false));
         if (vanishPlayer.getPlayerSettings().doNightVision()) hider.removePotionEffect(PotionEffectType.NIGHT_VISION);

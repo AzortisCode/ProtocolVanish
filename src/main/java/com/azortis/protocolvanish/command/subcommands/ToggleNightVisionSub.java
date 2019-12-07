@@ -49,6 +49,7 @@ public class ToggleNightVisionSub implements ISubCommandExecutor {
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().doNightVision()){
                     vanishPlayer.getPlayerSettings().setNightVision(false);
                     if(vanishPlayer.isVanished())player.removePotionEffect(PotionEffectType.NIGHT_VISION);

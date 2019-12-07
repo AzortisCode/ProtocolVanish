@@ -19,18 +19,19 @@
 package com.azortis.protocolvanish.storage;
 
 import com.azortis.protocolvanish.VanishPlayer;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public class MySQLAdapter implements IDatabase {
 
     @Override
-    public VanishPlayer getVanishPlayer(UUID uuid) {
+    public VanishPlayer getVanishPlayer(Player player) {
         return null;
     }
 
     @Override
-    public VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
+    public VanishPlayer.PlayerSettings getPlayerSettings(Player player) {
         return null;
     }
 

@@ -51,8 +51,8 @@ public class SettingsWrapper {
     }
 
     public int getInteger(String path, SettingsSection section) {
-        if (section != null) return (Integer) section.sectionMap.get(path);
-        return (Integer) settingsMap.get(path);
+        if (section != null) return ((Double) section.sectionMap.get(path)).intValue();
+        return ((Double) settingsMap.get(path)).intValue();
     }
 
     public void setInteger(String path, int value, SettingsSection section) {

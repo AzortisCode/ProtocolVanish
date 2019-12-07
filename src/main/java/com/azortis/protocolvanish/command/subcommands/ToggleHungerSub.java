@@ -47,6 +47,7 @@ public class ToggleHungerSub implements ISubCommandExecutor {
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().getDisableHunger()){
                     vanishPlayer.getPlayerSettings().setDisableHunger(false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledHunger")));

@@ -47,6 +47,7 @@ public class ToggleItemPickupSub implements ISubCommandExecutor {
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().getDisableItemPickUp()){
                     vanishPlayer.getPlayerSettings().setDisableItemPickUp(false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));

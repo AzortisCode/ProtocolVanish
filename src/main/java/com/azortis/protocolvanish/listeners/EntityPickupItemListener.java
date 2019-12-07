@@ -40,7 +40,7 @@ public class EntityPickupItemListener implements Listener {
     public void onEntityPickupItem(EntityPickupItemEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
             if (vanishPlayer != null && vanishPlayer.isVanished()
                     && vanishPlayer.getPlayerSettings().getDisableItemPickUp()) event.setCancelled(true);
         }

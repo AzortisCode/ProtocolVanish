@@ -86,35 +86,35 @@ public class VisibilityManager {
     /**
      * Make a player vanish or reappear.
      *
-     * @param uuid     The uuid of the {@link Player} you wan't to vanish.
+     * @param player The {@link Player} instance of the one you wan't to vanish.
      * @param vanished If the player should vanish.
      */
-    public void setVanished(UUID uuid, boolean vanished) {
-        if (vanishedPlayers.contains(uuid) && vanished) return;
+    public void setVanished(Player player, boolean vanished) {
+        if (vanishedPlayers.contains(player.getUniqueId()) && vanished) return;
         if (vanished) {
-            PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(Bukkit.getPlayer(uuid));
+            PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(player);
             Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
             if (!playerVanishEvent.isCancelled()) {
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
                 if (vanishPlayer == null) return; //TODO Log that a player can not vanish if player has no permission.
-                vanishedPlayers.add(uuid);
+                vanishedPlayers.add(player.getUniqueId());
                 vanishPlayer.setVanish(true);
                 plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                vanishedFromMap.put(Bukkit.getPlayer(uuid), new ArrayList<>());
-                visibilityChanger.vanishPlayer(uuid);
+                vanishedFromMap.put(player, new ArrayList<>());
+                visibilityChanger.vanishPlayer(player.getUniqueId());
                 plugin.getStorageManager().updateServerInfo();
             }
         } else {
-            PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
+            PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(player);
             Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
             if (!playerReappearEvent.isCancelled()) {
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
                 if (vanishPlayer == null) return; //TODO Log big error
-                vanishedPlayers.remove(uuid);
+                vanishedPlayers.remove(player.getUniqueId());
                 vanishPlayer.setVanish(false);
                 plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                visibilityChanger.showPlayer(uuid);
-                clearVanishedFrom(Bukkit.getPlayer(uuid));
+                visibilityChanger.showPlayer(player.getUniqueId());
+                clearVanishedFrom(player);
                 plugin.getStorageManager().updateServerInfo();
             }
         }

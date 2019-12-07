@@ -24,6 +24,7 @@ import com.azortis.protocolvanish.VanishPlayer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,14 +76,14 @@ public class SQLiteAdapter implements IDatabase {
     }
 
     @Override
-    public VanishPlayer getVanishPlayer(UUID uuid) {
+    public VanishPlayer getVanishPlayer(Player player) {
         try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT vanished FROM vanishPlayers WHERE uuid=?");
-            statement.setString(1, uuid.toString());
+            statement.setString(1, player.getUniqueId().toString());
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), resultSet.getBoolean(1));
+                VanishPlayer vanishPlayer = new VanishPlayer(player, resultSet.getBoolean(1));
                 resultSet.close();
                 statement.close();
                 connection.close();
@@ -98,14 +99,15 @@ public class SQLiteAdapter implements IDatabase {
     }
 
     @Override
-    public VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
+    public VanishPlayer.PlayerSettings getPlayerSettings(Player player) {
         try (Connection connection = createConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT playerSettings FROM vanishPlayers WHERE uuid=?");
-            statement.setString(1, uuid.toString());
+            statement.setString(1, player.getUniqueId().toString());
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 VanishPlayer.PlayerSettings playerSettings = gson.fromJson(resultSet.getString(1), VanishPlayer.PlayerSettings.class);
+                playerSettings.setParent(plugin.getVanishPlayer(player));
                 resultSet.close();
                 statement.close();
                 connection.close();

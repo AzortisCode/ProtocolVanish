@@ -11,8 +11,6 @@
     "vanishMessageWithPerm": "&a{player} has gone in vanish.",
     "reappearMessageWithPerm": "&a{player} has gone out of vanish.",
     "actionBarMsg": "&aYou're in vanish.",
-    "loadingPlayerSettings": "&aYou're vanish settings are being loaded...",
-    "playerSettingsBeenLoaded": "&aYou're vanish settings have been successfully loaded.",
     "enabledNightVision": "&aYou've enabled nightVision.",
     "disabledNightVision": "&aYou've disabled nightVision.",
     "enabledDamage": "&aYou've enabled damage.",

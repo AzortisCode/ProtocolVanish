@@ -26,8 +26,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 @SuppressWarnings("all")
 public class StorageManager {
 
@@ -44,39 +42,38 @@ public class StorageManager {
         this.adapter = new SQLiteAdapter(plugin);
     }
 
-    public VanishPlayer getVanishPlayer(UUID uuid) {
+    public VanishPlayer getVanishPlayer(Player player) {
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
-        VanishPlayer vanishPlayer = adapter.getVanishPlayer(uuid);
+        VanishPlayer vanishPlayer = adapter.getVanishPlayer(player);
 
         //Checks to prevent memory leaks.
-        if (vanishPlayer == null && plugin.getPermissionManager().hasPermissionToVanish(vanishPlayer.getPlayer()))
-            return createVanishPlayer(uuid);
+        if (vanishPlayer == null && plugin.getPermissionManager().hasPermissionToVanish(player)) {
+            return createVanishPlayer(player);
+        }
         else if (vanishPlayer == null) return null;
-        if (!plugin.getPermissionManager().hasPermissionToVanish(vanishPlayer.getPlayer())
+        if (!plugin.getPermissionManager().hasPermissionToVanish(player)
                 && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.deleteVanishPlayer(vanishPlayer));
             return null;
         } else if (/*plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/ false
-                && !plugin.getPermissionManager().hasPermissionToVanish(vanishPlayer.getPlayer()))
+                && !plugin.getPermissionManager().hasPermissionToVanish(player))
             return null;
 
         //Apply default settings for the actual to be retrieved later.
-        vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(vanishPlayer,
+        vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(
                 invisibilitySettings.getNightVisionEffect(),
                 invisibilitySettings.getDisableDamage(),
                 invisibilitySettings.getDisableHunger(),
                 invisibilitySettings.getDisableCreatureTarget(),
                 invisibilitySettings.getDisableItemPickup()));
-        if (vanishPlayer.isVanished()) vanishPlayer.getPlayer()
-                .sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getSettingsManager()
-                        .getMessageSettings().getMessage("loadingPlayerSettings")));
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> vanishPlayer.setPlayerSettings(getPlayerSettings(uuid)));
+        /*if (vanishPlayer.isVanished()) player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                plugin.getSettingsManager().getMessageSettings().getMessage("loadingPlayerSettings")));*/
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> vanishPlayer.setPlayerSettings(getPlayerSettings(player)));
         return vanishPlayer;
     }
 
-    private VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid) {
-        VanishPlayer.PlayerSettings playerSettings = adapter.getPlayerSettings(uuid);
-        Player player = playerSettings.getParent().getPlayer();
+    private VanishPlayer.PlayerSettings getPlayerSettings(Player player) {
+        VanishPlayer.PlayerSettings playerSettings = adapter.getPlayerSettings(player);
 
         //Permission checks
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
@@ -110,9 +107,8 @@ public class StorageManager {
         if (!valid) adapter.savePlayerSettings(playerSettings);
 
         //Check if it should send the message(applies if the player joined in vanish)
-        if (playerSettings.getParent().isVanished()) playerSettings.getParent().getPlayer()
-                .sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getSettingsManager()
-                        .getMessageSettings().getMessage("loadingPlayerSettings")));
+        /*if (playerSettings.getParent().isVanished()) player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                plugin.getSettingsManager().getMessageSettings().getMessage("loadedPlayerSettings")));*/
         return playerSettings;
     }
 
@@ -128,15 +124,16 @@ public class StorageManager {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.updateServerInfo());
     }
 
-    private VanishPlayer createVanishPlayer(UUID uuid) {
-        VanishPlayer vanishPlayer = new VanishPlayer(Bukkit.getPlayer(uuid), false);
+    public VanishPlayer createVanishPlayer(Player player) {
+        VanishPlayer vanishPlayer = new VanishPlayer(player, false);
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
-        vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(vanishPlayer,
+        vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(
                 invisibilitySettings.getNightVisionEffect(),
                 invisibilitySettings.getDisableDamage(),
                 invisibilitySettings.getDisableHunger(),
                 invisibilitySettings.getDisableCreatureTarget(),
                 invisibilitySettings.getDisableItemPickup()));
+        vanishPlayer.getPlayerSettings().setParent(vanishPlayer);
         adapter.createVanishPlayer(vanishPlayer);
         return vanishPlayer;
     }

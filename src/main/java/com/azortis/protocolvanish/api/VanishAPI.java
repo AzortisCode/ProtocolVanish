@@ -19,12 +19,12 @@
 package com.azortis.protocolvanish.api;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.UUID;
 
-@SuppressWarnings("all")
 public class VanishAPI {
 
     private static ProtocolVanish plugin;
@@ -42,19 +42,19 @@ public class VanishAPI {
     }
 
     public static void vanishPlayer(UUID uuid) {
-        plugin.getVisibilityManager().setVanished(uuid, true);
+        vanishPlayer(Bukkit.getPlayer(uuid));
     }
 
     public static void vanishPlayer(Player player) {
-        vanishPlayer(player.getUniqueId());
+        plugin.getVisibilityManager().setVanished(player, true);
     }
 
     public static void showPlayer(UUID uuid) {
-        plugin.getVisibilityManager().setVanished(uuid, false);
+        showPlayer(Bukkit.getPlayer(uuid));
     }
 
     public static void showPlayer(Player player) {
-        showPlayer(player.getUniqueId());
+        plugin.getVisibilityManager().setVanished(player, false);
     }
 
     public static boolean hasPermissionToSee(Player hider, Player viewer) {

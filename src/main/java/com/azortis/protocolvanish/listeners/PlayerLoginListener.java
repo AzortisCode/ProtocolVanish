@@ -45,7 +45,7 @@ public class PlayerLoginListener implements Listener {
     public void onPlayerLogin(PlayerLoginEvent event) {
         if(event.getResult() != PlayerLoginEvent.Result.ALLOWED)return;
         Player player = event.getPlayer();
-        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
         if (vanishPlayer != null && vanishPlayer.isVanished()) {
             player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
             plugin.getVisibilityManager().getVanishedPlayers().add(player.getUniqueId());
@@ -55,6 +55,7 @@ public class PlayerLoginListener implements Listener {
         }
         Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
         for (UUID uuid : vanishedPlayers) {
+            if(uuid == player.getUniqueId())break;
             plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
         }
     }

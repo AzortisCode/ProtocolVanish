@@ -61,13 +61,16 @@ public class VanishPlayer {
         private boolean disableCreatureTarget;
         private boolean disableItemPickUp;
 
-        public PlayerSettings(VanishPlayer parent, boolean nightVision, boolean disableDamage, boolean disableHunger, boolean disableCreatureTarget, boolean disableItemPickUp) {
-            this.parent = parent;
+        public PlayerSettings(boolean nightVision, boolean disableDamage, boolean disableHunger, boolean disableCreatureTarget, boolean disableItemPickUp) {
             this.nightVision = nightVision;
             this.disableDamage = disableDamage;
             this.disableHunger = disableHunger;
             this.disableCreatureTarget = disableCreatureTarget;
             this.disableItemPickUp = disableItemPickUp;
+        }
+
+        public void setParent(VanishPlayer parent) {
+            this.parent = parent;
         }
 
         public VanishPlayer getParent() {

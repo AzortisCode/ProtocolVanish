@@ -41,7 +41,7 @@ public class EntityTargetLivingEntityListener implements Listener {
     public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
         if (event.getTarget() instanceof Player) {
             Player player = (Player) event.getTarget();
-            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
             if (vanishPlayer != null && vanishPlayer.isVanished() && vanishPlayer.getPlayerSettings().getDisableCreatureTarget()) {
                 if (event.getEntity() instanceof LivingEntity
                         && plugin.getSettingsManager().getInvisibilitySettings().getDisableCreatureTarget()) {

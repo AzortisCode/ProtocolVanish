@@ -46,7 +46,7 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (player.hasMetadata("vanished")) {
-            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
             if (vanishPlayer != null && vanishPlayer.getPlayerSettings().doNightVision())
                 player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
             if (plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())

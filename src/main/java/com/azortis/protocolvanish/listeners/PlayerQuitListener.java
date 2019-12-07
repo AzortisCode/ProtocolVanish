@@ -47,7 +47,7 @@ public class PlayerQuitListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
         if (vanishPlayer != null && vanishPlayer.isVanished()) {
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
             if (vanishPlayer.getPlayerSettings().doNightVision())

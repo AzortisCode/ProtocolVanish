@@ -75,8 +75,6 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
                                 .setExecutor(new ToggleItemPickupSub(plugin))
                                 .addAliases(commandSettings.getSubCommandAliases("toggleItemPickup"))
                 ).build();
-        if(command == null)Bukkit.getLogger().severe("Command is null");
-        if(command.getName() == null)Bukkit.getLogger().severe("Name is null");
         CommandInjector.injectCommand("protocolvanish", command);
 
     }
@@ -91,11 +89,12 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermissionToVanish(player)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
                 if(vanishPlayer.isVanished()){
-                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
+                    plugin.getVisibilityManager().setVanished(player, false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
                 }else {
-                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
+                    plugin.getVisibilityManager().setVanished(player, true);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
                 }
                 return true;

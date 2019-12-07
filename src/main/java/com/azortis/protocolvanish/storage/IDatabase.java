@@ -19,14 +19,15 @@
 package com.azortis.protocolvanish.storage;
 
 import com.azortis.protocolvanish.VanishPlayer;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public interface IDatabase {
 
-    VanishPlayer getVanishPlayer(UUID uuid);
+    VanishPlayer getVanishPlayer(Player player);
 
-    VanishPlayer.PlayerSettings getPlayerSettings(UUID uuid);
+    VanishPlayer.PlayerSettings getPlayerSettings(Player player);
 
     void saveVanishPlayer(VanishPlayer vanishPlayer);
 

@@ -47,6 +47,7 @@ public class ToggleDamageSub implements ISubCommandExecutor {
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_DAMAGE)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().getDisableDamage()){
                     vanishPlayer.getPlayerSettings().setDisableDamage(false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledDamage")));

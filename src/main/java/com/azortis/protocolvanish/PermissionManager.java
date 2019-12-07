@@ -18,6 +18,7 @@
 
 package com.azortis.protocolvanish;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class PermissionManager {
