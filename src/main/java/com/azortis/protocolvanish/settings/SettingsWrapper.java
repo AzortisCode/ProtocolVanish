@@ -115,7 +115,7 @@ public class SettingsWrapper {
     }
 
     protected SettingsSection getSection(String path) {
-        return new SettingsSection(path);
+        return new SettingsSection(path, settingsMap, null);
     }
 
     public void save() {
@@ -128,13 +128,25 @@ public class SettingsWrapper {
 
         private String path;
         private Map<String, Object> sectionMap;
+        private SettingsSection parent;
 
-        protected SettingsSection(String path) {
+        protected SettingsSection(String path, Map<String, Object> settingsMap, SettingsSection parent) {
             this.path = path;
             this.sectionMap = (Map<String, Object>) settingsMap.get(path);
+            if(parent != null)this.parent = parent;
+        }
+
+        protected SettingsSection getSubSection(String path){
+            return new SettingsSection(path, sectionMap, this);
         }
 
         protected void save() {
+            if(parent != null){
+                parent.sectionMap.remove(path);
+                parent.sectionMap.put(path, this.sectionMap);
+                parent.save();
+                return;
+            }
             settingsMap.remove(path);
             settingsMap.put(path, sectionMap);
         }

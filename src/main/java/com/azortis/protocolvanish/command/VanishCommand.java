@@ -18,5 +18,62 @@
 
 package com.azortis.protocolvanish.command;
 
-public class VanishCommand {
+import com.azortis.azortislib.command.Command;
+import com.azortis.azortislib.command.CommandInjector;
+import com.azortis.azortislib.command.builders.CommandBuilder;
+import com.azortis.azortislib.command.builders.SubCommandBuilder;
+import com.azortis.azortislib.command.executors.ICommandExecutor;
+import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.command.subcommands.*;
+import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
+import org.bukkit.command.CommandSender;
+
+public class VanishCommand implements ICommandExecutor{
+
+    private ProtocolVanish plugin;
+
+    public VanishCommand(ProtocolVanish plugin){
+        this.plugin = plugin;
+        CommandSettingsWrapper commandSettings = plugin.getSettingsManager().getCommandSettings();
+        Command command = new CommandBuilder()
+                .setName(commandSettings.getName())
+                .setDescription(commandSettings.getDescription())
+                .setUsage(commandSettings.getUsage())
+                .addAliases(commandSettings.getAliases())
+                .setPlugin(plugin)
+                .setExecutor(this)
+                .setTabCompleter(new VanishTabCompleter(plugin))
+                .addSubCommands(
+                        new SubCommandBuilder()
+                                .setName(commandSettings.getSubCommandName("toggleNightVision"))
+                                .setExecutor(new ToggleNightVisionSub(plugin))
+                                .addAliases(commandSettings.getSubCommandAliases("toggleNightVision")),
+                        new SubCommandBuilder()
+                                .setName(commandSettings.getSubCommandName("toggleDamage"))
+                                .setExecutor(new ToggleDamageSub(plugin))
+                                .addAliases(commandSettings.getSubCommandAliases("toggleDamage")),
+                        new SubCommandBuilder()
+                                .setName(commandSettings.getSubCommandName("toggleHunger"))
+                                .setExecutor(new ToggleHungerSub(plugin))
+                                .addAliases(commandSettings.getSubCommandAliases("toggleHunger")),
+                        new SubCommandBuilder()
+                                .setName(commandSettings.getSubCommandName("toggleCreatureTarget"))
+                                .setExecutor(new ToggleCreatureTargetSub(plugin))
+                                .addAliases(commandSettings.getSubCommandAliases("toggleCreatureTarget")),
+                        new SubCommandBuilder()
+                                .setName(commandSettings.getSubCommandName("toggleItemPickup"))
+                                .setExecutor(new ToggleItemPickupSub(plugin))
+                                .addAliases(commandSettings.getSubCommandAliases("toggleItemPickup"))
+                ).build();
+        CommandInjector.injectCommand(command);
+
+    }
+
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        return false;
+    }
+
+
+
 }

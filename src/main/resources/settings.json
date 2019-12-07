@@ -1,13 +1,4 @@
 {
-  "storageSettings": {
-    "useMySQL": "false",
-    "host": "127.0.0.1",
-    "port": "3306",
-    "database": "database",
-    "username": "admin",
-    "password": "admin",
-    "tablePrefix": "protocolvanish-"
-  },
   "invisibilitySettings": {
     "nightVisionEffect": true,
     "disableDamage": true,
@@ -50,7 +41,38 @@
       "v",
       "pv",
       "protocolvanish"
-    ]
-  },
-  "settingsVersion": "1.0"
+    ],
+    "subCommands": {
+      "toggleNightVision": {
+        "name": "togglenightvision",
+        "aliases": [
+          "tnv"
+        ]
+      },
+      "toggleDamage": {
+        "name": "toggledamage",
+        "aliases": [
+          "td"
+        ]
+      },
+      "toggleHunger": {
+        "name": "toggleHunger",
+        "aliases":[
+          "th"
+        ]
+      },
+      "toggleCreatureTarget": {
+        "name": "togglecreaturetarget",
+        "aliases": [
+          "tct"
+        ]
+      },
+      "toggleItemPickup": {
+        "name": "toggleitempickup",
+        "aliases": [
+          "tip"
+        ]
+      }
+    }
+  }
 }
