@@ -129,6 +129,7 @@ public class VisibilityManager {
      * @return If the state has changed.
      */
     public boolean setVanished(Player hider, Player viewer, boolean vanished) {
+        if(viewer == null)return false;
         if (viewer == hider) return false;
         if (vanishedFromMap.get(hider).contains(viewer) && vanished) return false;
         if (!vanishedFromMap.get(hider).contains(viewer) && vanished) {
@@ -150,7 +151,8 @@ public class VisibilityManager {
      * @return If the hider is vanished from the viewer.
      */
     public boolean isVanishedFrom(Player hider, Player viewer) {
-        return vanishedFromMap.get(hider).contains(viewer);
+        if(vanishedFromMap.containsKey(hider))return vanishedFromMap.get(hider).contains(viewer);
+        return false;
     }
 
     /**

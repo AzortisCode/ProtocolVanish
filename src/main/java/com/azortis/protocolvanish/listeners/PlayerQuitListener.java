@@ -53,8 +53,8 @@ public class PlayerQuitListener implements Listener {
             if (vanishPlayer.getPlayerSettings().doNightVision())
                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             plugin.getVanishPlayerMap().remove(player.getUniqueId());
-            plugin.getVisibilityManager().clearVanishedFrom(player);
             plugin.getVisibilityManager().getVanishedPlayers().remove(player.getUniqueId());
+            plugin.getVisibilityManager().clearVanishedFrom(player);
             if (messageSettings.getHideRealJoinQuitMessages()) {
                 event.setQuitMessage("");
                 for (Player viewer : Bukkit.getOnlinePlayers()) {

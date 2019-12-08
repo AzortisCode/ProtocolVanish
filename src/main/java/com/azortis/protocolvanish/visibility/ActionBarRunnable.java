@@ -43,15 +43,17 @@ public class ActionBarRunnable implements Runnable {
     public void run() {
         if (plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
             for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
-                try {
-                    PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.CHAT);
-                    packetContainer.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
-                    packetContainer.getChatComponents().write(0, WrappedChatComponent.fromText
-                            (ChatColor.translateAlternateColorCodes('&',
-                                    plugin.getSettingsManager().getMessageSettings().getMessage("actionBarMsg"))));
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(Bukkit.getPlayer(uuid), packetContainer);
-                } catch (InvocationTargetException ex) {
-                    ex.printStackTrace();
+                if(Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuid))) {
+                    try {
+                        PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.CHAT);
+                        packetContainer.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
+                        packetContainer.getChatComponents().write(0, WrappedChatComponent.fromText
+                                (ChatColor.translateAlternateColorCodes('&',
+                                        plugin.getSettingsManager().getMessageSettings().getMessage("actionBarMsg"))));
+                        ProtocolLibrary.getProtocolManager().sendServerPacket(Bukkit.getPlayer(uuid), packetContainer);
+                    } catch (InvocationTargetException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }
