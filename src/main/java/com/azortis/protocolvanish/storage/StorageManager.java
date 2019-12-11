@@ -45,18 +45,12 @@ public class StorageManager {
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(player);
 
-        //Checks to prevent memory leaks.
-        if (vanishPlayer == null && plugin.getPermissionManager().hasPermissionToVanish(player)) {
-            return createVanishPlayer(player);
-        }
-        else if (vanishPlayer == null) return null;
+        if (vanishPlayer == null)return null;
         if (!plugin.getPermissionManager().hasPermissionToVanish(player)
                 && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.deleteVanishPlayer(vanishPlayer));
             return null;
-        } else if (/*plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/ false
-                && !plugin.getPermissionManager().hasPermissionToVanish(player))
-            return null;
+        }
 
         //Apply default settings for the actual to be retrieved later.
         vanishPlayer.setPlayerSettings(new VanishPlayer.PlayerSettings(
@@ -133,7 +127,7 @@ public class StorageManager {
                 invisibilitySettings.getDisableCreatureTarget(),
                 invisibilitySettings.getDisableItemPickup()));
         vanishPlayer.getPlayerSettings().setParent(vanishPlayer);
-        adapter.createVanishPlayer(vanishPlayer);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.createVanishPlayer(vanishPlayer));
         return vanishPlayer;
     }
 

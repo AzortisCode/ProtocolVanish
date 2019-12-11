@@ -110,7 +110,10 @@ public final class ProtocolVanish extends JavaPlugin {
      * @return The {@link VanishPlayer} that has been loaded.
      */
     public VanishPlayer loadVanishPlayer(Player player){
-        return storageManager.getVanishPlayer(player);
+        VanishPlayer vanishPlayer = storageManager.getVanishPlayer(player);
+        if(vanishPlayer == null)return null;
+        vanishPlayerMap.put(player.getUniqueId(), vanishPlayer);
+        return vanishPlayer;
     }
 
     /**
@@ -132,7 +135,9 @@ public final class ProtocolVanish extends JavaPlugin {
      * @return The created vanishPlayer instance.
      */
     public VanishPlayer createVanishPlayer(Player player){
-        return storageManager.createVanishPlayer(player);
+        VanishPlayer vanishPlayer = storageManager.createVanishPlayer(player);
+        vanishPlayerMap.put(player.getUniqueId(), vanishPlayer);
+        return vanishPlayer;
     }
 
 }

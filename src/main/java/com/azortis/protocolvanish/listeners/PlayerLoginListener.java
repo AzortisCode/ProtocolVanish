@@ -46,6 +46,7 @@ public class PlayerLoginListener implements Listener {
         Player player = event.getPlayer();
         if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
             VanishPlayer vanishPlayer = plugin.loadVanishPlayer(player);
+            if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
             if (vanishPlayer != null && vanishPlayer.isVanished()) {
                 plugin.getVisibilityManager().joinVanished(player);
                 player.setMetadata("vanished", new FixedMetadataValue(plugin, true));

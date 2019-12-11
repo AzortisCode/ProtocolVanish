@@ -45,7 +45,7 @@ public class ToggleHungerSub implements ISubCommandExecutor {
         }else if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
-            if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
+            if(plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
                 if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().getDisableHunger()){

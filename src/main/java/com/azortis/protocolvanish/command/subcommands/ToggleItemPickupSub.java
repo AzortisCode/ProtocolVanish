@@ -45,7 +45,7 @@ public class ToggleItemPickupSub implements ISubCommandExecutor {
         }else if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
-            if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)){
+            if(plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)){
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
                 if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().getDisableItemPickUp()){

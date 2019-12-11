@@ -43,7 +43,7 @@ public class ActionBarRunnable implements Runnable {
     public void run() {
         if (plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
             for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
-                if(Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuid))) {
+                if(Bukkit.getPlayer(uuid) != null && Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuid))) {
                     try {
                         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.CHAT);
                         packetContainer.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
