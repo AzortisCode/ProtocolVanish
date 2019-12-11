@@ -52,7 +52,6 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new NamedSoundEffectPacketListener(plugin));
         protocolManager.addPacketListener(new WorldParticlesPacketListener(plugin));
         new ActionBarRunnable(plugin);
-//        plugin.getMetrics().addCustomChart(new Metrics.SingleLineChart("players_in_vanish", ()-> vanishedPlayers.size()));
     }
 
     /*private void validateSettings(){
@@ -86,35 +85,35 @@ public class VisibilityManager {
     /**
      * Make a player vanish or reappear.
      *
-     * @param player The {@link Player} instance of the one you wan't to vanish.
+     * @param uuid The {@link UUID} of player you wan't to vanish.
      * @param vanished If the player should vanish.
      */
-    public void setVanished(Player player, boolean vanished) {
-        if (vanishedPlayers.contains(player.getUniqueId()) && vanished) return;
+    public void setVanished(UUID uuid, boolean vanished) {
+        if (vanishedPlayers.contains(uuid) && vanished) return;
         if (vanished) {
-            PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(player);
+            PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(Bukkit.getPlayer(uuid));
             Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
             if (!playerVanishEvent.isCancelled()) {
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
                 if (vanishPlayer == null) return; //TODO Log that a player can not vanish if player has no permission.
-                vanishedPlayers.add(player.getUniqueId());
+                vanishedPlayers.add(uuid);
                 vanishPlayer.setVanish(true);
                 plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                vanishedFromMap.put(player, new ArrayList<>());
-                visibilityChanger.vanishPlayer(player.getUniqueId());
+                vanishedFromMap.put(Bukkit.getPlayer(uuid), new ArrayList<>());
+                visibilityChanger.vanishPlayer(uuid);
                 plugin.getStorageManager().updateServerInfo();
             }
         } else {
-            PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(player);
+            PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
             Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
             if (!playerReappearEvent.isCancelled()) {
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
-                if (vanishPlayer == null) return; //TODO Log big error
-                vanishedPlayers.remove(player.getUniqueId());
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+                if (vanishPlayer == null) return;
+                vanishedPlayers.remove(uuid);
                 vanishPlayer.setVanish(false);
                 plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                visibilityChanger.showPlayer(player.getUniqueId());
-                clearVanishedFrom(player);
+                visibilityChanger.showPlayer(uuid);
+                clearVanishedFrom(Bukkit.getPlayer(uuid));
                 plugin.getStorageManager().updateServerInfo();
             }
         }
@@ -129,7 +128,6 @@ public class VisibilityManager {
      * @return If the state has changed.
      */
     public boolean setVanished(Player hider, Player viewer, boolean vanished) {
-        if(viewer == null)return false;
         if (viewer == hider) return false;
         if (vanishedFromMap.get(hider).contains(viewer) && vanished) return false;
         if (!vanishedFromMap.get(hider).contains(viewer) && vanished) {
@@ -141,6 +139,26 @@ public class VisibilityManager {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Called when a player joins the server vanished.
+     *
+     * @param player The player that is vanished.
+     */
+    public void joinVanished(Player player){
+        vanishedPlayers.add(player.getUniqueId());
+        vanishedFromMap.put(player, new ArrayList<>());
+    }
+
+    /**
+     * Called when a player leaves the server vanished.
+     *
+     * @param player The player that is vanished.
+     */
+    public void leaveVanished(Player player){
+        vanishedPlayers.remove(player.getUniqueId());
+        clearVanishedFrom(player);
     }
 
     /**
@@ -191,15 +209,6 @@ public class VisibilityManager {
      */
     public Collection<UUID> getVanishedPlayers() {
         return vanishedPlayers;
-    }
-
-    /**
-     * Get the list of the players the {@link Player} is vanished from.
-     *
-     * @return A map with a {@link Collection} of players as value.
-     */
-    public HashMap<Player, Collection<Player>> getVanishedFromMap() {
-        return vanishedFromMap;
     }
 
     /**

@@ -107,7 +107,7 @@ public class SQLiteAdapter implements IDatabase {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 VanishPlayer.PlayerSettings playerSettings = gson.fromJson(resultSet.getString(1), VanishPlayer.PlayerSettings.class);
-                playerSettings.setParent(plugin.getVanishPlayer(player));
+                playerSettings.setParent(plugin.getVanishPlayer(player.getUniqueId()));
                 resultSet.close();
                 statement.close();
                 connection.close();

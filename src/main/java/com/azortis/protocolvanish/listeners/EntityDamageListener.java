@@ -39,7 +39,7 @@ public class EntityDamageListener implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+            VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
             if (vanishPlayer != null && vanishPlayer.isVanished() && vanishPlayer.getPlayerSettings().getDisableDamage())
                 event.setCancelled(true);
         }

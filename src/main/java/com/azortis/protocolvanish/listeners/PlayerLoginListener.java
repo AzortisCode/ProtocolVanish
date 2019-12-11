@@ -28,7 +28,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -45,17 +44,18 @@ public class PlayerLoginListener implements Listener {
     public void onPlayerLogin(PlayerLoginEvent event) {
         if(event.getResult() != PlayerLoginEvent.Result.ALLOWED)return;
         Player player = event.getPlayer();
-        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
-        if (vanishPlayer != null && vanishPlayer.isVanished()) {
-            player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
-            plugin.getVisibilityManager().getVanishedPlayers().add(player.getUniqueId());
-            plugin.getVisibilityManager().getVanishedFromMap().put(player, new ArrayList<>());
-            for (Player viewer : Bukkit.getOnlinePlayers())
-                plugin.getVisibilityManager().setVanished(player, viewer, true);
-        }
-        Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
-        for (UUID uuid : vanishedPlayers) {
-            plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
+        if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
+            VanishPlayer vanishPlayer = plugin.loadVanishPlayer(player);
+            if (vanishPlayer != null && vanishPlayer.isVanished()) {
+                plugin.getVisibilityManager().joinVanished(player);
+                player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
+                for (Player viewer : Bukkit.getOnlinePlayers())
+                    plugin.getVisibilityManager().setVanished(player, viewer, true);
+            }
+            Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
+            for (UUID uuid : vanishedPlayers) {
+                plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
+            }
         }
     }
 

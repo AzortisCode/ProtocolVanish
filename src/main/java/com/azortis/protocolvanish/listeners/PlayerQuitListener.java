@@ -47,14 +47,13 @@ public class PlayerQuitListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
         if (vanishPlayer != null && vanishPlayer.isVanished()) {
+            plugin.getVisibilityManager().leaveVanished(player);
             player.setMetadata("vanished", new FixedMetadataValue(plugin, false));
             if (vanishPlayer.getPlayerSettings().doNightVision())
                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            plugin.getVanishPlayerMap().remove(player.getUniqueId());
-            plugin.getVisibilityManager().getVanishedPlayers().remove(player.getUniqueId());
-            plugin.getVisibilityManager().clearVanishedFrom(player);
+            plugin.unloadVanishPlayer(player);
             if (messageSettings.getHideRealJoinQuitMessages()) {
                 event.setQuitMessage("");
                 for (Player viewer : Bukkit.getOnlinePlayers()) {

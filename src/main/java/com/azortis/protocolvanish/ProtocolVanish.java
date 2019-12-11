@@ -94,27 +94,45 @@ public final class ProtocolVanish extends JavaPlugin {
     /**
      * Gets the vanishPlayer of a specific player.
      *
-     * @param player The {@link Player} instance
+     * @param uuid The {@link UUID} of the player.
      * @return The {@link VanishPlayer} of the player, null if have no permission.
      */
-    public VanishPlayer getVanishPlayer(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!vanishPlayerMap.containsKey(uuid)) {
-            VanishPlayer vanishPlayer = storageManager.getVanishPlayer(player);
-            if (vanishPlayer != null) {
-                vanishPlayerMap.put(uuid, storageManager.getVanishPlayer(player));
-                if (vanishPlayer.isVanished()) {
-                    visibilityManager.getVanishedPlayers().add(uuid);
-                    for (Player viewer : Bukkit.getOnlinePlayers())
-                        visibilityManager.setVanished(vanishPlayer.getPlayer(), viewer, true);
-                }
-            } else return null;
-        }
+    public VanishPlayer getVanishPlayer(UUID uuid) {
+        if(!vanishPlayerMap.containsKey(uuid))return null;
         return vanishPlayerMap.get(uuid);
     }
 
-    public HashMap<UUID, VanishPlayer> getVanishPlayerMap() {
-        return vanishPlayerMap;
+    /**
+     * Called to load the {@link VanishPlayer} from storage.
+     * Should only be called on join.
+     *
+     * @param player The player of which instance has to be loaded.
+     * @return The {@link VanishPlayer} that has been loaded.
+     */
+    public VanishPlayer loadVanishPlayer(Player player){
+        return storageManager.getVanishPlayer(player);
+    }
+
+    /**
+     * Called to unload the {@link VanishPlayer} instance.
+     * Should only be called on leave.
+     *
+     * @param player The player of which instance has to be unloaded.
+     */
+    public void unloadVanishPlayer(Player player){
+        vanishPlayerMap.remove(player.getUniqueId());
+    }
+
+    /**
+     * Called to create an new instance of {@link VanishPlayer}
+     * should only be called if there doesn't exist an entry,
+     * and if the player has the permission in order to keep the database clean.
+     *
+     * @param player The {@link Player} of which to create a vanishPlayer instance.
+     * @return The created vanishPlayer instance.
+     */
+    public VanishPlayer createVanishPlayer(Player player){
+        return storageManager.createVanishPlayer(player);
     }
 
 }

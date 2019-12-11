@@ -46,7 +46,7 @@ public class VanishAPI {
     }
 
     public static void vanishPlayer(Player player) {
-        plugin.getVisibilityManager().setVanished(player, true);
+        plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
     }
 
     public static void showPlayer(UUID uuid) {
@@ -54,7 +54,7 @@ public class VanishAPI {
     }
 
     public static void showPlayer(Player player) {
-        plugin.getVisibilityManager().setVanished(player, false);
+        plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
     }
 
     public static boolean hasPermissionToSee(Player hider, Player viewer) {

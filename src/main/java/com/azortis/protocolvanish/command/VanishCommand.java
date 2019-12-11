@@ -88,13 +88,13 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
             Player player = (Player)commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermissionToVanish(player)){
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
-                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+                if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
                 if(vanishPlayer.isVanished()){
-                    plugin.getVisibilityManager().setVanished(player, false);
+                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
                 }else {
-                    plugin.getVisibilityManager().setVanished(player, true);
+                    plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
                 }
                 return true;

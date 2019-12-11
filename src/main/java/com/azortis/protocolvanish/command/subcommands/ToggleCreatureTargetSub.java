@@ -47,8 +47,8 @@ public class ToggleCreatureTargetSub implements ISubCommandExecutor {
             Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_CREATURE_TARGET)){
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player);
-                if(vanishPlayer == null)vanishPlayer = plugin.getStorageManager().createVanishPlayer(player);
+                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+                if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
                 if(vanishPlayer.getPlayerSettings().getDisableCreatureTarget()){
                     vanishPlayer.getPlayerSettings().setDisableCreatureTarget(false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledCreatureTarget")));
