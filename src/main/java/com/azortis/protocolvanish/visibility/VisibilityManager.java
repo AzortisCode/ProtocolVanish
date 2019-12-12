@@ -43,7 +43,6 @@ public class VisibilityManager {
     public VisibilityManager(ProtocolVanish plugin) {
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
-//        validateSettings();
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
@@ -53,34 +52,6 @@ public class VisibilityManager {
         protocolManager.addPacketListener(new WorldParticlesPacketListener(plugin));
         new ActionBarRunnable(plugin);
     }
-
-    /*private void validateSettings(){
-        boolean valid = true;
-        VisibilitySettingsWrapper visibilitySettings = plugin.getSettingsManager().getVisibilitySettings();
-        List<String> enabledPacketListeners = visibilitySettings.getEnabledPacketListeners();
-        if(!enabledPacketListeners.contains("GeneralEntity") && enabledPacketListeners.contains("PlayerInfo")){
-            enabledPacketListeners.add("GeneralEntity");
-            valid = false;
-        }
-        if(!enabledPacketListeners.contains("ServerInfo") && (visibilitySettings.getAdjustOnlinePlayerCount() || visibilitySettings.getAdjustOnlinePlayerList())){
-            enabledPacketListeners.add("ServerInfo");
-            valid = false;
-        }
-        if((!visibilitySettings.getAdjustOnlinePlayerList() || !visibilitySettings.getAdjustOnlinePlayerCount()) && enabledPacketListeners.contains("ServerInfo")){
-            enabledPacketListeners.remove("ServerInfo");
-            valid = false;
-        }
-        if(!enabledPacketListeners.contains("PlayerInfo") && enabledPacketListeners.contains("TabComplete")){
-            enabledPacketListeners.remove("TabComplete");
-            valid = false;
-        }
-        if(!valid){
-            plugin.getAzortisLib().getLogger().warning("You're invisibility settings are invalid, changing some values...");
-            visibilitySettings.setEnabledPacketListeners(enabledPacketListeners);
-            visibilitySettings.save();
-            plugin.getSettingsManager().saveSettingsFile();
-        }
-    }*/
 
     /**
      * Make a player vanish or reappear.

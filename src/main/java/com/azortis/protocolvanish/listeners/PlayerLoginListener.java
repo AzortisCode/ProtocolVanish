@@ -55,6 +55,7 @@ public class PlayerLoginListener implements Listener {
             }
             Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
             for (UUID uuid : vanishedPlayers) {
+                if(uuid == player.getUniqueId())return;
                 plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
             }
         }
