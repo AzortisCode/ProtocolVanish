@@ -33,35 +33,40 @@ public class ToggleItemPickupSub implements ISubCommandExecutor {
 
     private ProtocolVanish plugin;
 
-    public ToggleItemPickupSub(ProtocolVanish plugin){
+    public ToggleItemPickupSub(ProtocolVanish plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onSubCommand(CommandSender commandSender, SubCommand subCommand, String s, String[] strings) {
-        if(commandSender instanceof ConsoleCommandSender){
+        if (commandSender instanceof ConsoleCommandSender) {
             commandSender.sendMessage("This command cannot be run from console!");
             return false;
-        }else if(commandSender instanceof Player) {
+        } else if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
-            if(plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)){
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-                if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
-                if(vanishPlayer.getPlayerSettings().getDisableItemPickUp()){
-                    vanishPlayer.getPlayerSettings().setDisableItemPickUp(false);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
-                }else {
-                    vanishPlayer.getPlayerSettings().setDisableItemPickUp(true);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
+            if (plugin.getSettingsManager().getCommandSettings().isSubCommandEnabled("toggleItemPickup")) {
+                if (plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
+                    VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+                    if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
+                    if (vanishPlayer.getPlayerSettings().getDisableItemPickUp()) {
+                        vanishPlayer.getPlayerSettings().setDisableItemPickUp(false);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
+                    } else {
+                        vanishPlayer.getPlayerSettings().setDisableItemPickUp(true);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
+                    }
+                    plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
+                    return true;
+                } else {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                    return false;
                 }
-                plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
-                return true;
-            }else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
-                return false;
+            } else {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("invalidUsage")));
             }
         }
         return false;
     }
+
 }

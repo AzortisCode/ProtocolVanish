@@ -35,7 +35,7 @@ public class PermissionManager {
     }
 
     public boolean hasPermissionToVanish(Player player) {
-        if(player.isOp() || player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
+        if (player.isOp() || player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
         return Permission.USE.getPermissionLevel(plugin, player) > 0;
     }
 

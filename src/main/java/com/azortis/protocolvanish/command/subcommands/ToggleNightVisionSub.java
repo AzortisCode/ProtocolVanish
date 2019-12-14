@@ -35,37 +35,43 @@ public class ToggleNightVisionSub implements ISubCommandExecutor {
 
     private ProtocolVanish plugin;
 
-    public ToggleNightVisionSub(ProtocolVanish plugin){
+    public ToggleNightVisionSub(ProtocolVanish plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onSubCommand(CommandSender commandSender, SubCommand subCommand, String s, String[] strings) {
-        if(commandSender instanceof ConsoleCommandSender){
+        if (commandSender instanceof ConsoleCommandSender) {
             commandSender.sendMessage("This command cannot be run from console!");
             return false;
-        }else if(commandSender instanceof Player){
-            Player player = (Player)commandSender;
+        } else if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
-            if(plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)){
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-                if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
-                if(vanishPlayer.getPlayerSettings().doNightVision()){
-                    vanishPlayer.getPlayerSettings().setNightVision(false);
-                    if(vanishPlayer.isVanished())player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledNightVision")));
-                }else {
-                    vanishPlayer.getPlayerSettings().setNightVision(true);
-                    if(vanishPlayer.isVanished())player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledNightVision")));
+            if (plugin.getSettingsManager().getCommandSettings().isSubCommandEnabled("toggleNightVision")) {
+                if (plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)) {
+                    VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+                    if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
+                    if (vanishPlayer.getPlayerSettings().doNightVision()) {
+                        vanishPlayer.getPlayerSettings().setNightVision(false);
+                        if (vanishPlayer.isVanished()) player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledNightVision")));
+                    } else {
+                        vanishPlayer.getPlayerSettings().setNightVision(true);
+                        if (vanishPlayer.isVanished())
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledNightVision")));
+                    }
+                    plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
+                    return true;
+                } else {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                    return false;
                 }
-                plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
-                return true;
-            }else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
-                return false;
+            } else {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("invalidUsage")));
             }
         }
         return false;
     }
+
 }

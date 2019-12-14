@@ -1,6 +1,7 @@
 {
   "messages": {
     "noPermission": "&cYou have no permission to perform this!",
+    "invalidUsage": "&cInvalid usage!",
     "onVanish": "&aYou're now vanished.",
     "onReappear": "&aYou're no longer vanished.",
     "joinedSilently": "&aYou've joined silently",

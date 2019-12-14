@@ -6,7 +6,7 @@
 
     <groupId>com.azortis</groupId>
     <artifactId>protocolvanish</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>com.azortis</groupId>
             <artifactId>azortislib</artifactId>
-            <version>0.4.1-SNAPSHOT</version>
+            <version>0.4.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

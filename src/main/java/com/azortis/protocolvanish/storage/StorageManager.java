@@ -45,7 +45,7 @@ public class StorageManager {
         InvisibilitySettingsWrapper invisibilitySettings = plugin.getSettingsManager().getInvisibilitySettings();
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(player);
 
-        if (vanishPlayer == null)return null;
+        if (vanishPlayer == null) return null;
         if (!plugin.getPermissionManager().hasPermissionToVanish(player)
                 && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.deleteVanishPlayer(vanishPlayer));
@@ -127,7 +127,7 @@ public class StorageManager {
                 invisibilitySettings.getDisableCreatureTarget(),
                 invisibilitySettings.getDisableItemPickup()));
         vanishPlayer.getPlayerSettings().setParent(vanishPlayer);
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> adapter.createVanishPlayer(vanishPlayer));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.createVanishPlayer(vanishPlayer));
         return vanishPlayer;
     }
 

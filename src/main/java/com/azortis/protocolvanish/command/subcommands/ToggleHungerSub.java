@@ -33,35 +33,40 @@ public class ToggleHungerSub implements ISubCommandExecutor {
 
     private ProtocolVanish plugin;
 
-    public ToggleHungerSub(ProtocolVanish plugin){
+    public ToggleHungerSub(ProtocolVanish plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onSubCommand(CommandSender commandSender, SubCommand subCommand, String s, String[] strings) {
-        if(commandSender instanceof ConsoleCommandSender){
+        if (commandSender instanceof ConsoleCommandSender) {
             commandSender.sendMessage("This command cannot be run from console!");
             return false;
-        }else if(commandSender instanceof Player) {
+        } else if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
-            if(plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)){
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-                if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
-                if(vanishPlayer.getPlayerSettings().getDisableHunger()){
-                    vanishPlayer.getPlayerSettings().setDisableHunger(false);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledHunger")));
-                }else {
-                    vanishPlayer.getPlayerSettings().setDisableHunger(true);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledHunger")));
+            if (plugin.getSettingsManager().getCommandSettings().isSubCommandEnabled("toggleHunger")) {
+                if (plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_HUNGER)) {
+                    VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
+                    if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
+                    if (vanishPlayer.getPlayerSettings().getDisableHunger()) {
+                        vanishPlayer.getPlayerSettings().setDisableHunger(false);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledHunger")));
+                    } else {
+                        vanishPlayer.getPlayerSettings().setDisableHunger(true);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledHunger")));
+                    }
+                    plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
+                    return true;
+                } else {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                    return false;
                 }
-                plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
-                return true;
-            }else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
-                return false;
+            } else {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("invalidUsage")));
             }
         }
         return false;
     }
+
 }

@@ -42,11 +42,11 @@ public class PlayerLoginListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLogin(PlayerLoginEvent event) {
-        if(event.getResult() != PlayerLoginEvent.Result.ALLOWED)return;
+        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) return;
         Player player = event.getPlayer();
-        if(plugin.getPermissionManager().hasPermissionToVanish(player)) {
+        if (plugin.getPermissionManager().hasPermissionToVanish(player)) {
             VanishPlayer vanishPlayer = plugin.loadVanishPlayer(player);
-            if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
+            if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
             if (vanishPlayer != null && vanishPlayer.isVanished()) {
                 plugin.getVisibilityManager().joinVanished(player);
                 player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
@@ -55,7 +55,7 @@ public class PlayerLoginListener implements Listener {
             }
             Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
             for (UUID uuid : vanishedPlayers) {
-                if(uuid == player.getUniqueId())return;
+                if (uuid == player.getUniqueId()) return;
                 plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
             }
         }

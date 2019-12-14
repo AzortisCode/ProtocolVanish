@@ -44,30 +44,35 @@
     ],
     "subCommands": {
       "toggleNightVision": {
+        "enabled": true,
         "name": "togglenightvision",
         "aliases": [
           "tnv"
         ]
       },
       "toggleDamage": {
+        "enabled": true,
         "name": "toggledamage",
         "aliases": [
           "td"
         ]
       },
       "toggleHunger": {
+        "enabled": true,
         "name": "toggleHunger",
         "aliases":[
           "th"
         ]
       },
       "toggleCreatureTarget": {
+        "enabled": true,
         "name": "togglecreaturetarget",
         "aliases": [
           "tct"
         ]
       },
       "toggleItemPickup": {
+        "enabled": true,
         "name": "toggleitempickup",
         "aliases": [
           "tip"

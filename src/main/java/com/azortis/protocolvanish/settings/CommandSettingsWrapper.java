@@ -59,22 +59,32 @@ public class CommandSettingsWrapper extends SettingsWrapper {
         setStringList("aliases", aliases, null);
     }
 
-    public String getSubCommandName(String subCommand){
+    public boolean isSubCommandEnabled(String subCommand) {
+        SettingsSection subCommandSection = getSection("subCommands");
+        return getBoolean("enabled", subCommandSection.getSubSection(subCommand));
+    }
+
+    public void setSubCommandEnabled(String subCommand, boolean enabled) {
+        SettingsSection subCommandSection = getSection("subCommands");
+        setBoolean("enabled", enabled, subCommandSection.getSubSection(subCommand));
+    }
+
+    public String getSubCommandName(String subCommand) {
         SettingsSection subCommandSection = getSection("subCommands");
         return getString("name", subCommandSection.getSubSection(subCommand));
     }
 
-    public void setSubCommandName(String subCommand, String name){
+    public void setSubCommandName(String subCommand, String name) {
         SettingsSection subCommandSection = getSection("subCommands");
         setString("name", name, subCommandSection.getSubSection(subCommand));
     }
 
-    public List<String> getSubCommandAliases(String subCommand){
+    public List<String> getSubCommandAliases(String subCommand) {
         SettingsSection subCommandSection = getSection("subCommands");
         return getStringList("aliases", subCommandSection.getSubSection(subCommand));
     }
 
-    public void setSubCommandAliases(String subCommand, List<String> aliases){
+    public void setSubCommandAliases(String subCommand, List<String> aliases) {
         SettingsSection subCommandSection = getSection("subCommands");
         setStringList("aliases", aliases, subCommandSection.getSubSection(subCommand));
     }

@@ -56,7 +56,7 @@ public class VisibilityManager {
     /**
      * Make a player vanish or reappear.
      *
-     * @param uuid The {@link UUID} of player you wan't to vanish.
+     * @param uuid     The {@link UUID} of player you wan't to vanish.
      * @param vanished If the player should vanish.
      */
     public void setVanished(UUID uuid, boolean vanished) {
@@ -117,7 +117,7 @@ public class VisibilityManager {
      *
      * @param player The player that is vanished.
      */
-    public void joinVanished(Player player){
+    public void joinVanished(Player player) {
         vanishedPlayers.add(player.getUniqueId());
         vanishedFromMap.put(player, new ArrayList<>());
     }
@@ -127,7 +127,7 @@ public class VisibilityManager {
      *
      * @param player The player that is vanished.
      */
-    public void leaveVanished(Player player){
+    public void leaveVanished(Player player) {
         vanishedPlayers.remove(player.getUniqueId());
         clearVanishedFrom(player);
     }
@@ -140,7 +140,7 @@ public class VisibilityManager {
      * @return If the hider is vanished from the viewer.
      */
     public boolean isVanishedFrom(Player hider, Player viewer) {
-        if(vanishedFromMap.containsKey(hider))return vanishedFromMap.get(hider).contains(viewer);
+        if (vanishedFromMap.containsKey(hider)) return vanishedFromMap.get(hider).contains(viewer);
         return false;
     }
 

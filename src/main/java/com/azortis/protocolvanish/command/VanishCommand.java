@@ -24,25 +24,29 @@ import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
+import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.command.subcommands.*;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class VanishCommand implements ICommandExecutor, ITabCompleter {
 
     private ProtocolVanish plugin;
+    private Collection<String> enabledSubCommands = new ArrayList<>();
 
-    public VanishCommand(ProtocolVanish plugin){
+    public VanishCommand(ProtocolVanish plugin) {
         this.plugin = plugin;
         CommandSettingsWrapper commandSettings = plugin.getSettingsManager().getCommandSettings();
         Command command = new CommandBuilder()
@@ -76,29 +80,32 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
                                 .addAliases(commandSettings.getSubCommandAliases("toggleItemPickup"))
                 ).build();
         CommandInjector.injectCommand("protocolvanish", command);
-
+        String[] subCommands = new String[]{"toggleNightVision", "toggleDamage", "toggleHunger", "toggleCreatureTarget", "toggleItemPickup"};
+        for (String subCommand : subCommands) {
+            if (commandSettings.isSubCommandEnabled(subCommand)) this.enabledSubCommands.add(subCommand);
+        }
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if(commandSender instanceof ConsoleCommandSender){
+        if (commandSender instanceof ConsoleCommandSender) {
             commandSender.sendMessage("This command cannot be run from console!");
             return false;
-        }else if(commandSender instanceof Player){
-            Player player = (Player)commandSender;
+        } else if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
             MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
-            if(plugin.getPermissionManager().hasPermissionToVanish(player)){
+            if (plugin.getPermissionManager().hasPermissionToVanish(player)) {
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
-                if(vanishPlayer == null)vanishPlayer = plugin.createVanishPlayer(player);
-                if(vanishPlayer.isVanished()){
+                if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
+                if (vanishPlayer.isVanished()) {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
-                }else {
+                } else {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
                 }
                 return true;
-            }else{
+            } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
                 return false;
             }
@@ -107,7 +114,44 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender commandSender, String s, String[] strings, Location location) {
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args, Location location) {
+        if(!(commandSender instanceof Player))return null;
+        Player player = (Player)commandSender;
+        if(args.length < 2 && plugin.getPermissionManager().hasPermissionToVanish(player)){
+            List<String> suggestions = new ArrayList<>();
+            for (String subCommand : this.enabledSubCommands){
+                switch (subCommand){
+                    case "toggleNightVision":
+                        addSuggestions(subCommand, PermissionManager.Permission.CHANGE_NIGHT_VISION, player, suggestions);
+                        break;
+                    case "toggleDamage":
+                        addSuggestions(subCommand, PermissionManager.Permission.CHANGE_DAMAGE, player, suggestions);
+                        break;
+                    case "toggleHunger":
+                        addSuggestions(subCommand, PermissionManager.Permission.CHANGE_HUNGER, player, suggestions);
+                        break;
+                    case "toggleCreatureTarget":
+                        addSuggestions(subCommand, PermissionManager.Permission.CHANGE_CREATURE_TARGET, player, suggestions);
+                        break;
+                    case "toggleItemPickup":
+                        addSuggestions(subCommand, PermissionManager.Permission.CHANGE_ITEM_PICKUP, player, suggestions);
+                        break;
+                }
+            }
+            return StringUtil.copyPartialMatches(args[0], suggestions, new ArrayList<>());
+        }
         return null;
     }
+
+    private void addSuggestions(String subCommand, PermissionManager.Permission permission, Player player,  List<String> suggestionList){
+        if(plugin.getPermissionManager().hasPermission(player, permission)){
+            suggestionList.add(plugin.getSettingsManager().getCommandSettings().getSubCommandName(subCommand));
+        }
+    }
+
+    public void setEnabled(String subCommand, boolean enabled) {
+        if (enabled && !enabledSubCommands.contains(subCommand)) enabledSubCommands.add(subCommand);
+        else if (!enabled) enabledSubCommands.remove(subCommand);
+    }
+
 }

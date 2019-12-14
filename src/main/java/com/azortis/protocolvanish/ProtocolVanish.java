@@ -39,6 +39,8 @@ public final class ProtocolVanish extends JavaPlugin {
     private VisibilityManager visibilityManager;
     private StorageManager storageManager;
 
+    private VanishCommand vanishCommand;
+
     private HashMap<UUID, VanishPlayer> vanishPlayerMap = new HashMap<>();
 
     @Override
@@ -54,7 +56,8 @@ public final class ProtocolVanish extends JavaPlugin {
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
 
-        new VanishCommand(this);
+        this.vanishCommand = new VanishCommand(this);
+
         new PlayerLoginListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
@@ -91,6 +94,10 @@ public final class ProtocolVanish extends JavaPlugin {
         return storageManager;
     }
 
+    public VanishCommand getVanishCommand() {
+        return vanishCommand;
+    }
+
     /**
      * Gets the vanishPlayer of a specific player.
      *
@@ -98,7 +105,7 @@ public final class ProtocolVanish extends JavaPlugin {
      * @return The {@link VanishPlayer} of the player, null if have no permission.
      */
     public VanishPlayer getVanishPlayer(UUID uuid) {
-        if(!vanishPlayerMap.containsKey(uuid))return null;
+        if (!vanishPlayerMap.containsKey(uuid)) return null;
         return vanishPlayerMap.get(uuid);
     }
 
@@ -109,9 +116,9 @@ public final class ProtocolVanish extends JavaPlugin {
      * @param player The player of which instance has to be loaded.
      * @return The {@link VanishPlayer} that has been loaded.
      */
-    public VanishPlayer loadVanishPlayer(Player player){
+    public VanishPlayer loadVanishPlayer(Player player) {
         VanishPlayer vanishPlayer = storageManager.getVanishPlayer(player);
-        if(vanishPlayer == null)return null;
+        if (vanishPlayer == null) return null;
         vanishPlayerMap.put(player.getUniqueId(), vanishPlayer);
         return vanishPlayer;
     }
@@ -122,7 +129,7 @@ public final class ProtocolVanish extends JavaPlugin {
      *
      * @param player The player of which instance has to be unloaded.
      */
-    public void unloadVanishPlayer(Player player){
+    public void unloadVanishPlayer(Player player) {
         vanishPlayerMap.remove(player.getUniqueId());
     }
 
@@ -134,7 +141,7 @@ public final class ProtocolVanish extends JavaPlugin {
      * @param player The {@link Player} of which to create a vanishPlayer instance.
      * @return The created vanishPlayer instance.
      */
-    public VanishPlayer createVanishPlayer(Player player){
+    public VanishPlayer createVanishPlayer(Player player) {
         VanishPlayer vanishPlayer = storageManager.createVanishPlayer(player);
         vanishPlayerMap.put(player.getUniqueId(), vanishPlayer);
         return vanishPlayer;
