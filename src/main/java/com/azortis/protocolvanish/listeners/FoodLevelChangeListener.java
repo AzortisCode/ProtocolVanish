@@ -28,7 +28,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class FoodLevelChangeListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public FoodLevelChangeListener(ProtocolVanish plugin) {
         this.plugin = plugin;

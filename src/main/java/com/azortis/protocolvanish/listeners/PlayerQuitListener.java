@@ -35,7 +35,7 @@ import java.util.UUID;
 
 public class PlayerQuitListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
 
     public PlayerQuitListener(ProtocolVanish plugin) {
@@ -58,7 +58,7 @@ public class PlayerQuitListener implements Listener {
                 event.setQuitMessage("");
                 for (Player viewer : Bukkit.getOnlinePlayers()) {
                     if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
-                        viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherLeftSilently").replaceAll("\\{player}", player.getName())));
+                        plugin.sendPlayerMessage(viewer, "otherLeftSilently");
                     }
                 }
             }

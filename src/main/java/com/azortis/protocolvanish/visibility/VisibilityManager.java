@@ -34,7 +34,7 @@ import java.util.*;
 
 public class VisibilityManager {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private VisibilityChanger visibilityChanger;
 
     private Collection<UUID> vanishedPlayers = new ArrayList<>();

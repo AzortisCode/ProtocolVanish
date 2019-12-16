@@ -23,15 +23,13 @@ import com.azortis.azortislib.command.executors.ISubCommandExecutor;
 import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
-import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class ToggleItemPickupSub implements ISubCommandExecutor {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public ToggleItemPickupSub(ProtocolVanish plugin) {
         this.plugin = plugin;
@@ -44,26 +42,25 @@ public class ToggleItemPickupSub implements ISubCommandExecutor {
             return false;
         } else if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
-            MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if (plugin.getSettingsManager().getCommandSettings().isSubCommandEnabled("toggleItemPickup")) {
                 if (plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_ITEM_PICKUP)) {
                     VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
                     if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
                     if (vanishPlayer.getPlayerSettings().getDisableItemPickUp()) {
                         vanishPlayer.getPlayerSettings().setDisableItemPickUp(false);
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledItemPickup")));
+                        plugin.sendPlayerMessage(player, "enabledItemPickup");
                     } else {
                         vanishPlayer.getPlayerSettings().setDisableItemPickUp(true);
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledItemPickup")));
+                        plugin.sendPlayerMessage(player, "disabledItemPickup");
                     }
                     plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
                     return true;
                 } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                    plugin.sendPlayerMessage(player, "noPermission");
                     return false;
                 }
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("invalidUsage")));
+                plugin.sendPlayerMessage(player, "invalidUsage");
             }
         }
         return false;

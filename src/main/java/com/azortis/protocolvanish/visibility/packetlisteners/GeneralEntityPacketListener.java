@@ -32,7 +32,7 @@ import java.util.*;
 @SuppressWarnings("all")
 public class GeneralEntityPacketListener extends PacketAdapter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public GeneralEntityPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.NAMED_ENTITY_SPAWN,

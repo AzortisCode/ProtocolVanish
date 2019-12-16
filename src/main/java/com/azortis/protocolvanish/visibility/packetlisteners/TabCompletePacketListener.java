@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 
 public class TabCompletePacketListener extends PacketAdapter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public TabCompletePacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.TAB_COMPLETE);

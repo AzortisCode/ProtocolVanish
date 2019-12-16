@@ -23,18 +23,16 @@ import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.UUID;
 
 @SuppressWarnings("all")
 public class SQLiteAdapter implements IDatabase {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private String jdbcurl;
     private Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 

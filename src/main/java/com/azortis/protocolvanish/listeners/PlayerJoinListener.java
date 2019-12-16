@@ -33,7 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PlayerJoinListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
 
     public PlayerJoinListener(ProtocolVanish plugin) {
@@ -52,10 +52,10 @@ public class PlayerJoinListener implements Listener {
             if (plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())
                 event.setJoinMessage("");
             else
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("joinedSilently")));
+                plugin.sendPlayerMessage(player, "joinedSilently");
             for (Player viewer : Bukkit.getOnlinePlayers()) {
                 if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
-                    viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("otherJoinedSilently").replaceAll("\\{player}", player.getName())));
+                    plugin.sendPlayerMessage(viewer, "otherJoinedSilently");
                 }
             }
         }

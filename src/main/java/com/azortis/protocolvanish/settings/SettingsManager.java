@@ -32,7 +32,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class SettingsManager {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private File settingsFile;
     private File messageFile;
 

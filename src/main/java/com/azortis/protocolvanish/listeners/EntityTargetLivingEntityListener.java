@@ -30,7 +30,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
 public class EntityTargetLivingEntityListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public EntityTargetLivingEntityListener(ProtocolVanish plugin) {
         this.plugin = plugin;

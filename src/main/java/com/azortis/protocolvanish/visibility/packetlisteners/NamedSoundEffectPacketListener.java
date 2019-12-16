@@ -32,7 +32,7 @@ import java.util.UUID;
 
 public class NamedSoundEffectPacketListener extends PacketAdapter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public NamedSoundEffectPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.NAMED_SOUND_EFFECT);

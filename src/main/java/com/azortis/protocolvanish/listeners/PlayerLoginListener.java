@@ -33,7 +33,7 @@ import java.util.UUID;
 
 public class PlayerLoginListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public PlayerLoginListener(ProtocolVanish plugin) {
         this.plugin = plugin;

@@ -29,7 +29,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 
 public class EntityPickupItemListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public EntityPickupItemListener(ProtocolVanish plugin) {
         this.plugin = plugin;

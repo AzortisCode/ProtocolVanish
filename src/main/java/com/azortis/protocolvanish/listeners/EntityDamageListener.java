@@ -28,7 +28,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class EntityDamageListener implements Listener {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public EntityDamageListener(ProtocolVanish plugin) {
         this.plugin = plugin;

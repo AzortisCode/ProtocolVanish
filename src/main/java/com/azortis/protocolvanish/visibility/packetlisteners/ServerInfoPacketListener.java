@@ -31,7 +31,7 @@ import java.util.*;
 
 public class ServerInfoPacketListener extends PacketAdapter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public ServerInfoPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Status.Server.SERVER_INFO);

@@ -24,7 +24,9 @@ import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.storage.StorageManager;
 import com.azortis.protocolvanish.visibility.VisibilityManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,12 +47,17 @@ public final class ProtocolVanish extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.metrics = new Metrics(this);
         if (!Bukkit.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
             this.getLogger().severe("ProtocolLib isn't present, please install ProtocolLib! Shutting down...");
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            this.getLogger().severe("PlaceholderAPI isn't present, please install PlaceholderAPI! Shutting down...");
+            Bukkit.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        this.metrics = new Metrics(this);
         this.settingsManager = new SettingsManager(this);
         this.storageManager = new StorageManager(this);
         this.permissionManager = new PermissionManager(this);
@@ -65,6 +72,7 @@ public final class ProtocolVanish extends JavaPlugin {
         new FoodLevelChangeListener(this);
         new EntityTargetLivingEntityListener(this);
         new EntityPickupItemListener(this);
+        new UpdateChecker(this).fetch();
 
         VanishAPI.setPlugin(this);
     }
@@ -145,6 +153,19 @@ public final class ProtocolVanish extends JavaPlugin {
         VanishPlayer vanishPlayer = storageManager.createVanishPlayer(player);
         vanishPlayerMap.put(player.getUniqueId(), vanishPlayer);
         return vanishPlayer;
+    }
+
+    /**
+     * Sends message to specified {@link Player}.
+     * Message will be processed, to replace all placeholders.
+     *
+     * @param receiver The player that should receive the message.
+     * @param messagePath The path of the message in the MessageSettings.
+     */
+    public void sendPlayerMessage(Player receiver, String messagePath){
+        String rawMessage = settingsManager.getMessageSettings().getMessage(messagePath);
+        String message = PlaceholderAPI.setPlaceholders(receiver, rawMessage);
+        receiver.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
 }

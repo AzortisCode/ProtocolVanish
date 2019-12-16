@@ -29,8 +29,7 @@ import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.command.subcommands.*;
 import com.azortis.protocolvanish.settings.CommandSettingsWrapper;
-import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -43,7 +42,7 @@ import java.util.List;
 
 public class VanishCommand implements ICommandExecutor, ITabCompleter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private Collection<String> enabledSubCommands = new ArrayList<>();
 
     public VanishCommand(ProtocolVanish plugin) {
@@ -87,26 +86,29 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (commandSender instanceof ConsoleCommandSender) {
             commandSender.sendMessage("This command cannot be run from console!");
             return false;
         } else if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
-            MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if (plugin.getPermissionManager().hasPermissionToVanish(player)) {
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
                 if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
+                if(args.length > 0){
+                    plugin.sendPlayerMessage(player, "invalidUsage");
+                    return false;
+                }
                 if (vanishPlayer.isVanished()) {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onReappear")));
+                    plugin.sendPlayerMessage(player, "onReappear");
                 } else {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("onVanish")));
+                    plugin.sendPlayerMessage(player, "onVanish");
                 }
                 return true;
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                plugin.sendPlayerMessage(player, "noPermission");
                 return false;
             }
         }

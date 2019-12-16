@@ -32,7 +32,7 @@ import java.util.UUID;
 
 public class WorldParticlesPacketListener extends PacketAdapter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public WorldParticlesPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.WORLD_PARTICLES);

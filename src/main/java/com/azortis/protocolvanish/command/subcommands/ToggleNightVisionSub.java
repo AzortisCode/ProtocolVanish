@@ -23,8 +23,6 @@ import com.azortis.azortislib.command.executors.ISubCommandExecutor;
 import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
-import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -33,7 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class ToggleNightVisionSub implements ISubCommandExecutor {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public ToggleNightVisionSub(ProtocolVanish plugin) {
         this.plugin = plugin;
@@ -46,7 +44,6 @@ public class ToggleNightVisionSub implements ISubCommandExecutor {
             return false;
         } else if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
-            MessageSettingsWrapper messageSettings = plugin.getSettingsManager().getMessageSettings();
             if (plugin.getSettingsManager().getCommandSettings().isSubCommandEnabled("toggleNightVision")) {
                 if (plugin.getPermissionManager().hasPermissionToVanish(player) && plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.CHANGE_NIGHT_VISION)) {
                     VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
@@ -54,21 +51,21 @@ public class ToggleNightVisionSub implements ISubCommandExecutor {
                     if (vanishPlayer.getPlayerSettings().doNightVision()) {
                         vanishPlayer.getPlayerSettings().setNightVision(false);
                         if (vanishPlayer.isVanished()) player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("disabledNightVision")));
+                        plugin.sendPlayerMessage(player, "disabledNightVision");
                     } else {
                         vanishPlayer.getPlayerSettings().setNightVision(true);
                         if (vanishPlayer.isVanished())
                             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("enabledNightVision")));
+                        plugin.sendPlayerMessage(player, "enabledNightVision");
                     }
                     plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
                     return true;
                 } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("noPermission")));
+                    plugin.sendPlayerMessage(player, "noPermission");
                     return false;
                 }
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("invalidUsage")));
+                plugin.sendPlayerMessage(player, "invalidUsage");
             }
         }
         return false;

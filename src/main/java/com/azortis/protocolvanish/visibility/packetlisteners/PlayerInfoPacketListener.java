@@ -34,7 +34,7 @@ import java.util.UUID;
 
 public class PlayerInfoPacketListener extends PacketAdapter {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public PlayerInfoPacketListener(ProtocolVanish plugin) {
         super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.PLAYER_INFO);

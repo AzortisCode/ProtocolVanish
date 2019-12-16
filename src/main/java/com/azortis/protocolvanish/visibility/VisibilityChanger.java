@@ -43,7 +43,7 @@ import java.util.UUID;
 @SuppressWarnings("all")
 public class VisibilityChanger {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
     private MessageSettingsWrapper messageSettings;
     private InvisibilitySettingsWrapper invisibilitySettings;
 
@@ -71,12 +71,12 @@ public class VisibilityChanger {
                 sendPlayerInfoPacket(viewer, hider, true);
                 sendEntityDestroyPacket(viewer, hider);
                 if (messageSettings.getBroadCastFakeQuitOnVanish())
-                    viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
+                    plugin.sendPlayerMessage(viewer, "vanishMessage");
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
-                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessageWithPerm").replaceAll("\\{player}", hider.getName())));
+                plugin.sendPlayerMessage(viewer, "vanishMessageWithPerm");
             }
             if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
-                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("vanishMessage").replaceAll("\\{player}", hider.getName())));
+                plugin.sendPlayerMessage(viewer, "vanishMessage");
         }
     }
 
@@ -92,12 +92,12 @@ public class VisibilityChanger {
                 sendPlayerInfoPacket(viewer, hider, false);
                 sendSpawnPlayerPacket(viewer, hider);
                 if (messageSettings.getBroadCastFakeJoinOnReappear())
-                    viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
+                    plugin.sendPlayerMessage(viewer, "reappearMessage");
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
-                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessageWithPerm").replaceAll("\\{player}", hider.getName())));
+                plugin.sendPlayerMessage(viewer, "reappearMessageWithPerm");
             }
             if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
-                viewer.sendMessage(ChatColor.translateAlternateColorCodes('&', messageSettings.getMessage("reappearMessage").replaceAll("\\{player}", hider.getName())));
+                plugin.sendPlayerMessage(viewer, "reappearMessage");
         }
     }
 

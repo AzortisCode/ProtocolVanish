@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.azortis</groupId>
   <artifactId>protocolvanish</artifactId>
-  <version>0.4.1-SNAPSHOT</version>
+  <version>0.4.2-SNAPSHOT</version>
   <build>
     <finalName>ProtocolVanish</finalName>
     <plugins>
@@ -37,17 +37,6 @@
           </relocations>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -66,6 +55,10 @@
     <repository>
       <id>minecraft-libraries</id>
       <url>https://libraries.minecraft.net</url>
+    </repository>
+    <repository>
+      <id>placeholderapi</id>
+      <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -183,6 +176,12 @@
           <groupId>com.google.guava</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>me.clip</groupId>
+      <artifactId>placeholderapi</artifactId>
+      <version>2.10.4</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <distributionManagement>

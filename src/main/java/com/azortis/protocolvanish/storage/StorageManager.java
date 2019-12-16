@@ -28,8 +28,8 @@ import org.bukkit.entity.Player;
 @SuppressWarnings("all")
 public class StorageManager {
 
-    private ProtocolVanish plugin;
-    private IDatabase adapter;
+    private final ProtocolVanish plugin;
+    private final IDatabase adapter;
 
     public StorageManager(ProtocolVanish plugin) {
         this.plugin = plugin;

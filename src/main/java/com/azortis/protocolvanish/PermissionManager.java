@@ -18,12 +18,11 @@
 
 package com.azortis.protocolvanish;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class PermissionManager {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     PermissionManager(ProtocolVanish plugin) {
         this.plugin = plugin;
