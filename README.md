@@ -30,3 +30,8 @@ Add the following to your pom.xml
     </dependency>
 </dependencies>
 ```
+
+## PlaceholderAPI
+
+The placeholder repository can be found [here](https://github.com/AzortisCode/ProtocolVanish_PlaceholderExpansion).
+The download can be found [here](https://api.extendedclip.com/expansions/protocolvanish/).
