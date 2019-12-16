@@ -32,7 +32,7 @@ import java.util.UUID;
 
 public class ActionBarRunnable implements Runnable {
 
-    private ProtocolVanish plugin;
+    private final ProtocolVanish plugin;
 
     public ActionBarRunnable(ProtocolVanish plugin) {
         this.plugin = plugin;

@@ -71,12 +71,12 @@ public class VisibilityChanger {
                 sendPlayerInfoPacket(viewer, hider, true);
                 sendEntityDestroyPacket(viewer, hider);
                 if (messageSettings.getBroadCastFakeQuitOnVanish())
-                    plugin.sendPlayerMessage(viewer, "vanishMessage");
+                    plugin.sendPlayerMessage(viewer, hider,"vanishMessage");
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
-                plugin.sendPlayerMessage(viewer, "vanishMessageWithPerm");
+                plugin.sendPlayerMessage(viewer, hider,"vanishMessageWithPerm");
             }
             if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
-                plugin.sendPlayerMessage(viewer, "vanishMessage");
+                plugin.sendPlayerMessage(viewer, hider, "vanishMessage");
         }
     }
 
@@ -92,12 +92,12 @@ public class VisibilityChanger {
                 sendPlayerInfoPacket(viewer, hider, false);
                 sendSpawnPlayerPacket(viewer, hider);
                 if (messageSettings.getBroadCastFakeJoinOnReappear())
-                    plugin.sendPlayerMessage(viewer, "reappearMessage");
+                    plugin.sendPlayerMessage(viewer, hider,"reappearMessage");
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
-                plugin.sendPlayerMessage(viewer, "reappearMessageWithPerm");
+                plugin.sendPlayerMessage(viewer, hider,"reappearMessageWithPerm");
             }
             if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
-                plugin.sendPlayerMessage(viewer, "reappearMessage");
+                plugin.sendPlayerMessage(viewer, hider,"reappearMessage");
         }
     }
 

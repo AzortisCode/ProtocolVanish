@@ -162,9 +162,9 @@ public final class ProtocolVanish extends JavaPlugin {
      * @param receiver The player that should receive the message.
      * @param messagePath The path of the message in the MessageSettings.
      */
-    public void sendPlayerMessage(Player receiver, String messagePath){
+    public void sendPlayerMessage(Player receiver, Player placeholderPlayer,  String messagePath){
         String rawMessage = settingsManager.getMessageSettings().getMessage(messagePath);
-        String message = PlaceholderAPI.setPlaceholders(receiver, rawMessage);
+        String message = PlaceholderAPI.setPlaceholders(placeholderPlayer, rawMessage);
         receiver.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 

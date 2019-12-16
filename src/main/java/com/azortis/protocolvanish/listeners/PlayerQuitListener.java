@@ -22,7 +22,6 @@ import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -58,7 +57,7 @@ public class PlayerQuitListener implements Listener {
                 event.setQuitMessage("");
                 for (Player viewer : Bukkit.getOnlinePlayers()) {
                     if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
-                        plugin.sendPlayerMessage(viewer, "otherLeftSilently");
+                        plugin.sendPlayerMessage(viewer, player,"otherLeftSilently");
                     }
                 }
             }

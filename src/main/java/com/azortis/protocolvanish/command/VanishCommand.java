@@ -96,19 +96,19 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
                 if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
                 if(args.length > 0){
-                    plugin.sendPlayerMessage(player, "invalidUsage");
+                    plugin.sendPlayerMessage(player, player,"invalidUsage");
                     return false;
                 }
                 if (vanishPlayer.isVanished()) {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), false);
-                    plugin.sendPlayerMessage(player, "onReappear");
+                    plugin.sendPlayerMessage(player, player,"onReappear");
                 } else {
                     plugin.getVisibilityManager().setVanished(player.getUniqueId(), true);
-                    plugin.sendPlayerMessage(player, "onVanish");
+                    plugin.sendPlayerMessage(player, player,"onVanish");
                 }
                 return true;
             } else {
-                plugin.sendPlayerMessage(player, "noPermission");
+                plugin.sendPlayerMessage(player, player, "noPermission");
                 return false;
             }
         }

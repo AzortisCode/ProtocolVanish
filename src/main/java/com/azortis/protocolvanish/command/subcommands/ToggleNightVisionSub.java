@@ -51,21 +51,21 @@ public class ToggleNightVisionSub implements ISubCommandExecutor {
                     if (vanishPlayer.getPlayerSettings().doNightVision()) {
                         vanishPlayer.getPlayerSettings().setNightVision(false);
                         if (vanishPlayer.isVanished()) player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                        plugin.sendPlayerMessage(player, "disabledNightVision");
+                        plugin.sendPlayerMessage(player, player, "disabledNightVision");
                     } else {
                         vanishPlayer.getPlayerSettings().setNightVision(true);
                         if (vanishPlayer.isVanished())
                             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-                        plugin.sendPlayerMessage(player, "enabledNightVision");
+                        plugin.sendPlayerMessage(player, player,"enabledNightVision");
                     }
                     plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
                     return true;
                 } else {
-                    plugin.sendPlayerMessage(player, "noPermission");
+                    plugin.sendPlayerMessage(player, player,"noPermission");
                     return false;
                 }
             } else {
-                plugin.sendPlayerMessage(player, "invalidUsage");
+                plugin.sendPlayerMessage(player, player,"invalidUsage");
             }
         }
         return false;

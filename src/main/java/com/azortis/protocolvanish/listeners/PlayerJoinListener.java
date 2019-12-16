@@ -22,7 +22,6 @@ import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
 import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -52,10 +51,10 @@ public class PlayerJoinListener implements Listener {
             if (plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())
                 event.setJoinMessage("");
             else
-                plugin.sendPlayerMessage(player, "joinedSilently");
+                plugin.sendPlayerMessage(player, player,"joinedSilently");
             for (Player viewer : Bukkit.getOnlinePlayers()) {
                 if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
-                    plugin.sendPlayerMessage(viewer, "otherJoinedSilently");
+                    plugin.sendPlayerMessage(viewer, player,"otherJoinedSilently");
                 }
             }
         }

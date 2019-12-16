@@ -49,19 +49,19 @@ public class ToggleHungerSub implements ISubCommandExecutor {
                     if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
                     if (vanishPlayer.getPlayerSettings().getDisableHunger()) {
                         vanishPlayer.getPlayerSettings().setDisableHunger(false);
-                        plugin.sendPlayerMessage(player, "enabledHunger");
+                        plugin.sendPlayerMessage(player, player, "enabledHunger");
                     } else {
                         vanishPlayer.getPlayerSettings().setDisableHunger(true);
-                        plugin.sendPlayerMessage(player, "disabledHunger");
+                        plugin.sendPlayerMessage(player, player,"disabledHunger");
                     }
                     plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
                     return true;
                 } else {
-                    plugin.sendPlayerMessage(player, "noPermission");
+                    plugin.sendPlayerMessage(player, player,"noPermission");
                     return false;
                 }
             } else {
-                plugin.sendPlayerMessage(player, "invalidUsage");
+                plugin.sendPlayerMessage(player, player,"invalidUsage");
             }
         }
         return false;

@@ -48,19 +48,19 @@ public class ToggleItemPickupSub implements ISubCommandExecutor {
                     if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
                     if (vanishPlayer.getPlayerSettings().getDisableItemPickUp()) {
                         vanishPlayer.getPlayerSettings().setDisableItemPickUp(false);
-                        plugin.sendPlayerMessage(player, "enabledItemPickup");
+                        plugin.sendPlayerMessage(player, player, "enabledItemPickup");
                     } else {
                         vanishPlayer.getPlayerSettings().setDisableItemPickUp(true);
-                        plugin.sendPlayerMessage(player, "disabledItemPickup");
+                        plugin.sendPlayerMessage(player, player,"disabledItemPickup");
                     }
                     plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
                     return true;
                 } else {
-                    plugin.sendPlayerMessage(player, "noPermission");
+                    plugin.sendPlayerMessage(player, player, "noPermission");
                     return false;
                 }
             } else {
-                plugin.sendPlayerMessage(player, "invalidUsage");
+                plugin.sendPlayerMessage(player, player, "invalidUsage");
             }
         }
         return false;

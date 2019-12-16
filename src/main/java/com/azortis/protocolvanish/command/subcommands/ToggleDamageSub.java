@@ -48,19 +48,19 @@ public class ToggleDamageSub implements ISubCommandExecutor {
                     if (vanishPlayer == null) vanishPlayer = plugin.createVanishPlayer(player);
                     if (vanishPlayer.getPlayerSettings().getDisableDamage()) {
                         vanishPlayer.getPlayerSettings().setDisableDamage(false);
-                        plugin.sendPlayerMessage(player, "enabledDamage");
+                        plugin.sendPlayerMessage(player, player,"enabledDamage");
                     } else {
                         vanishPlayer.getPlayerSettings().setDisableDamage(true);
-                        plugin.sendPlayerMessage(player, "disabledDamage");
+                        plugin.sendPlayerMessage(player, player,"disabledDamage");
                     }
                     plugin.getStorageManager().savePlayerSettings(vanishPlayer.getPlayerSettings());
                     return true;
                 } else {
-                    plugin.sendPlayerMessage(player, "noPermission");
+                    plugin.sendPlayerMessage(player, player,"noPermission");
                     return false;
                 }
             } else {
-                plugin.sendPlayerMessage(player, "invalidUsage");
+                plugin.sendPlayerMessage(player, player,"invalidUsage");
             }
         }
         return false;
