@@ -61,11 +61,15 @@ public class GeneralEntityPacketListener extends PacketAdapter {
             } else if (packet.getType() == PacketType.Play.Server.ENTITY_DESTROY) {
                 int[] entityIds = packet.getIntegerArrays().read(0);
                 List<Integer> entityIdList = new ArrayList<>();
+                HashMap<UUID, List<Integer>> bypassFilterPackets = plugin.getVisibilityManager().getBypassFilterPackets();
                 for (int entityId : entityIds) {
                     Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, viewer.getWorld());
                     if (player == null) {
                         entityIdList.add(entityId);
-                    } else if (packet.getMeta("ignoreFilter").isPresent() && (boolean) packet.getMeta("ignoreFilter").get()) {
+                    } else if (bypassFilterPackets.containsKey(viewer.getUniqueId())
+                            && bypassFilterPackets.get(viewer.getUniqueId()).contains(entityId)) {
+                        bypassFilterPackets.get(viewer.getUniqueId()).remove(entityId);
+                        if(bypassFilterPackets.get(viewer.getUniqueId()).isEmpty())bypassFilterPackets.remove(viewer.getUniqueId());
                         entityIdList.add(entityId);
                     } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
                             !plugin.getVisibilityManager().isVanishedFrom(player, viewer)) {

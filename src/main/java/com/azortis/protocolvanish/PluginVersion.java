@@ -55,7 +55,8 @@ public enum PluginVersion {
     }
 
     public static PluginVersion getVersionFromString(String versionString){
-        return PluginVersion.valueOf("v" + versionString.replace(".", "_"));
+        String enumKey = "v" + versionString.replace(".", "_");
+        return PluginVersion.valueOf(enumKey);
     }
 
 }

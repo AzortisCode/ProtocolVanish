@@ -37,6 +37,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -110,7 +111,9 @@ public class VisibilityChanger {
     private void sendEntityDestroyPacket(Player receiver, Player vanishedPlayer) {
         if (ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)) {
             PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
-            packetContainer.setMeta("ignoreFilter", true); // To make sure our packet doesn't get filtered
+            if(!plugin.getVisibilityManager().getBypassFilterPackets().containsKey(receiver.getUniqueId()))
+                plugin.getVisibilityManager().getBypassFilterPackets().put(receiver.getUniqueId(), new ArrayList<>());
+            plugin.getVisibilityManager().getBypassFilterPackets().get(receiver.getUniqueId()).add(vanishedPlayer.getEntityId());
 
             int[] entityId = new int[]{vanishedPlayer.getEntityId()};
             packetContainer.getIntegerArrays().write(0, entityId);

@@ -40,6 +40,8 @@ public class VisibilityManager {
     private Collection<UUID> vanishedPlayers = new ArrayList<>();
     private HashMap<Player, Collection<Player>> vanishedFromMap = new HashMap<>();
 
+    private HashMap<UUID, List<Integer>> bypassFilterPackets = new HashMap<>(); // For the entityDestroy packet.
+
     public VisibilityManager(ProtocolVanish plugin) {
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
@@ -198,4 +200,13 @@ public class VisibilityManager {
         return null;
     }
 
+    /**
+     * Get the HashMap of packets that should't be filtered.
+     * Only for internal use.
+     *
+     * @return {@link HashMap} of packets that shouldn't be filtered.
+     */
+    public HashMap<UUID, List<Integer>> getBypassFilterPackets() {
+        return bypassFilterPackets;
+    }
 }
