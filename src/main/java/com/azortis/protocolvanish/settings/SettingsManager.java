@@ -64,19 +64,19 @@ public class SettingsManager {
         }
         //Check if settingsFile is up to date!
         String settingsFileVersion = (String) settingsMap.get("fileVersion");
-        if(plugin.getUpdateChecker().getPluginVersion().getSettingsFileVersion() != settingsFileVersion){
+        if(!plugin.getUpdateChecker().getPluginVersion().getSettingsFileVersion().equals(settingsFileVersion)){
             plugin.getLogger().severe("Settings file is outdated, Please update it!");
-            plugin.getLogger().severe("Disabling plugin...");
-            Bukkit.getPluginManager().disablePlugin(plugin);
             filesUpToDate = false;
         }
         //Check if messageFile is up to date!
         String messageFileVersion = (String) settingsMap.get("fileVersion");
-        if(plugin.getUpdateChecker().getPluginVersion().getMessageFileVersion() != messageFileVersion){
+        if(!plugin.getUpdateChecker().getPluginVersion().getMessageFileVersion().equals(messageFileVersion)){
             plugin.getLogger().severe("Message file is outdated, Please update it!");
+            filesUpToDate = false;
+        }
+        if(!filesUpToDate){
             plugin.getLogger().severe("Disabling plugin...");
             Bukkit.getPluginManager().disablePlugin(plugin);
-            filesUpToDate = false;
         }
     }
 

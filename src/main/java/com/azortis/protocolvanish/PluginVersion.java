@@ -46,6 +46,10 @@ public enum PluginVersion {
         return versionString;
     }
 
+    public int getVersionNumber() {
+        return versionNumber;
+    }
+
     public String getSettingsFileVersion() {
         return settingsFileVersion;
     }
@@ -55,8 +59,8 @@ public enum PluginVersion {
     }
 
     public static PluginVersion getVersionFromString(String versionString){
-        String enumKey = "v" + versionString.replace(".", "_");
-        return PluginVersion.valueOf(enumKey);
+        String enumVersionString = "v" + versionString.replace(".", "_");
+        return PluginVersion.valueOf(enumVersionString);
     }
 
 }

@@ -40,7 +40,7 @@ public class UpdateChecker implements Listener {
 
     UpdateChecker(ProtocolVanish plugin) {
         this.plugin = plugin;
-        this.pluginVersion = PluginVersion.valueOf(plugin.getDescription().getVersion());
+        this.pluginVersion = PluginVersion.getVersionFromString(plugin.getDescription().getVersion());
 
         //Grab version
         plugin.getLogger().info("Checking for updates...");
