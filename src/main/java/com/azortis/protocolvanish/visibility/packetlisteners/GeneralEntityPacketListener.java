@@ -65,7 +65,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                     Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, viewer.getWorld());
                     if (player == null) {
                         entityIdList.add(entityId);
-                    } else if ((boolean) packet.getMeta("ignoreFilter").get()) {
+                    } else if (packet.getMeta("ignoreFilter").isPresent() && (boolean) packet.getMeta("ignoreFilter").get()) {
                         entityIdList.add(entityId);
                     } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
                             !plugin.getVisibilityManager().isVanishedFrom(player, viewer)) {

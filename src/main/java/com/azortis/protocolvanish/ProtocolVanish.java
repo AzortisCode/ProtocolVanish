@@ -40,6 +40,7 @@ public final class ProtocolVanish extends JavaPlugin {
     private PermissionManager permissionManager;
     private VisibilityManager visibilityManager;
     private StorageManager storageManager;
+    private UpdateChecker updateChecker;
 
     private VanishCommand vanishCommand;
 
@@ -57,14 +58,17 @@ public final class ProtocolVanish extends JavaPlugin {
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        this.metrics = new Metrics(this);
+        this.updateChecker = new UpdateChecker(this);
         this.settingsManager = new SettingsManager(this);
+        if(!settingsManager.areFilesUpToDate())return;
+
+        this.metrics = new Metrics(this);
         this.storageManager = new StorageManager(this);
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
-
         this.vanishCommand = new VanishCommand(this);
 
+        this.getLogger().info("Registering events...");
         new PlayerLoginListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
@@ -72,14 +76,21 @@ public final class ProtocolVanish extends JavaPlugin {
         new FoodLevelChangeListener(this);
         new EntityTargetLivingEntityListener(this);
         new EntityPickupItemListener(this);
-        new UpdateChecker(this).fetch();
 
         VanishAPI.setPlugin(this);
     }
 
     @Override
     public void onDisable() {
+        this.getLogger().info("Saving vanish players...");
+        for (VanishPlayer vanishPlayer : vanishPlayerMap.values()){
+            storageManager.saveVanishPlayer(vanishPlayer);
+            storageManager.savePlayerSettings(vanishPlayer.getPlayerSettings());
+        }
+    }
 
+    public UpdateChecker getUpdateChecker(){
+        return updateChecker;
     }
 
     public Metrics getMetrics() {

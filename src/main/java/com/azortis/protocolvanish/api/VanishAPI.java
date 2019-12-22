@@ -63,5 +63,6 @@ public class VanishAPI {
 
     public static void setPlugin(ProtocolVanish paramPlugin) {
         plugin = paramPlugin;
+        paramPlugin.getLogger().info("Applying VanishAPI...");
     }
 }

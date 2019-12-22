@@ -47,6 +47,7 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
 
     public VanishCommand(ProtocolVanish plugin) {
         this.plugin = plugin;
+        plugin.getLogger().info("Loading command...");
         CommandSettingsWrapper commandSettings = plugin.getSettingsManager().getCommandSettings();
         Command command = new CommandBuilder()
                 .setName(commandSettings.getName())
