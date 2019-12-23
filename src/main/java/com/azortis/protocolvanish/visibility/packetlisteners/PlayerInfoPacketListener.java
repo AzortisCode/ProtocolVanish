@@ -23,7 +23,6 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -44,17 +43,24 @@ public class PlayerInfoPacketListener extends PacketAdapter {
     @Override
     public void onPacketSending(PacketEvent event) {
         if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("PlayerInfo")) {
+            Player receiver = event.getPlayer();
             Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
             List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
             playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
-                if (vanishedPlayers.contains(playerInfoData.getProfile().getUUID())) {
-                    Player vanishedPlayer = Bukkit.getPlayer(playerInfoData.getProfile().getUUID());
-                    return plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer, event.getPlayer())
-                            && event.getPacket().getPlayerInfoAction().read(0) != EnumWrappers.PlayerInfoAction.REMOVE_PLAYER;
+                UUID playerInfoUUID = playerInfoData.getProfile().getUUID();
+                if (receiver != Bukkit.getPlayer(playerInfoUUID)
+                        && vanishedPlayers.contains(playerInfoUUID)) {
+                    if(plugin.getVisibilityManager().bypassFilter(receiver.getUniqueId(), playerInfoUUID, "playerInfo")){
+                        plugin.getVisibilityManager().removePacketFromBypassFilterList(receiver.getUniqueId(), playerInfoUUID, "playerInfo");
+                        return false;
+                    }
+                    Player vanishedPlayer = Bukkit.getPlayer(playerInfoUUID);
+                    return plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer, event.getPlayer());
                 }
                 return false;
             });
             event.getPacket().getPlayerInfoDataLists().write(0, playerInfoDataList);
         }
     }
+
 }

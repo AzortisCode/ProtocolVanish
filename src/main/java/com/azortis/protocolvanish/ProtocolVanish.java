@@ -80,15 +80,6 @@ public final class ProtocolVanish extends JavaPlugin {
         VanishAPI.setPlugin(this);
     }
 
-    @Override
-    public void onDisable() {
-        this.getLogger().info("Saving vanish players...");
-        for (VanishPlayer vanishPlayer : vanishPlayerMap.values()){
-            storageManager.saveVanishPlayer(vanishPlayer);
-            storageManager.savePlayerSettings(vanishPlayer.getPlayerSettings());
-        }
-    }
-
     public UpdateChecker getUpdateChecker(){
         return updateChecker;
     }

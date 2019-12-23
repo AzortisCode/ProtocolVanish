@@ -28,7 +28,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.Collection;
 import java.util.UUID;
 
 public class PlayerLoginListener implements Listener {
@@ -53,11 +52,9 @@ public class PlayerLoginListener implements Listener {
                 for (Player viewer : Bukkit.getOnlinePlayers())
                     plugin.getVisibilityManager().setVanished(player, viewer, true);
             }
-            Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
-            for (UUID uuid : vanishedPlayers) {
-                if (uuid == player.getUniqueId()) return;
-                plugin.getVisibilityManager().setVanished(player, Bukkit.getPlayer(uuid), true);
-            }
+        }
+        for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
+            plugin.getVisibilityManager().setVanished(Bukkit.getPlayer(uuid), player, true);
         }
     }
 

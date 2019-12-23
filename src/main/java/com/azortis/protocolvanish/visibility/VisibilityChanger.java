@@ -37,9 +37,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("all")
 public class VisibilityChanger {
@@ -111,10 +109,7 @@ public class VisibilityChanger {
     private void sendEntityDestroyPacket(Player receiver, Player vanishedPlayer) {
         if (ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)) {
             PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
-            if(!plugin.getVisibilityManager().getBypassFilterPackets().containsKey(receiver.getUniqueId()))
-                plugin.getVisibilityManager().getBypassFilterPackets().put(receiver.getUniqueId(), new ArrayList<>());
-            plugin.getVisibilityManager().getBypassFilterPackets().get(receiver.getUniqueId()).add(vanishedPlayer.getEntityId());
-
+            plugin.getVisibilityManager().addPacketToBypassFilterList(receiver.getUniqueId(), vanishedPlayer.getUniqueId(), "entityDestroy");
             int[] entityId = new int[]{vanishedPlayer.getEntityId()};
             packetContainer.getIntegerArrays().write(0, entityId);
             try {
@@ -128,6 +123,9 @@ public class VisibilityChanger {
     private void sendPlayerInfoPacket(Player receiver, Player vanishedPlayer, boolean vanished) {
         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.PLAYER_INFO);
         packetContainer.getPlayerInfoAction().write(0, vanished ? EnumWrappers.PlayerInfoAction.REMOVE_PLAYER : EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+        if(vanished){
+            plugin.getVisibilityManager().addPacketToBypassFilterList(receiver.getUniqueId(), vanishedPlayer.getUniqueId(), "playerInfo");
+        }
 
         GameMode gameMode = vanishedPlayer.getGameMode();
         PlayerInfoData pid = new PlayerInfoData(WrappedGameProfile.fromPlayer(vanishedPlayer), ReflectionUtils.getPing(vanishedPlayer), EnumWrappers.NativeGameMode.fromBukkit(gameMode), WrappedChatComponent.fromText(vanishedPlayer.getPlayerListName()));

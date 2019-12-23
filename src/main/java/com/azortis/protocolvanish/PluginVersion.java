@@ -19,8 +19,8 @@
 package com.azortis.protocolvanish;
 
 public enum PluginVersion {
-    v0_4_3("0.4.3", 43, "1.0.0", "1.0.0"),
-    v0_4_4("0.4.4", 44, "1.0.0", "1.0.0");
+    v0_4_3("0.4.3", 43, "1", "1"),
+    v0_4_4("0.4.4", 44, "1", "1");
 
     private String versionString;
     private int versionNumber;
