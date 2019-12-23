@@ -21,6 +21,7 @@ package com.azortis.protocolvanish.settings;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -39,20 +40,48 @@ public class SettingsManager {
     private Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private Map<String, Object> settingsMap;
     private Map<String, Object> messageMap;
+    private boolean filesUpToDate = true;
 
     public SettingsManager(ProtocolVanish plugin) {
         this.plugin = plugin;
+        plugin.getLogger().info("Loading settings...");
         if (plugin.getDataFolder().exists()) plugin.getDataFolder().mkdir();
         settingsFile = new File(plugin.getDataFolder(), "settings.json");
         messageFile = new File(plugin.getDataFolder(), "messages.json");
-        if (!settingsFile.exists()) plugin.saveResource(settingsFile.getName(), false);
-        if (!messageFile.exists()) plugin.saveResource(messageFile.getName(), false);
+        if (!settingsFile.exists()){
+            plugin.getLogger().info("Creating new settings file...");
+            plugin.saveResource(settingsFile.getName(), false);
+        }
+        if (!messageFile.exists()){
+            plugin.getLogger().info("Creating new message file...");
+            plugin.saveResource(messageFile.getName(), false);
+        }
         try {
             settingsMap = gson.fromJson(new FileReader(settingsFile), Map.class);
             messageMap = gson.fromJson(new FileReader(messageFile), Map.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //Check if settingsFile is up to date!
+        String settingsFileVersion = (String) settingsMap.get("fileVersion");
+        if(!plugin.getUpdateChecker().getPluginVersion().getSettingsFileVersion().equals(settingsFileVersion)){
+            plugin.getLogger().severe("Settings file is outdated, Please update it!");
+            filesUpToDate = false;
+        }
+        //Check if messageFile is up to date!
+        String messageFileVersion = (String) settingsMap.get("fileVersion");
+        if(!plugin.getUpdateChecker().getPluginVersion().getMessageFileVersion().equals(messageFileVersion)){
+            plugin.getLogger().severe("Message file is outdated, Please update it!");
+            filesUpToDate = false;
+        }
+        if(!filesUpToDate){
+            plugin.getLogger().severe("Disabling plugin...");
+            Bukkit.getPluginManager().disablePlugin(plugin);
+        }
+    }
+
+    public boolean areFilesUpToDate() {
+        return filesUpToDate;
     }
 
     public void saveSettingsFile() {

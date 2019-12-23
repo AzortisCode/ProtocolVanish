@@ -33,11 +33,8 @@ public class StorageManager {
 
     public StorageManager(ProtocolVanish plugin) {
         this.plugin = plugin;
-        /*if(plugin.getSettingsManager().getStorageSettings().getUseMySQL()){
-            this.adapter = new MySQLAdapter();
-        }else{
-            this.adapter = new SQLiteAdapter(plugin);
-        }*/
+        plugin.getLogger().info("Loading storage...");
+        plugin.getLogger().info("Using SQLite..."); //Because we haven't yet added MySQL checks.
         this.adapter = new SQLiteAdapter(plugin);
     }
 
@@ -46,8 +43,7 @@ public class StorageManager {
         VanishPlayer vanishPlayer = adapter.getVanishPlayer(player);
 
         if (vanishPlayer == null) return null;
-        if (!plugin.getPermissionManager().hasPermissionToVanish(player)
-                && /*!plugin.getSettingsManager().getStorageSettings().getUseMySQL()*/true) {
+        if (!plugin.getPermissionManager().hasPermissionToVanish(player)) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> adapter.deleteVanishPlayer(vanishPlayer));
             return null;
         }

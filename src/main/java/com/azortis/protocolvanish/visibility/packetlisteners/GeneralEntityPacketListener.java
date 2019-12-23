@@ -50,27 +50,37 @@ public class GeneralEntityPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        Player viewer = event.getPlayer();
+        Player receiver = event.getPlayer();
         PacketContainer packet = event.getPacket();
         if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
             if (packet.getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
                 UUID playerUUID = packet.getUUIDs().read(0);
                 if (plugin.getVisibilityManager().getVanishedPlayers().contains(playerUUID)
-                        && plugin.getVisibilityManager().isVanishedFrom(Bukkit.getPlayer(playerUUID), viewer))
+                        && plugin.getVisibilityManager().isVanishedFrom(Bukkit.getPlayer(playerUUID), receiver))
                     event.setCancelled(true);
             } else if (packet.getType() == PacketType.Play.Server.ENTITY_DESTROY) {
                 int[] entityIds = packet.getIntegerArrays().read(0);
                 List<Integer> entityIdList = new ArrayList<>();
-                for (int entityId : entityIds) {
-                    Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, viewer.getWorld());
-                    if (player == null) {
+                for (int entityId : entityIds){
+                    Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, receiver.getWorld());
+                    if(player == null){
                         entityIdList.add(entityId);
-                    } else if ((boolean) packet.getMeta("ignoreFilter").get()) {
+                        break;
+                    }
+                    else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())){
                         entityIdList.add(entityId);
-                    } else if (plugin.getVisibilityManager().isVanished(player.getUniqueId()) &&
-                            !plugin.getVisibilityManager().isVanishedFrom(player, viewer)) {
+                        plugin.getLogger().info("Oof Loop 2 " + player.getName());
+                        break;
+                    }
+                    else if(plugin.getVisibilityManager().isVanished(player.getUniqueId())
+                            && !plugin.getVisibilityManager().isVanishedFrom(player, receiver)){
                         entityIdList.add(entityId);
-                    } else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
+                        plugin.getLogger().info("Oof Loop 3 " + player.getName());
+                        break;
+                    }
+                    else if (plugin.getVisibilityManager().bypassFilter(receiver.getUniqueId(), player.getUniqueId(), "entityDestroy")){
+                        plugin.getLogger().info("Oof Loop 4 " + player.getName());
+                        plugin.getVisibilityManager().removePacketFromBypassFilterList(receiver.getUniqueId(), player.getUniqueId(), "entityDestroy");
                         entityIdList.add(entityId);
                     }
                 }
@@ -84,12 +94,13 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                 if (packet.getType() == PacketType.Play.Server.COLLECT) entityId =
                         packet.getIntegers().read(1);
                 else entityId = packet.getIntegers().read(0);
-                Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, viewer.getWorld());
+                Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, receiver.getWorld());
                 if (player != null
                         && plugin.getVisibilityManager().isVanished(player.getUniqueId())
-                        && plugin.getVisibilityManager().isVanishedFrom(player, viewer))
+                        && plugin.getVisibilityManager().isVanishedFrom(player, receiver))
                     event.setCancelled(true);
             }
         }
     }
+
 }

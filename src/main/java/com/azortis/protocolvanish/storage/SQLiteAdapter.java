@@ -38,9 +38,11 @@ public class SQLiteAdapter implements IDatabase {
 
     SQLiteAdapter(ProtocolVanish plugin) {
         this.plugin = plugin;
+        plugin.getLogger().info("Loading database file...");
         File dbFile = new File(plugin.getDataFolder(), "storage.db");
         try {
             if (!dbFile.exists()) {
+                plugin.getLogger().info("Database file doesn't exist, creating one...");
                 dbFile.createNewFile();
             }
         } catch (IOException ex) {

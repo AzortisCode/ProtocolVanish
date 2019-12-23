@@ -40,7 +40,7 @@ public class VanishPlayer {
         return vanished;
     }
 
-    public void setVanish(boolean vanished) {
+    public void setVanished(boolean vanished) {
         this.vanished = vanished;
     }
 

@@ -22,5 +22,6 @@
     "disabledCreatureTarget": "&aYou've disabled creature target.",
     "enabledItemPickup": "&aYou've enabled item pickup.",
     "disabledItemPickup": "&aYou've disabled item pickup."
-  }
+  },
+  "fileVersion": "1"
 }

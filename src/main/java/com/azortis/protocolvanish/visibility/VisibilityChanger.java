@@ -28,7 +28,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.*;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -37,8 +36,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("all")
 public class VisibilityChanger {
@@ -67,9 +65,9 @@ public class VisibilityChanger {
         }
         for (Player viewer : Bukkit.getOnlinePlayers()) {
             if (plugin.getVisibilityManager().setVanished(hider, viewer, true)) {
-                viewer.hidePlayer(plugin, hider);
                 sendPlayerInfoPacket(viewer, hider, true);
                 sendEntityDestroyPacket(viewer, hider);
+                viewer.hidePlayer(plugin, hider);
                 if (messageSettings.getBroadCastFakeQuitOnVanish())
                     plugin.sendPlayerMessage(viewer, hider,"vanishMessage");
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
@@ -110,8 +108,7 @@ public class VisibilityChanger {
     private void sendEntityDestroyPacket(Player receiver, Player vanishedPlayer) {
         if (ProtocolLibrary.getProtocolManager().getEntityTrackers(vanishedPlayer).contains(receiver)) {
             PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
-            packetContainer.setMeta("ignoreFilter", true); // To make sure our packet doesn't get filtered
-
+            plugin.getVisibilityManager().addPacketToBypassFilterList(receiver.getUniqueId(), vanishedPlayer.getUniqueId(), "entityDestroy");
             int[] entityId = new int[]{vanishedPlayer.getEntityId()};
             packetContainer.getIntegerArrays().write(0, entityId);
             try {
@@ -125,6 +122,9 @@ public class VisibilityChanger {
     private void sendPlayerInfoPacket(Player receiver, Player vanishedPlayer, boolean vanished) {
         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.PLAYER_INFO);
         packetContainer.getPlayerInfoAction().write(0, vanished ? EnumWrappers.PlayerInfoAction.REMOVE_PLAYER : EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+        if(vanished){
+            plugin.getVisibilityManager().addPacketToBypassFilterList(receiver.getUniqueId(), vanishedPlayer.getUniqueId(), "playerInfo");
+        }
 
         GameMode gameMode = vanishedPlayer.getGameMode();
         PlayerInfoData pid = new PlayerInfoData(WrappedGameProfile.fromPlayer(vanishedPlayer), ReflectionUtils.getPing(vanishedPlayer), EnumWrappers.NativeGameMode.fromBukkit(gameMode), WrappedChatComponent.fromText(vanishedPlayer.getPlayerListName()));

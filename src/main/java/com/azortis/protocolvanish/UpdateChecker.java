@@ -33,63 +33,72 @@ import java.net.URL;
 public class UpdateChecker implements Listener {
 
     private final ProtocolVanish plugin;
-    private final int RESOURCE_ID = 69445;
-    private String spigotVersion;
-    private final String pluginVersion;
+    private PluginVersion spigotVersion;
+    private final PluginVersion pluginVersion;
     private boolean updateAvailable;
+    private boolean unreleased;
 
-    UpdateChecker(ProtocolVanish plugin){
+    UpdateChecker(ProtocolVanish plugin) {
         this.plugin = plugin;
-        this.pluginVersion = plugin.getDescription().getVersion();
+        this.pluginVersion = PluginVersion.getVersionFromString(plugin.getDescription().getVersion());
+
+        //Grab version
+        plugin.getLogger().info("Checking for updates...");
+        try {
+            HttpsURLConnection connection = (HttpsURLConnection) new URL(
+                    "https://api.spigotmc.org/legacy/update.php?resource=69445").openConnection();
+            connection.setRequestMethod("GET");
+            spigotVersion = PluginVersion.getVersionFromString(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine());
+        } catch (Exception ex) {
+            plugin.getLogger().severe("Failed to check for updates on spigot.");
+        }
+        if(spigotVersion == null){
+            plugin.getLogger().severe("Failed to check for updates on spigot.");
+            return;
+        }
+        if (pluginVersion.isSame(spigotVersion)) return;
+
+        this.updateAvailable = spigotVersion.isNewerThen(pluginVersion);
+        if (updateAvailable) {
+            plugin.getLogger().info("A new version(" + spigotVersion.getVersionString() + ") is available on spigot!");
+            plugin.getLogger().info("You can download it here: https://www.spigotmc.org/resources/69445/");
+            Bukkit.getPluginManager().registerEvents(this, plugin);
+            return;
+        }
+
+        this.unreleased = pluginVersion.isNewerThen(spigotVersion);
+        if (unreleased) {
+            plugin.getLogger().warning("You're using an unreleased version(" + pluginVersion.getVersionString() + "). Please proceed with caution.");
+            Bukkit.getPluginManager().registerEvents(this, plugin);
+        }
+    }
+
+    public PluginVersion getSpigotVersion() {
+        return spigotVersion;
+    }
+
+    public PluginVersion getPluginVersion(){
+        return pluginVersion;
     }
 
     public boolean isUpdateAvailable() {
         return updateAvailable;
     }
 
-    public String getSpigotVersion() {
-        return spigotVersion;
-    }
-
-    public void fetch(){
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
-            try {
-                HttpsURLConnection connection = (HttpsURLConnection) new URL(
-                        "https://api.spigotmc.org/legacy/update.php?resource=" + RESOURCE_ID).openConnection();
-                connection.setRequestMethod("GET");
-                spigotVersion = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
-            }catch (Exception ex){
-                plugin.getLogger().info("Failed to check for updates on spigot.");
-            }
-            if (spigotVersion == null || spigotVersion.isEmpty()) {
-                return;
-            }
-            updateAvailable = spigotIsNewer();
-            if (!updateAvailable) {
-                return;
-            }
-
-            Bukkit.getScheduler().runTask(plugin, ()-> {
-                plugin.getLogger().info("A new version(" + spigotVersion + ") is available on spigot!");
-                plugin.getLogger().info("You can download it here: https://www.spigotmc.org/resources/protocolvanish.69445/");
-                Bukkit.getPluginManager().registerEvents(this, plugin);
-            });
-        });
-    }
-
-    private boolean spigotIsNewer() {
-        if (spigotVersion == null || spigotVersion.isEmpty()) {
-            return false;
-        }
-        return !pluginVersion.equals(spigotVersion);
+    public boolean isUnreleased() {
+        return unreleased;
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event){
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.ADMIN)){
-            player.sendMessage(ChatColor.GREEN + "[ProtocolVanish] A new update is available(" + spigotVersion +")");
-            player.sendMessage(ChatColor.GREEN + "You can download it here: You can download it here: https://www.spigotmc.org/resources/protocolvanish.69445/");
+        if (plugin.getPermissionManager().hasPermission(player, PermissionManager.Permission.ADMIN)) {
+            if (updateAvailable) {
+                player.sendMessage(ChatColor.GREEN + "[ProtocolVanish] A new update is available(" + spigotVersion.getVersionString() + ")");
+                player.sendMessage(ChatColor.GREEN + "You can download it here: You can download it here: https://www.spigotmc.org/resources/69445/");
+            } else if (unreleased) {
+                player.sendMessage(ChatColor.RED + "[ProtocolVanish] You're using an unreleased version(" + pluginVersion.getVersionString() + "). Please proceed with caution.");
+            }
         }
     }
 

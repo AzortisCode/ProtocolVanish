@@ -40,6 +40,8 @@ public class VisibilityManager {
     private Collection<UUID> vanishedPlayers = new ArrayList<>();
     private HashMap<Player, Collection<Player>> vanishedFromMap = new HashMap<>();
 
+    private final HashMap<UUID, Collection<String>> bypassFilterPackets = new HashMap<>(); // For the entityDestroy packet.
+
     public VisibilityManager(ProtocolVanish plugin) {
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
@@ -68,9 +70,9 @@ public class VisibilityManager {
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
                 if (vanishPlayer == null) return; //TODO Log that a player can not vanish if player has no permission.
                 vanishedPlayers.add(uuid);
-                vanishPlayer.setVanish(true);
+                vanishPlayer.setVanished(true);
                 plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                vanishedFromMap.put(Bukkit.getPlayer(uuid), new ArrayList<>());
+                vanishedFromMap.put(vanishPlayer.getPlayer(), new ArrayList<>());
                 visibilityChanger.vanishPlayer(uuid);
                 plugin.getStorageManager().updateServerInfo();
             }
@@ -81,10 +83,10 @@ public class VisibilityManager {
                 VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
                 if (vanishPlayer == null) return;
                 vanishedPlayers.remove(uuid);
-                vanishPlayer.setVanish(false);
+                vanishPlayer.setVanished(false);
                 plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
                 visibilityChanger.showPlayer(uuid);
-                clearVanishedFrom(Bukkit.getPlayer(uuid));
+                clearVanishedFrom(vanishPlayer.getPlayer());
                 plugin.getStorageManager().updateServerInfo();
             }
         }
@@ -99,6 +101,7 @@ public class VisibilityManager {
      * @return If the state has changed.
      */
     public boolean setVanished(Player hider, Player viewer, boolean vanished) {
+        if (hider == null || viewer == null) return false;
         if (viewer == hider) return false;
         if (vanishedFromMap.get(hider).contains(viewer) && vanished) return false;
         if (!vanishedFromMap.get(hider).contains(viewer) && vanished) {
@@ -196,6 +199,43 @@ public class VisibilityManager {
             return (Player) entity;
         }
         return null;
+    }
+
+    /**
+     * Adds an packet to the bypassFilter list.
+     *
+     * @param receiverUUID The UUID of the {@link Player} that receives the packet.
+     * @param vanishedUUID The UUID of the {@link Player} that the packet is about.
+     * @param packetType The type of the packet.
+     */
+    public void addPacketToBypassFilterList(UUID receiverUUID, UUID vanishedUUID, String packetType){
+        if(!bypassFilterPackets.containsKey(receiverUUID)) bypassFilterPackets.put(receiverUUID, new ArrayList<>());
+        bypassFilterPackets.get(receiverUUID).add(vanishedUUID.toString() + " " + packetType);
+    }
+
+    /**
+     * Removes a packet from the bypassFilter list.
+     *
+     * @param receiverUUID The UUID of the {@link Player} that receives the packet.
+     * @param vanishedUUID The UUID of the {@link Player} that the packet is about.
+     * @param packetType The type of the packet.
+     */
+    public void removePacketFromBypassFilterList(UUID receiverUUID, UUID vanishedUUID, String packetType){
+        bypassFilterPackets.get(receiverUUID).remove(vanishedUUID.toString() + " " + packetType);
+        if(bypassFilterPackets.get(receiverUUID).isEmpty())bypassFilterPackets.remove(receiverUUID);
+    }
+
+    /**
+     * Check if a packet should be filtered.
+     *
+     * @param receiverUUID The UUID of the {@link Player} that receives the packet.
+     * @param vanishedUUID The UUID of the {@link Player} that the packet is about.
+     * @param packetType The type of the packet.
+     * @return If the packet shouldn't be filtered
+     */
+    public boolean bypassFilter(UUID receiverUUID, UUID vanishedUUID, String packetType){
+        if(!bypassFilterPackets.containsKey(receiverUUID))return false;
+        return bypassFilterPackets.get(receiverUUID).contains(vanishedUUID.toString() + " " + packetType);
     }
 
 }

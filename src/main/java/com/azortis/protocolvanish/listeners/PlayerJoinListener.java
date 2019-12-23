@@ -48,10 +48,10 @@ public class PlayerJoinListener implements Listener {
             VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
             if (vanishPlayer != null && vanishPlayer.getPlayerSettings().doNightVision())
                 player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-            if (plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages())
+            if (plugin.getSettingsManager().getMessageSettings().getHideRealJoinQuitMessages()) {
                 event.setJoinMessage("");
-            else
-                plugin.sendPlayerMessage(player, player,"joinedSilently");
+                plugin.sendPlayerMessage(player, player, "joinedSilently");
+            }
             for (Player viewer : Bukkit.getOnlinePlayers()) {
                 if (plugin.getPermissionManager().hasPermissionToSee(player, viewer) && messageSettings.getAnnounceVanishStateToAdmins() && player != viewer) {
                     plugin.sendPlayerMessage(viewer, player,"otherJoinedSilently");
