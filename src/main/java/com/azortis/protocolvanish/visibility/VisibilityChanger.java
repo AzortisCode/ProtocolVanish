@@ -28,7 +28,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.*;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -66,9 +65,9 @@ public class VisibilityChanger {
         }
         for (Player viewer : Bukkit.getOnlinePlayers()) {
             if (plugin.getVisibilityManager().setVanished(hider, viewer, true)) {
-                viewer.hidePlayer(plugin, hider);
                 sendPlayerInfoPacket(viewer, hider, true);
                 sendEntityDestroyPacket(viewer, hider);
+                viewer.hidePlayer(plugin, hider);
                 if (messageSettings.getBroadCastFakeQuitOnVanish())
                     plugin.sendPlayerMessage(viewer, hider,"vanishMessage");
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
