@@ -69,17 +69,14 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                     }
                     else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())){
                         entityIdList.add(entityId);
-                        plugin.getLogger().info("Oof Loop 2 " + player.getName());
                         break;
                     }
                     else if(plugin.getVisibilityManager().isVanished(player.getUniqueId())
                             && !plugin.getVisibilityManager().isVanishedFrom(player, receiver)){
                         entityIdList.add(entityId);
-                        plugin.getLogger().info("Oof Loop 3 " + player.getName());
                         break;
                     }
                     else if (plugin.getVisibilityManager().bypassFilter(receiver.getUniqueId(), player.getUniqueId(), "entityDestroy")){
-                        plugin.getLogger().info("Oof Loop 4 " + player.getName());
                         plugin.getVisibilityManager().removePacketFromBypassFilterList(receiver.getUniqueId(), player.getUniqueId(), "entityDestroy");
                         entityIdList.add(entityId);
                     }

@@ -28,11 +28,13 @@ public class PluginVersionTest {
     public void getPluginVersionsFromString(){
         assertEquals(PluginVersion.v0_4_3, PluginVersion.getVersionFromString("0.4.3"), "0.4.3 should translate to PluginVersion.v0_4_3");
         assertEquals(PluginVersion.v0_4_4, PluginVersion.getVersionFromString("0.4.4"), "0.4.4 should translate to PluginVersion.v0_4_4");
+        assertEquals(PluginVersion.v0_4_5, PluginVersion.getVersionFromString("0.4.5"), "0.4.5 should translate to PluginVersion.v0_4_4");
     }
 
     @Test
     public void isNewerThan(){
         assertTrue(PluginVersion.v0_4_4.isNewerThen(PluginVersion.v0_4_3), "0.4.4 should be newer then 0.4.3");
+        assertTrue(PluginVersion.v0_4_5.isNewerThen(PluginVersion.v0_4_4), "0.4.5 should be newer then 0.4.4");
         assertFalse(PluginVersion.v0_4_3.isNewerThen(PluginVersion.v0_4_3), "0.4.3 shouldn't be newer then 0.4.4");
     }
 
@@ -40,12 +42,14 @@ public class PluginVersionTest {
     public void getVersionNumber(){
         assertEquals(43, PluginVersion.v0_4_3.getVersionNumber(), "PluginVersion.v0_4_3 its version number should equal to 43");
         assertEquals(44, PluginVersion.v0_4_4.getVersionNumber(), "PluginVersion.v0_4_4 its version number should equal to 44");
+        assertEquals(45, PluginVersion.v0_4_5.getVersionNumber(), "PluginVersion.v0_4_5 its version number should equal to 44");
     }
 
     @Test
     public void getVersionString(){
         assertEquals("0.4.3", PluginVersion.v0_4_3.getVersionString(), "PluginVersion.v0_4_3 its version string should equal to 0.4.3");
         assertEquals("0.4.4", PluginVersion.v0_4_4.getVersionString(), "PluginVersion.v0_4_4 its version string should equal to 0.4.4");
+        assertEquals("0.4.5", PluginVersion.v0_4_5.getVersionString(), "PluginVersion.v0_4_5 its version string should equal to 0.4.5");
     }
 
 }
