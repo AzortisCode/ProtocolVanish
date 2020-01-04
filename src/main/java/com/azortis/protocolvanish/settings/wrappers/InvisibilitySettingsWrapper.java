@@ -16,7 +16,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.settings;
+package com.azortis.protocolvanish.settings.wrappers;
+
+import com.azortis.protocolvanish.settings.SettingsManager;
+import com.azortis.protocolvanish.settings.SettingsWrapper;
 
 @SuppressWarnings("all")
 public class InvisibilitySettingsWrapper extends SettingsWrapper {
@@ -63,6 +66,38 @@ public class InvisibilitySettingsWrapper extends SettingsWrapper {
 
     public void setDisableItemPickup(boolean disableItemPickup) {
         setBoolean("disableItemPickup", disableItemPickup, null);
+    }
+
+    public boolean getSleepingIgnored(){
+        return getBoolean("sleepingIgnored", null);
+    }
+
+    public void setSleepingIgnored(boolean sleepingIgnored){
+        setBoolean("sleepingIgnored", sleepingIgnored, null);
+    }
+
+    public boolean getSwitchGameMode(){
+        return getBoolean("switchGameMode", null);
+    }
+
+    public void setSwitchGameMode(boolean switchGameMode){
+        setBoolean("switchGameMode", switchGameMode, null);
+    }
+
+    public boolean getAllowFlight(){
+        return getBoolean("allowFlight", null);
+    }
+
+    public void setAllowFlight(boolean allowFlight){
+        setBoolean("allowFlight", allowFlight, null);
+    }
+
+    public boolean getKeepFlight(){
+        return getBoolean("keepFlight", null);
+    }
+
+    public void setKeepFlight(boolean keepFlight){
+        setBoolean("keepFlight", keepFlight, null);
     }
 
 }

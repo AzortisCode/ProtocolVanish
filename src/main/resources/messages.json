@@ -21,7 +21,8 @@
     "enabledCreatureTarget": "&aYou've enabled creature target.",
     "disabledCreatureTarget": "&aYou've disabled creature target.",
     "enabledItemPickup": "&aYou've enabled item pickup.",
-    "disabledItemPickup": "&aYou've disabled item pickup."
+    "disabledItemPickup": "&aYou've disabled item pickup.",
+    "gameModeSwitched": "&aYou're gamemode has been switched to %player_gamemode%."
   },
-  "fileVersion": "1"
+  "fileVersion": "2"
 }

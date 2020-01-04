@@ -4,7 +4,11 @@
     "disableDamage": true,
     "disableHunger": true,
     "disableCreatureTarget": true,
-    "disableItemPickup": true
+    "disableItemPickup": true,
+    "sleepingIgnored": true,
+    "switchGameMode": true,
+    "allowFlight": true,
+    "keepFlight": false
   },
   "messageSettings": {
     "broadCastFakeQuitOnVanish": true,
@@ -80,5 +84,5 @@
       }
     }
   },
-  "fileVersion": "1"
+  "fileVersion": "2"
 }

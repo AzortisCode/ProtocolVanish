@@ -136,7 +136,7 @@ public class SettingsWrapper {
             if(parent != null)this.parent = parent;
         }
 
-        protected SettingsSection getSubSection(String path){
+        public SettingsSection getSubSection(String path){
             return new SettingsSection(path, sectionMap, this);
         }
 

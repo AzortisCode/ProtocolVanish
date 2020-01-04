@@ -18,10 +18,11 @@
 
 package com.azortis.protocolvanish.visibility;
 
+import com.azortis.protocolvanish.PermissionManager;
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.azortis.protocolvanish.VanishPlayer;
-import com.azortis.protocolvanish.settings.InvisibilitySettingsWrapper;
-import com.azortis.protocolvanish.settings.MessageSettingsWrapper;
+import com.azortis.protocolvanish.settings.wrappers.InvisibilitySettingsWrapper;
+import com.azortis.protocolvanish.settings.wrappers.MessageSettingsWrapper;
 import com.azortis.protocolvanish.utils.ReflectionUtils;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -63,6 +64,12 @@ public class VisibilityChanger {
                 if (mob.getTarget() == hider) mob.setTarget(null);
             }
         }
+        if(invisibilitySettings.getAllowFlight() && plugin.getPermissionManager().hasPermission(hider, PermissionManager.Permission.FLY)){
+            hider.setAllowFlight(true);
+        }
+        if(invisibilitySettings.getSleepingIgnored()){
+            hider.setSleepingIgnored(true);
+        }
         for (Player viewer : Bukkit.getOnlinePlayers()) {
             if (plugin.getVisibilityManager().setVanished(hider, viewer, true)) {
                 sendPlayerInfoPacket(viewer, hider, true);
@@ -84,6 +91,12 @@ public class VisibilityChanger {
         if (vanishPlayer == null) return;
         hider.setMetadata("vanished", new FixedMetadataValue(plugin, false));
         if (vanishPlayer.getPlayerSettings().doNightVision()) hider.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        if(!invisibilitySettings.getKeepFlight() && hider.getGameMode() != GameMode.CREATIVE && !plugin.getPermissionManager().hasPermission(hider, PermissionManager.Permission.KEEP_FLY)){
+            hider.setAllowFlight(false);
+        }
+        if(invisibilitySettings.getSleepingIgnored()){
+            hider.setSleepingIgnored(false);
+        }
         for (Player viewer : Bukkit.getOnlinePlayers()) {
             if (plugin.getVisibilityManager().setVanished(hider, viewer, false)) {
                 viewer.showPlayer(plugin, hider);

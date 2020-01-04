@@ -16,7 +16,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.settings;
+package com.azortis.protocolvanish.settings.wrappers;
+
+import com.azortis.protocolvanish.settings.SettingsManager;
+import com.azortis.protocolvanish.settings.SettingsWrapper;
 
 import java.util.Map;
 

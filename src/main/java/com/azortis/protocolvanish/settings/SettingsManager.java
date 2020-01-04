@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.settings;
 
 import com.azortis.protocolvanish.ProtocolVanish;
+import com.azortis.protocolvanish.settings.wrappers.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;

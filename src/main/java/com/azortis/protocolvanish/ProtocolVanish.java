@@ -24,12 +24,20 @@ import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.storage.StorageManager;
 import com.azortis.protocolvanish.visibility.VisibilityManager;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -76,6 +84,7 @@ public final class ProtocolVanish extends JavaPlugin {
         new FoodLevelChangeListener(this);
         new EntityTargetLivingEntityListener(this);
         new EntityPickupItemListener(this);
+        new PlayerToggleSneakListener(this);
 
         VanishAPI.setPlugin(this);
     }
@@ -167,6 +176,18 @@ public final class ProtocolVanish extends JavaPlugin {
     public void sendPlayerMessage(Player receiver, Player placeholderPlayer,  String messagePath){
         String rawMessage = settingsManager.getMessageSettings().getMessage(messagePath);
         String message = PlaceholderAPI.setPlaceholders(placeholderPlayer, rawMessage);
+        if(message.startsWith("[JSON]")){
+            try {
+                String jsonString = message.replace("[JSON]", "").trim();
+                WrappedChatComponent chatComponent = WrappedChatComponent.fromJson(jsonString);
+                PacketContainer packet = new PacketContainer(PacketType.Play.Server.CHAT);
+                packet.getChatTypes().write(0, EnumWrappers.ChatType.CHAT);
+                packet.getChatComponents().write(0, chatComponent);
+                ProtocolLibrary.getProtocolManager().sendServerPacket(receiver, packet);
+            }catch (InvocationTargetException ex){
+                ex.printStackTrace();
+            }
+        }
         receiver.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
