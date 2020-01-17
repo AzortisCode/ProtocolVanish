@@ -20,7 +20,6 @@ package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -36,7 +35,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
     private final ProtocolVanish plugin;
 
     public GeneralEntityPacketListener(ProtocolVanish plugin) {
-        super(plugin, ListenerPriority.HIGH, PacketType.Play.Server.NAMED_ENTITY_SPAWN,
+        super(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.NAMED_ENTITY_SPAWN,
                 PacketType.Play.Server.ENTITY_DESTROY, PacketType.Play.Server.ANIMATION,
                 PacketType.Play.Server.BLOCK_BREAK_ANIMATION, PacketType.Play.Server.ENTITY_STATUS,
                 PacketType.Play.Server.ENTITY, PacketType.Play.Server.REL_ENTITY_MOVE,
