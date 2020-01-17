@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.azortis</groupId>
   <artifactId>protocolvanish</artifactId>
-  <version>0.4.5-SNAPSHOT</version>
+  <version>0.5-SNAPSHOT</version>
   <build>
     <finalName>ProtocolVanish</finalName>
     <plugins>
@@ -119,34 +119,6 @@
       <artifactId>brigadier</artifactId>
       <version>1.0.17</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.md-5</groupId>
-      <artifactId>bungeecord-api</artifactId>
-      <version>1.14-SNAPSHOT</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>bungeecord-config</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-event</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-protocol</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>net.md-5</groupId>

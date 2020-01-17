@@ -77,10 +77,10 @@ public class VisibilityChanger {
                 viewer.hidePlayer(plugin, hider);
                 if (messageSettings.getBroadCastFakeQuitOnVanish())
                     plugin.sendPlayerMessage(viewer, hider,"vanishMessage");
+                break;
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
                 plugin.sendPlayerMessage(viewer, hider,"vanishMessageWithPerm");
-            }
-            if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
+            } else if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers() && messageSettings.getBroadCastFakeQuitOnVanish())
                 plugin.sendPlayerMessage(viewer, hider, "vanishMessage");
         }
     }
@@ -104,10 +104,10 @@ public class VisibilityChanger {
                 sendSpawnPlayerPacket(viewer, hider);
                 if (messageSettings.getBroadCastFakeJoinOnReappear())
                     plugin.sendPlayerMessage(viewer, hider,"reappearMessage");
+                break;
             } else if (messageSettings.getAnnounceVanishStateToAdmins() && viewer != hider) {
                 plugin.sendPlayerMessage(viewer, hider,"reappearMessageWithPerm");
-            }
-            if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers())
+            } else if (!messageSettings.getSendFakeJoinQuitMessagesOnlyToUsers()  && messageSettings.getBroadCastFakeQuitOnVanish())
                 plugin.sendPlayerMessage(viewer, hider,"reappearMessage");
         }
     }

@@ -46,4 +46,8 @@ public class PlayerVanishEvent extends PlayerEvent implements Cancellable {
     public HandlerList getHandlers() {
         return handlerList;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
 }

@@ -192,7 +192,7 @@ public class VisibilityManager {
      * @param world    The {@link World} the player is in.
      * @return The player instance, null if not found.
      */
-    public Player getPlayerFromEntityID(int entityId, World world) {
+    public Player getPlayerFromEntityId(int entityId, World world) {
         Entity entity = ProtocolLibrary.getProtocolManager().getEntityFromID(world, entityId);
 
         if (entity instanceof Player) {

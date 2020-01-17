@@ -20,6 +20,7 @@ package com.azortis.protocolvanish.visibility.packetlisteners;
 
 import com.azortis.protocolvanish.ProtocolVanish;
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -62,7 +63,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                 int[] entityIds = packet.getIntegerArrays().read(0);
                 List<Integer> entityIdList = new ArrayList<>();
                 for (int entityId : entityIds){
-                    Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, receiver.getWorld());
+                    Player player = plugin.getVisibilityManager().getPlayerFromEntityId(entityId, receiver.getWorld());
                     if(player == null){
                         entityIdList.add(entityId);
                         break;
@@ -91,7 +92,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                 if (packet.getType() == PacketType.Play.Server.COLLECT) entityId =
                         packet.getIntegers().read(1);
                 else entityId = packet.getIntegers().read(0);
-                Player player = plugin.getVisibilityManager().getPlayerFromEntityID(entityId, receiver.getWorld());
+                Player player = plugin.getVisibilityManager().getPlayerFromEntityId(entityId, receiver.getWorld());
                 if (player != null
                         && plugin.getVisibilityManager().isVanished(player.getUniqueId())
                         && plugin.getVisibilityManager().isVanishedFrom(player, receiver))

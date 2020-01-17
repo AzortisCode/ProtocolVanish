@@ -46,4 +46,9 @@ public class PlayerReappearEvent extends PlayerEvent implements Cancellable {
     public HandlerList getHandlers() {
         return handlerList;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
+
 }
