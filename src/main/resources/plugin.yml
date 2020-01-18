@@ -4,3 +4,4 @@ main: com.azortis.protocolvanish.ProtocolVanish
 version: 0.5
 api-version: 1.13
 depend: [ProtocolLib, PlaceholderAPI]
+softdepend: [Dynmap]

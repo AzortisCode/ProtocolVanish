@@ -37,6 +37,14 @@
       "adjustOnlinePlayerList": true
     }
   },
+  "hookSettings": {
+    "dynmapHook": {
+      "enabled": true,
+      "broadCastFakeQuitOnVanish": true,
+      "broadCastFakeJoinOnReappear": true,
+      "hideVanishPlayersOnMap": true
+    }
+  },
   "commandSettings": {
     "name": "vanish",
     "description": "Vanish yourself from other players!",

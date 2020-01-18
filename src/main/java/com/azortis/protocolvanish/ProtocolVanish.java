@@ -20,6 +20,7 @@ package com.azortis.protocolvanish;
 
 import com.azortis.protocolvanish.api.VanishAPI;
 import com.azortis.protocolvanish.command.VanishCommand;
+import com.azortis.protocolvanish.hooks.HookManager;
 import com.azortis.protocolvanish.listeners.*;
 import com.azortis.protocolvanish.settings.SettingsManager;
 import com.azortis.protocolvanish.storage.StorageManager;
@@ -46,6 +47,7 @@ public final class ProtocolVanish extends JavaPlugin {
     private PermissionManager permissionManager;
     private VisibilityManager visibilityManager;
     private StorageManager storageManager;
+    private HookManager hookManager;
     private UpdateChecker updateChecker;
 
     private VanishCommand vanishCommand;
@@ -72,6 +74,7 @@ public final class ProtocolVanish extends JavaPlugin {
         this.storageManager = new StorageManager(this);
         this.permissionManager = new PermissionManager(this);
         this.visibilityManager = new VisibilityManager(this);
+        this.hookManager = new HookManager(this);
         this.vanishCommand = new VanishCommand(this);
 
         this.getLogger().info("Registering events...");
@@ -109,6 +112,10 @@ public final class ProtocolVanish extends JavaPlugin {
 
     public StorageManager getStorageManager() {
         return storageManager;
+    }
+
+    public HookManager getHookManager() {
+        return hookManager;
     }
 
     public VanishCommand getVanishCommand() {

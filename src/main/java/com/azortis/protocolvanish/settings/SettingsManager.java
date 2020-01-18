@@ -141,6 +141,10 @@ public class SettingsManager {
         return new CommandSettingsWrapper(this, settingsMap.get("commandSettings"));
     }
 
+    public HookSettingsWrapper getHookSettings(){
+        return new HookSettingsWrapper(this, settingsMap.get("hookSettings"));
+    }
+
     /*public StorageSettingsWrapper getStorageSettings(){
         return new StorageSettingsWrapper(this, settingsMap.get("StorageSettings"));
     }*/

@@ -90,6 +90,13 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.dynmap</groupId>
+            <artifactId>Dynmap</artifactId>
+            <scope>system</scope>
+            <systemPath>${basedir}/dependencies/Dynmap.jar</systemPath>
+            <version>latest</version>
+        </dependency>
     </dependencies>
 
     <build>

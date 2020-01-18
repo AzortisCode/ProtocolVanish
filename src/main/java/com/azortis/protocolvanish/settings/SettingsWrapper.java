@@ -34,12 +34,12 @@ public class SettingsWrapper {
         this.settingsPath = settingsPath;
     }
 
-    protected String getString(String path, SettingsSection section) {
+    public String getString(String path, SettingsSection section) {
         if (section != null) return (String) section.sectionMap.get(path);
         return (String) settingsMap.get(path);
     }
 
-    protected void setString(String path, String value, SettingsSection section) {
+    public void setString(String path, String value, SettingsSection section) {
         if (section != null) {
             section.sectionMap.remove(path);
             section.sectionMap.put(path, value);
@@ -82,12 +82,12 @@ public class SettingsWrapper {
         settingsMap.put(path, value);
     }
 
-    protected List<?> getList(String path, SettingsSection section) {
+    public List<?> getList(String path, SettingsSection section) {
         if (section != null) return (List<?>) section.sectionMap.get(path);
         return (List<?>) settingsMap.get(path);
     }
 
-    protected void setList(String path, List<?> value, SettingsSection section) {
+    public void setList(String path, List<?> value, SettingsSection section) {
         if (section != null) {
             section.sectionMap.remove(path);
             section.sectionMap.put(path, value);
@@ -98,12 +98,12 @@ public class SettingsWrapper {
         settingsMap.put(path, value);
     }
 
-    protected List<String> getStringList(String path, SettingsSection section) {
+    public List<String> getStringList(String path, SettingsSection section) {
         if (section != null) return (List<String>) section.sectionMap.get(path);
         return (List<String>) settingsMap.get(path);
     }
 
-    protected void setStringList(String path, List<String> value, SettingsSection section) {
+    public void setStringList(String path, List<String> value, SettingsSection section) {
         if (section != null) {
             section.sectionMap.remove(path);
             section.sectionMap.put(path, value);
@@ -114,7 +114,7 @@ public class SettingsWrapper {
         settingsMap.put(path, value);
     }
 
-    protected SettingsSection getSection(String path) {
+    public SettingsSection getSection(String path) {
         return new SettingsSection(path, settingsMap, null);
     }
 
@@ -124,7 +124,7 @@ public class SettingsWrapper {
         parrentSettingsMap.put(settingsPath, settingsMap);
     }
 
-    protected class SettingsSection {
+    public class SettingsSection {
 
         private String path;
         private Map<String, Object> sectionMap;

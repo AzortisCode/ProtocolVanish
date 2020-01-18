@@ -22,7 +22,9 @@
     "disabledCreatureTarget": "&aYou've disabled creature target.",
     "enabledItemPickup": "&aYou've enabled item pickup.",
     "disabledItemPickup": "&aYou've disabled item pickup.",
-    "gameModeSwitched": "&aYou're gamemode has been switched to %player_gamemode%."
+    "gameModeSwitched": "&aYou're gamemode has been switched to %player_gamemode%.",
+    "dynmapVanishMessage": "&e%player_name% has left the game",
+    "dynmapReappearMessage": "&e%player_name% joined the game"
   },
   "fileVersion": "2"
 }
