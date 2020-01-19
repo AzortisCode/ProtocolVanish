@@ -26,17 +26,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PlayerToggleSneakListener implements Listener {
 
     private ProtocolVanish plugin;
-    private List<Player> pastSneaks = new ArrayList<>();
+    private Map<Player, Long> sneakTimer = new HashMap<>();
     private Map<Player, GameMode> pastGameModeMap = new HashMap<>();
 
     public PlayerToggleSneakListener(ProtocolVanish plugin){
@@ -46,29 +45,29 @@ public class PlayerToggleSneakListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event){
-        if(!event.isCancelled()){
+        if(!event.isCancelled() && event.isSneaking()){
             Player player = event.getPlayer();
             if(plugin.getVisibilityManager().isVanished(player) && plugin.getSettingsManager().getInvisibilitySettings().getSwitchGameMode()){
                 if(!pastGameModeMap.containsKey(player)) {
-                    if (pastSneaks.contains(player)) {
-                        pastSneaks.remove(player);
+                    if (sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) > -1500L) {
+                        sneakTimer.remove(player);
                         pastGameModeMap.put(player, player.getGameMode());
                         player.setGameMode(GameMode.SPECTATOR);
                         plugin.sendPlayerMessage(player, player, "gameModeSwitched");
                     } else if (player.getGameMode() != GameMode.SPECTATOR) {
-                        pastSneaks.add(player);
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pastSneaks.remove(player), 30L);
-                    }
+                        sneakTimer.put(player, System.currentTimeMillis());
+                    } else sneakTimer.remove(player);
                 }else{
-                    if(pastSneaks.contains(player)){
-                        pastSneaks.remove(player);
+                    if(sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) > -1500L){
+                        sneakTimer.remove(player);
                         player.setGameMode(pastGameModeMap.get(player));
                         plugin.sendPlayerMessage(player, player, "gameModeSwitched");
                     } else if (player.getGameMode() == GameMode.SPECTATOR){
-                        pastSneaks.add(player);
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pastSneaks.remove(player), 30L);
-                    }else {
-                        pastGameModeMap.remove(player); // Because they are no longer switching between the two game modes.
+                        sneakTimer.put(player, System.currentTimeMillis());
+                    } else if(sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) < -1500L){
+                        sneakTimer.remove(player);
+                    } else {
+                        pastGameModeMap.remove(player);
                     }
                 }
             } else if(!plugin.getVisibilityManager().isVanished(player)){
@@ -85,6 +84,17 @@ public class PlayerToggleSneakListener implements Listener {
                 player.setGameMode(pastGameModeMap.get(player));
             }
             pastGameModeMap.remove(player);
+            sneakTimer.remove(player);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event){
+        Player player = event.getPlayer();
+        if(pastGameModeMap.containsKey(player)){
+            player.setGameMode(pastGameModeMap.get(player));
+            pastGameModeMap.remove(player);
+            sneakTimer.remove(player);
         }
     }
 
