@@ -148,6 +148,25 @@ public class VisibilityManager {
         return false;
     }
 
+    public boolean isVanishedFrom(int entityId, World world, Player viewer){
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if(player.getEntityId() == entityId && player.getWorld() == world){
+                return isVanishedFrom(player, viewer);
+            }
+        }
+        return false;
+    }
+
+    public boolean isVanishedFrom(String hiderName, Player viewer){
+        if(viewer.getName().equals(hiderName))return false;
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if(player.getName().equals(hiderName)){
+                return isVanishedFrom(player, viewer);
+            }
+        }
+        return false;
+    }
+
     /**
      * Clears a {@link Player} from the vanishedFrom map
      *

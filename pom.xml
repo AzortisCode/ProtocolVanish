@@ -56,7 +56,7 @@
         <dependency>
             <groupId>com.azortis</groupId>
             <artifactId>azortislib</artifactId>
-            <version>0.4.3-SNAPSHOT</version>
+            <version>0.4.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

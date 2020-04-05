@@ -25,8 +25,6 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class TabCompletePacketListener extends PacketAdapter {
 
@@ -41,16 +39,17 @@ public class TabCompletePacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("TabComplete")) {
             Suggestions suggestions = event.getPacket().getSpecificModifier(Suggestions.class).read(0);
-            suggestions.getList().removeIf((Suggestion suggestion) -> {
-                if (!suggestion.getText().contains("/")) {
-                    Player player = Bukkit.getPlayer(suggestion.getText());
-                    if (player != null && plugin.getVisibilityManager().getVanishedPlayers().contains(player.getUniqueId())) {
-                        return plugin.getVisibilityManager().isVanishedFrom(player, event.getPlayer());
-                    }
+            boolean writeChanges = false;
+            for (Suggestion suggestion : suggestions.getList()){
+                String suggestionString = suggestion.getText();
+                if(!suggestionString.contains("/") && plugin.getVisibilityManager().isVanishedFrom(suggestionString, event.getPlayer())){
+                    writeChanges = true;
+                    suggestions.getList().remove(suggestion);
                 }
-                return false;
-            });
-            event.getPacket().getSpecificModifier(Suggestions.class).write(0, suggestions);
+            }
+            if(writeChanges) {
+                event.getPacket().getSpecificModifier(Suggestions.class).write(0, suggestions);
+            }
         }
     }
 }

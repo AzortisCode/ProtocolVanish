@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-@SuppressWarnings("all")
 public class GeneralEntityPacketListener extends PacketAdapter {
 
     private final ProtocolVanish plugin;
@@ -61,23 +60,11 @@ public class GeneralEntityPacketListener extends PacketAdapter {
             } else if (packet.getType() == PacketType.Play.Server.ENTITY_DESTROY) {
                 int[] entityIds = packet.getIntegerArrays().read(0);
                 List<Integer> entityIdList = new ArrayList<>();
-                for (int entityId : entityIds){
-                    Player player = plugin.getVisibilityManager().getPlayerFromEntityId(entityId, receiver.getWorld());
-                    if(player == null){
+                for (int entityId : entityIds) {
+                    if(!plugin.getVisibilityManager().isVanishedFrom(entityId, receiver.getWorld(), receiver)){
                         entityIdList.add(entityId);
-                        break;
-                    }
-                    else if (!plugin.getVisibilityManager().isVanished(player.getUniqueId())){
-                        entityIdList.add(entityId);
-                        break;
-                    }
-                    else if(plugin.getVisibilityManager().isVanished(player.getUniqueId())
-                            && !plugin.getVisibilityManager().isVanishedFrom(player, receiver)){
-                        entityIdList.add(entityId);
-                        break;
-                    }
-                    else if (plugin.getVisibilityManager().bypassFilter(receiver.getUniqueId(), player.getUniqueId(), "entityDestroy")){
-                        plugin.getVisibilityManager().removePacketFromBypassFilterList(receiver.getUniqueId(), player.getUniqueId(), "entityDestroy");
+                    }else if(plugin.getVisibilityManager().bypassFilter(receiver.getUniqueId(),
+                            plugin.getVisibilityManager().getPlayerFromEntityId(entityId, receiver.getWorld()).getUniqueId(), "entityDestroy")){
                         entityIdList.add(entityId);
                     }
                 }

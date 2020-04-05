@@ -49,7 +49,7 @@ public class PlayerToggleSneakListener implements Listener {
             Player player = event.getPlayer();
             if(plugin.getVisibilityManager().isVanished(player) && plugin.getSettingsManager().getInvisibilitySettings().getSwitchGameMode()){
                 if(!pastGameModeMap.containsKey(player)) {
-                    if (sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) > -1500L) {
+                    if (sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) > -500L) {
                         sneakTimer.remove(player);
                         pastGameModeMap.put(player, player.getGameMode());
                         player.setGameMode(GameMode.SPECTATOR);
@@ -58,13 +58,13 @@ public class PlayerToggleSneakListener implements Listener {
                         sneakTimer.put(player, System.currentTimeMillis());
                     } else sneakTimer.remove(player);
                 }else{
-                    if(sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) > -1500L){
+                    if(sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) > -500L){
                         sneakTimer.remove(player);
                         player.setGameMode(pastGameModeMap.get(player));
                         plugin.sendPlayerMessage(player, player, "gameModeSwitched");
                     } else if (player.getGameMode() == GameMode.SPECTATOR){
                         sneakTimer.put(player, System.currentTimeMillis());
-                    } else if(sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) < -1500L){
+                    } else if(sneakTimer.containsKey(player) && (sneakTimer.get(player) - System.currentTimeMillis()) < -500L){
                         sneakTimer.remove(player);
                     } else {
                         pastGameModeMap.remove(player);

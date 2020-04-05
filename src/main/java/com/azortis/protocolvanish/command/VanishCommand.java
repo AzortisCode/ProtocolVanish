@@ -78,7 +78,7 @@ public class VanishCommand implements ICommandExecutor, ITabCompleter {
                                 .setExecutor(new ToggleItemPickupSub(plugin))
                                 .addAliases(commandSettings.getSubCommandAliases("toggleItemPickup"))
                 ).build();
-        CommandInjector.injectCommand("protocolvanish", command);
+        CommandInjector.injectCommand("protocolvanish", command, false);
         String[] subCommands = new String[]{"toggleNightVision", "toggleDamage", "toggleHunger", "toggleCreatureTarget", "toggleItemPickup"};
         for (String subCommand : subCommands) {
             if (commandSettings.isSubCommandEnabled(subCommand)) this.enabledSubCommands.add(subCommand);
