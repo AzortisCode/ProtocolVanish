@@ -57,7 +57,7 @@
     "subCommands": {
       "toggleNightVision": {
         "enabled": true,
-        "name": "toggleNightvision",
+        "name": "toggleNightVision",
         "aliases": [
           "tnv"
         ]
@@ -78,7 +78,7 @@
       },
       "toggleCreatureTarget": {
         "enabled": true,
-        "name": "toggleCreaturetarget",
+        "name": "toggleCreatureTarget",
         "aliases": [
           "tct"
         ]

@@ -1,0 +1,4 @@
+name: ProtocolVanish
+author: YourPalJake
+main: com.azortis.protocolvanish.bungee.ProtocolVanishProxy
+version: 0.6
