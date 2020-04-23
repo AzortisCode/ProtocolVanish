@@ -57,7 +57,7 @@ public class PermissionManager {
         KEEP_FLY("fly.keep"),
         ADMIN("admin");
 
-        private String permissionNode;
+        private final String permissionNode;
 
         Permission(String permissionNode) {
             this.permissionNode = permissionNode;
@@ -76,7 +76,7 @@ public class PermissionManager {
                     return 1;
                 return level;
             }
-            return 1;
+            return 0;
         }
     }
 

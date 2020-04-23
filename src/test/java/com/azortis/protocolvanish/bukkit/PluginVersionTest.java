@@ -18,6 +18,7 @@
 
 package com.azortis.protocolvanish.bukkit;
 
+import com.azortis.protocolvanish.common.PluginVersion;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -35,7 +35,7 @@ import org.dynmap.bukkit.DynmapPlugin;
 
 public class DynmapHook implements PluginHook, Listener {
 
-    private ProtocolVanish plugin;
+    private transient final ProtocolVanish plugin;
     private boolean enabled;
 
     public DynmapHook(ProtocolVanish plugin){

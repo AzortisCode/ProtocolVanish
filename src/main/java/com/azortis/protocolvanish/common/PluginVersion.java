@@ -16,25 +16,27 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit;
+package com.azortis.protocolvanish.common;
 
 public enum PluginVersion {
-    v0_4_3("0.4.3", 43, "1", "1"),
-    v0_4_4("0.4.4", 44, "1", "1"),
-    v0_4_5("0.4.5", 45, "1", "1"),
-    v0_5("0.5", 50, "2", "2"),
-    v0_6("0.6", 60, "2", "2");
+    v0_4_3("0.4.3", 43, "1", "1", "0"),
+    v0_4_4("0.4.4", 44, "1", "1", "0"),
+    v0_4_5("0.4.5", 45, "1", "1", "0"),
+    v0_5("0.5", 50, "2", "2", "0"),
+    v1_0("1.0", 100, "3", "3", "1");
 
-    private String versionString;
-    private int versionNumber;
-    private String settingsFileVersion;
-    private String messageFileVersion;
+    private final String versionString;
+    private final int versionNumber;
+    private final String settingsFileVersion;
+    private final String messageFileVersion;
+    private final String proxySettingsFileVersion;
 
-    PluginVersion(String versionString, int versionNumber, String settingsFileVersion, String messageFileVersion){
+    PluginVersion(String versionString, int versionNumber, String settingsFileVersion, String messageFileVersion, String proxySettingsFileVersion){
         this.versionString = versionString;
         this.versionNumber = versionNumber;
         this.settingsFileVersion = settingsFileVersion;
         this.messageFileVersion = messageFileVersion;
+        this.proxySettingsFileVersion = proxySettingsFileVersion;
     }
 
     public boolean isNewerThen(PluginVersion pluginVersion){
@@ -59,6 +61,10 @@ public enum PluginVersion {
 
     public String getMessageFileVersion() {
         return messageFileVersion;
+    }
+
+    public String getProxySettingsFileVersion() {
+        return proxySettingsFileVersion;
     }
 
     public static PluginVersion getVersionFromString(String versionString){

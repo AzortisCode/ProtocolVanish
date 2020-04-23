@@ -1,1 +1,10 @@
-{}
+{
+  "storageSettings": {
+    "driver": "MariaDB",
+    "address": "127.0.0.1:3306",
+    "database": "",
+    "username": "",
+    "password": "",
+    "tablePrefix": "protocolvanish_"
+  }
+}

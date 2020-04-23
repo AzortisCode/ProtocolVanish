@@ -18,5 +18,35 @@
 
 package com.azortis.protocolvanish.bungee;
 
-public class ProtocolVanishProxy {
+import com.azortis.protocolvanish.common.PluginVersion;
+import com.azortis.protocolvanish.common.UpdateChecker;
+import net.md_5.bungee.api.plugin.Plugin;
+
+public final class ProtocolVanishProxy extends Plugin {
+
+    private PluginVersion pluginVersion;
+    private UpdateChecker updateChecker;
+
+    @Override
+    public void onEnable() {
+        this.pluginVersion = PluginVersion.getVersionFromString(this.getDescription().getVersion());
+        UpdateChecker updateChecker = new UpdateChecker(pluginVersion);
+        if(updateChecker.hasFailed()){
+            getLogger().severe("Failed to check for updates!");
+        }else if (updateChecker.isUpdateAvailable()){
+            getLogger().info("A new version(v" + updateChecker.getSpigotVersion().getVersionString() + ") is available on spigot!");
+            getLogger().info("You can download it here: https://www.spigotmc.org/resources/77011/");;
+        }else if(updateChecker.isUnreleased()){
+            getLogger().warning("You're using an unreleased version(v" + pluginVersion.getVersionString() + "). Please proceed with caution.");
+        }
+
+    }
+
+    public PluginVersion getPluginVersion() {
+        return pluginVersion;
+    }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
+    }
 }

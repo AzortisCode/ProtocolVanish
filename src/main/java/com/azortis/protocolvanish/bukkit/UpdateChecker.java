@@ -18,6 +18,7 @@
 
 package com.azortis.protocolvanish.bukkit;
 
+import com.azortis.protocolvanish.common.PluginVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
