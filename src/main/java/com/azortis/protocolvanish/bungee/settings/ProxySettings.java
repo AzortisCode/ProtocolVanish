@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bungee;
+package com.azortis.protocolvanish.bungee.settings;
 
 import com.azortis.protocolvanish.common.messaging.MessagingSettings;
 import com.azortis.protocolvanish.common.storage.StorageSettings;
@@ -31,6 +31,7 @@ public class ProxySettings implements Serializable {
 
     private StorageSettings storageSettings;
     private MessagingSettings messagingSettings;
+    private String fileVersion;
 
     public StorageSettings getStorageSettings() {
         return storageSettings;
@@ -38,6 +39,10 @@ public class ProxySettings implements Serializable {
 
     public MessagingSettings getMessagingSettings() {
         return messagingSettings;
+    }
+
+    public String getFileVersion() {
+        return fileVersion;
     }
 
     @Override

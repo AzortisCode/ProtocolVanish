@@ -22,32 +22,35 @@ import com.azortis.protocolvanish.common.messaging.MessagingService;
 import com.azortis.protocolvanish.common.messaging.message.Message;
 import com.azortis.protocolvanish.common.storage.Driver;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 public class SQLMessagingProvider implements MessagingProvider{
 
-    private final MessagingService service;
     private final Driver driver;
     private final Runnable runnable;
 
+    private final Collection<UUID> sendMessages = new ArrayList<>();
+    private final Collection<UUID> processedMessages = new ArrayList<>();
+
     public SQLMessagingProvider(MessagingService service, Driver driver){
-        this.service = service;
         this.driver = driver;
-        this.runnable = new SQLRunnable(service, driver);
+        this.runnable = new SQLRunnable(this, service, driver);
         createTable();
     }
 
     @Override
     public void postMessage(Message message) {
         try(Connection connection = driver.getConnection()){
-            PreparedStatement messageStatement = connection.prepareStatement("INSERT INTO " + driver.getTablePrefix() + "messages VALUES (?,?)");
+            PreparedStatement messageStatement = connection.prepareStatement("INSERT INTO " + driver.getTablePrefix() + "messages VALUES (?,?,?)");
             messageStatement.setString(1, message.getId().toString());
-            messageStatement.setString(1, message.getMessage());
+            messageStatement.setString(2, message.getMessage());
+            messageStatement.setLong(3, System.currentTimeMillis());
             messageStatement.executeUpdate();
             messageStatement.close();
+            sendMessages.add(message.getId());
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -60,24 +63,50 @@ public class SQLMessagingProvider implements MessagingProvider{
 
     private class SQLRunnable implements Runnable{
 
-        private MessagingService service;
-        private Driver driver;
+        private final SQLMessagingProvider parent;
+        private final MessagingService service;
+        private final Driver driver;
 
-        public SQLRunnable(MessagingService service, Driver driver) {
+        public SQLRunnable(SQLMessagingProvider parent, MessagingService service, Driver driver) {
+            this.parent = parent;
             this.service = service;
             this.driver = driver;
         }
 
         @Override
         public void run() {
-
+            try(Connection connection = driver.getConnection()){
+                Statement fetchStatement = connection.createStatement();
+                ResultSet resultSet = fetchStatement.executeQuery("SELECT * FROM " + driver.getTablePrefix() + "messages");
+                Collection<UUID> fetchedMessageIds = new ArrayList<>();
+                while(resultSet.next()){
+                    UUID messageId = UUID.fromString(resultSet.getString("id"));
+                    String message = resultSet.getString("message");
+                    long timeStamp = resultSet.getLong("timeStamp");
+                    if(!parent.sendMessages.contains(messageId)){
+                        if(!parent.processedMessages.contains(messageId)) {
+                            processedMessages.add(messageId);
+                            service.consumeMessage(message);
+                        }
+                        fetchedMessageIds.add(messageId);
+                    }else if((System.currentTimeMillis() - timeStamp) > 59000){
+                        PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM " + driver.getTablePrefix() + "messages WHERE id=?");
+                        deleteStatement.setString(1, messageId.toString());
+                        deleteStatement.executeUpdate();
+                        deleteStatement.close();
+                    }
+                }
+                processedMessages.removeIf(uuid -> !fetchedMessageIds.contains(uuid));
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
         }
     }
 
     private void createTable(){
         try(Connection connection = driver.getConnection()){
             Statement messagingStatement = connection.createStatement();
-            messagingStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + driver.getTablePrefix() + "messages(id varchar(36), message tinytext)");
+            messagingStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + driver.getTablePrefix() + "messages (id varchar(36), message tinytext, timeStamp bigint)");
             messagingStatement.close();
         }catch (SQLException ex){
             ex.printStackTrace();

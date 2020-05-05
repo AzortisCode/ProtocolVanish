@@ -24,6 +24,7 @@ import com.azortis.protocolvanish.common.storage.Driver;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.UUID;
 
 public class H2Driver implements Driver {
@@ -43,13 +44,18 @@ public class H2Driver implements Driver {
     }
 
     @Override
-    public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
+    public void deleteVanishPlayer(UUID uuid) {
 
     }
 
     @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
 
+    }
+
+    @Override
+    public Collection<UUID> getVanishedUUIDs() {
+        return null;
     }
 
     @Override

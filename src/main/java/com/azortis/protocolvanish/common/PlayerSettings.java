@@ -18,5 +18,17 @@
 
 package com.azortis.protocolvanish.common;
 
-public class PlayerSettings {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.Serializable;
+
+public class PlayerSettings implements Serializable {
+
+    private final transient Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+    @Override
+    public String toString() {
+        return gson.toJson(this);
+    }
 }

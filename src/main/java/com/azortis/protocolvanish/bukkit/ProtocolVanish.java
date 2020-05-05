@@ -52,7 +52,7 @@ public final class ProtocolVanish extends JavaPlugin {
 
     private VanishCommand vanishCommand;
 
-    private HashMap<UUID, VanishPlayer> vanishPlayerMap = new HashMap<>();
+    private final HashMap<UUID, VanishPlayer> vanishPlayerMap = new HashMap<>();
 
     @Override
     public void onEnable() {

@@ -28,6 +28,8 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.StringReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 public class MariaDBDriver implements Driver{
@@ -73,17 +75,59 @@ public class MariaDBDriver implements Driver{
 
     @Override
     public void saveVanishPlayer(VanishPlayer vanishPlayer) {
-
+        try(Connection connection = hikari.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + tablePrefix + "vanishPlayers SET vanished=?, playerSettings=? WHERE uuid=?");
+            preparedStatement.setBoolean(1, vanishPlayer.isVanished());
+            preparedStatement.setString(2, vanishPlayer.getPlayerSettings().toString());
+            preparedStatement.setString(3, vanishPlayer.getUUID().toString());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override
-    public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
-
+    public void deleteVanishPlayer(UUID uuid) {
+        try(Connection connection = hikari.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + tablePrefix + "vanishPlayers WHERE uuid=?");
+            preparedStatement.setString(1, uuid.toString());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
+        try(Connection connection = hikari.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + tablePrefix + "vanishPlayers VALUES (?,?,?)");
+            preparedStatement.setString(1, vanishPlayer.getUUID().toString());
+            preparedStatement.setBoolean(2, vanishPlayer.isVanished());
+            preparedStatement.setString(3, vanishPlayer.getPlayerSettings().toString());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
 
+    @Override
+    public Collection<UUID> getVanishedUUIDs() {
+        try(Connection connection = hikari.getConnection()){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("GET uuid FROM " + tablePrefix + "vanishPlayers WHERE vanished=true");
+            Collection<UUID> UUIDs = new ArrayList<>();
+            while(resultSet.next()){
+                UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                UUIDs.add(uuid);
+            }
+            return UUIDs;
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     private void createTables(){

@@ -23,7 +23,7 @@ import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
 
 import java.io.File;
 
-public abstract class DatabaseManager {
+public class DatabaseManager {
 
     private Driver driver;
 

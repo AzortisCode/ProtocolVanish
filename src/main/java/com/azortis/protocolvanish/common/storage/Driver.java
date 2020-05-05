@@ -22,6 +22,7 @@ import com.azortis.protocolvanish.common.VanishPlayer;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.UUID;
 
 public interface Driver {
@@ -30,9 +31,11 @@ public interface Driver {
 
     void saveVanishPlayer(VanishPlayer vanishPlayer);
 
-    void deleteVanishPlayer(VanishPlayer vanishPlayer);
+    void deleteVanishPlayer(UUID uuid);
 
     void createVanishPlayer(VanishPlayer vanishPlayer);
+
+    Collection<UUID> getVanishedUUIDs();
 
     Connection getConnection() throws SQLException;
 

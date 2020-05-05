@@ -32,7 +32,7 @@ public class VanishPlayer {
         this.playerSettings = playerSettings;
     }
 
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 

@@ -18,14 +18,18 @@
 
 package com.azortis.protocolvanish.bungee;
 
+import com.azortis.protocolvanish.bungee.settings.SettingsManager;
 import com.azortis.protocolvanish.common.PluginVersion;
 import com.azortis.protocolvanish.common.UpdateChecker;
+import com.azortis.protocolvanish.common.storage.DatabaseManager;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public final class ProtocolVanishProxy extends Plugin {
 
     private PluginVersion pluginVersion;
     private UpdateChecker updateChecker;
+    private SettingsManager settingsManager;
+    private DatabaseManager databaseManager;
 
     @Override
     public void onEnable() {
@@ -39,7 +43,8 @@ public final class ProtocolVanishProxy extends Plugin {
         }else if(updateChecker.isUnreleased()){
             getLogger().warning("You're using an unreleased version(v" + pluginVersion.getVersionString() + "). Please proceed with caution.");
         }
-
+        this.settingsManager = new SettingsManager(this);
+        this.databaseManager = new DatabaseManager(settingsManager.getProxySettings().getStorageSettings(), this.getDataFolder());
     }
 
     public PluginVersion getPluginVersion() {
@@ -50,6 +55,11 @@ public final class ProtocolVanishProxy extends Plugin {
         return updateChecker;
     }
 
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
+    }
 
-
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
 }
