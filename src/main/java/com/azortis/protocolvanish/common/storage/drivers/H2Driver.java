@@ -18,5 +18,47 @@
 
 package com.azortis.protocolvanish.common.storage.drivers;
 
-public class H2Driver {
+import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.storage.Driver;
+
+import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.UUID;
+
+public class H2Driver implements Driver {
+
+    public H2Driver(File dataFolder){
+
+    }
+
+    @Override
+    public VanishPlayer getVanishPlayer(UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public void saveVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void deleteVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public void createVanishPlayer(VanishPlayer vanishPlayer) {
+
+    }
+
+    @Override
+    public Connection getConnection() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public String getTablePrefix() {
+        return null;
+    }
 }

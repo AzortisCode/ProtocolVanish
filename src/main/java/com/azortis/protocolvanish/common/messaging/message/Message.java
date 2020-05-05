@@ -16,26 +16,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.common.messaging.message;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
-import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
+import java.util.UUID;
 
-import java.io.File;
+public interface Message {
 
-public abstract class DatabaseManager {
+    UUID getId();
 
-    private Driver driver;
+    String getMessage();
 
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
-        if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
-            driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            driver = new H2Driver(dataFolder);
-        }
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
 }

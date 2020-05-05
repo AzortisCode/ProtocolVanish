@@ -1,4 +1,23 @@
 {
+  "bungeeSettings": {
+    "enabled": false,
+    "messagingSettings": {
+      "messagingService": "SQL",
+      "redisSettings": {
+        "address": "127.0.0.1",
+        "port": 6379,
+        "password": ""
+      }
+    }
+  },
+  "storageSettings": {
+    "driver": "H2",
+    "address": "127.0.0.1:3306",
+    "database": "",
+    "username": "",
+    "password": "",
+    "tablePrefix": "protocolvanish_"
+  },
   "invisibilitySettings": {
     "nightVisionEffect": true,
     "disableDamage": true,
@@ -53,44 +72,7 @@
       "v",
       "pv",
       "protocolvanish"
-    ],
-    "subCommands": {
-      "toggleNightVision": {
-        "enabled": true,
-        "name": "toggleNightVision",
-        "aliases": [
-          "tnv"
-        ]
-      },
-      "toggleDamage": {
-        "enabled": true,
-        "name": "toggleDamage",
-        "aliases": [
-          "td"
-        ]
-      },
-      "toggleHunger": {
-        "enabled": true,
-        "name": "toggleHunger",
-        "aliases":[
-          "th"
-        ]
-      },
-      "toggleCreatureTarget": {
-        "enabled": true,
-        "name": "toggleCreatureTarget",
-        "aliases": [
-          "tct"
-        ]
-      },
-      "toggleItemPickup": {
-        "enabled": true,
-        "name": "toggleItemPickup",
-        "aliases": [
-          "tip"
-        ]
-      }
-    }
+    ]
   },
   "fileVersion": "2"
 }

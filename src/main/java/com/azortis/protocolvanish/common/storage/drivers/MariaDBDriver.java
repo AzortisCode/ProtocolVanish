@@ -89,11 +89,20 @@ public class MariaDBDriver implements Driver{
     private void createTables(){
         try(Connection connection = hikari.getConnection()){
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.executeUpdate("CREATE TABLE WHEN NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished BOOL, playerSettings varchar)");
+            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished BOOL, playerSettings varchar)");
             vanishPlayerStatement.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
     }
 
+    @Override
+    public Connection getConnection()throws SQLException {
+        return hikari.getConnection();
+    }
+
+    @Override
+    public String getTablePrefix() {
+        return tablePrefix;
+    }
 }

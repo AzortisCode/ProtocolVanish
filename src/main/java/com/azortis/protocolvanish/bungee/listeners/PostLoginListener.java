@@ -16,26 +16,21 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.bungee.listeners;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
-import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 
-import java.io.File;
+public class PostLoginListener implements Listener {
 
-public abstract class DatabaseManager {
+    @EventHandler
+    public void onPostLogin(PostLoginEvent event){
+        ProxiedPlayer player = event.getPlayer();
+        if(player.hasPermission("protocolvanish.use")){
 
-    private Driver driver;
-
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
-        if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
-            driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            driver = new H2Driver(dataFolder);
         }
     }
 
-    public Driver getDriver() {
-        return driver;
-    }
 }

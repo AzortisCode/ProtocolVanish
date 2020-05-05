@@ -16,26 +16,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.bungee;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
-import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
+import com.azortis.protocolvanish.common.storage.DatabaseManager;
+import com.azortis.protocolvanish.common.storage.StorageSettings;
 
-import java.io.File;
+public class StorageManager extends DatabaseManager {
 
-public abstract class DatabaseManager {
-
-    private Driver driver;
-
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
-        if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
-            driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            driver = new H2Driver(dataFolder);
-        }
-    }
-
-    public Driver getDriver() {
-        return driver;
+    public StorageManager(ProtocolVanishProxy plugin, StorageSettings storageSettings) {
+        super(storageSettings, plugin.getDataFolder());
     }
 }

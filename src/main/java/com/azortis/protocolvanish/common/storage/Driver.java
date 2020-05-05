@@ -20,6 +20,8 @@ package com.azortis.protocolvanish.common.storage;
 
 import com.azortis.protocolvanish.common.VanishPlayer;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public interface Driver {
@@ -31,4 +33,9 @@ public interface Driver {
     void deleteVanishPlayer(VanishPlayer vanishPlayer);
 
     void createVanishPlayer(VanishPlayer vanishPlayer);
+
+    Connection getConnection() throws SQLException;
+
+    String getTablePrefix();
+
 }

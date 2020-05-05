@@ -16,26 +16,30 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.common.messaging.message;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
-import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
+import java.util.UUID;
 
-import java.io.File;
+/**
+ * Should only be sent from BungeeCord.
+ */
+public class UnloadMessage implements Message{
 
-public abstract class DatabaseManager {
+    private final UUID id = UUID.randomUUID();
+    private String message = "unload %playerUUID%";
 
-    private Driver driver;
-
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
-        if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
-            driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            driver = new H2Driver(dataFolder);
-        }
+    public UnloadMessage(UUID playerUUID){
+        message = message.replaceAll("%playerUUID%", playerUUID.toString());
     }
 
-    public Driver getDriver() {
-        return driver;
+    @Override
+    public UUID getId() {
+        return id;
     }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
 }

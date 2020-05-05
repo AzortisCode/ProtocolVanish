@@ -16,26 +16,32 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.bungee;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
-import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
+import com.azortis.protocolvanish.common.messaging.MessagingSettings;
+import com.azortis.protocolvanish.common.storage.StorageSettings;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.io.File;
+import java.io.Serializable;
 
-public abstract class DatabaseManager {
+public class ProxySettings implements Serializable {
 
-    private Driver driver;
+    private final transient Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
-        if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
-            driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            driver = new H2Driver(dataFolder);
-        }
+    private StorageSettings storageSettings;
+    private MessagingSettings messagingSettings;
+
+    public StorageSettings getStorageSettings() {
+        return storageSettings;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public MessagingSettings getMessagingSettings() {
+        return messagingSettings;
+    }
+
+    @Override
+    public String toString() {
+        return gson.toJson(this);
     }
 }

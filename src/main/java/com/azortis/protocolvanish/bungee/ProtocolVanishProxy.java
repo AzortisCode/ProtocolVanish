@@ -49,4 +49,7 @@ public final class ProtocolVanishProxy extends Plugin {
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
     }
+
+
+
 }

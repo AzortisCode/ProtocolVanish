@@ -18,6 +18,7 @@
 
 package com.azortis.protocolvanish.bukkit;
 
+import com.azortis.protocolvanish.bukkit.ProtocolVanish;
 import org.bukkit.entity.Player;
 
 public class PermissionManager {

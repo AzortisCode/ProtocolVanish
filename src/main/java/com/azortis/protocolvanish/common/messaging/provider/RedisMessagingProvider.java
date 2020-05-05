@@ -16,26 +16,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.common.messaging.provider;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
-import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
+import com.azortis.protocolvanish.common.messaging.message.Message;
 
-import java.io.File;
+public class RedisMessagingProvider implements MessagingProvider {
 
-public abstract class DatabaseManager {
+    @Override
+    public void postMessage(Message message) {
 
-    private Driver driver;
-
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
-        if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
-            driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            driver = new H2Driver(dataFolder);
-        }
     }
 
-    public Driver getDriver() {
-        return driver;
+    @Override
+    public Runnable getRunnable() {
+        return null;
     }
 }
