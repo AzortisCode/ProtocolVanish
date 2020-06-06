@@ -30,14 +30,14 @@ import java.util.UUID;
 public class SQLMessagingProvider implements MessagingProvider{
 
     private final Driver driver;
-    private final Runnable runnable;
+    private final Thread thread;
 
     private final Collection<UUID> sendMessages = new ArrayList<>();
     private final Collection<UUID> processedMessages = new ArrayList<>();
 
     public SQLMessagingProvider(MessagingService service, Driver driver){
         this.driver = driver;
-        this.runnable = new SQLRunnable(this, service, driver);
+        this.thread = new SQLThread(this, service, driver);
         createTable();
     }
 
@@ -57,17 +57,17 @@ public class SQLMessagingProvider implements MessagingProvider{
     }
 
     @Override
-    public Runnable getRunnable() {
-        return runnable;
+    public Thread getRunnable() {
+        return thread;
     }
 
-    private class SQLRunnable implements Runnable{
+    private class SQLThread extends Thread{
 
         private final SQLMessagingProvider parent;
         private final MessagingService service;
         private final Driver driver;
 
-        public SQLRunnable(SQLMessagingProvider parent, MessagingService service, Driver driver) {
+        public SQLThread(SQLMessagingProvider parent, MessagingService service, Driver driver) {
             this.parent = parent;
             this.service = service;
             this.driver = driver;
@@ -85,7 +85,7 @@ public class SQLMessagingProvider implements MessagingProvider{
                     long timeStamp = resultSet.getLong("timeStamp");
                     if(!parent.sendMessages.contains(messageId)){
                         if(!parent.processedMessages.contains(messageId)) {
-                            processedMessages.add(messageId);
+                            parent.processedMessages.add(messageId);
                             service.consumeMessage(message);
                         }
                         fetchedMessageIds.add(messageId);

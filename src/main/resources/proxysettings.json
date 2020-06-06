@@ -15,5 +15,14 @@
       "password": ""
     }
   },
+  "permissionSettings": {
+    "enableSeePermission": true,
+    "enableLayeredPermissions": true,
+    "maxLevel": 100
+  },
+  "featureSettings": {
+    "adjustPlayerCount": true,
+    "filterTabCompletions": true
+  },
   "fileVersion": "1"
 }

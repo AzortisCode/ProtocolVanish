@@ -19,33 +19,29 @@
 package com.azortis.protocolvanish.bungee.listeners;
 
 import com.azortis.protocolvanish.bungee.ProtocolVanishProxy;
-import com.azortis.protocolvanish.common.messaging.message.LoadMessage;
-import com.azortis.protocolvanish.common.messaging.message.UnloadMessage;
-import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class PostLoginListener implements Listener {
+import java.util.Collection;
+
+public class ProxyPingListener implements Listener {
 
     private final ProtocolVanishProxy plugin;
 
-    public PostLoginListener(ProtocolVanishProxy plugin){
+    public ProxyPingListener(ProtocolVanishProxy plugin){
         this.plugin = plugin;
         plugin.getProxy().getPluginManager().registerListener(plugin, this);
     }
 
     @EventHandler
-    public void onPostLogin(PostLoginEvent event){
-        ProxiedPlayer player = event.getPlayer();
-        if(plugin.getVanishedPlayers().contains(player.getUniqueId())){
-            if(plugin.getPermissionManager().hasPermissionToVanish(player)){
-                plugin.getMessagingService().postMessage(new LoadMessage(player.getUniqueId()));
-            }else{
-                plugin.getMessagingService().postMessage(new VanishMessage(player.getUniqueId(), false));
-                plugin.getDatabaseManager().getDriver().deleteVanishPlayer(player.getUniqueId());
-            }
+    public void onProxyPing(ProxyPingEvent event){
+        if(plugin.getSettingsManager().getProxySettings().getFeatureSettings().getAdjustPlayerCount()){
+            int onlinePlayers = event.getResponse().getPlayers().getOnline();
+            Collection<ProxiedPlayer> onlineVanishedPlayers = plugin.getProxy().getPlayers();
+            onlineVanishedPlayers.removeIf(proxiedPlayer -> plugin.getVanishedPlayers().contains(proxiedPlayer.getUniqueId()));
+            event.getResponse().getPlayers().setOnline(onlinePlayers - onlineVanishedPlayers.size());
         }
     }
 

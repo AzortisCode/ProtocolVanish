@@ -52,6 +52,7 @@ public class GeneralEntityPacketListener extends PacketAdapter {
         try {
             Player receiver = event.getPlayer();
             PacketContainer packet = event.getPacket();
+            if(event.isReadOnly())event.setReadOnly(false);
             if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
                 if (packet.getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
                     UUID playerUUID = packet.getUUIDs().read(0);

@@ -16,68 +16,62 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit;
+package com.azortis.protocolvanish.bungee;
 
-import org.bukkit.entity.Player;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PermissionManager {
 
-    private final ProtocolVanish plugin;
+    private final ProtocolVanishProxy plugin;
 
-    PermissionManager(ProtocolVanish plugin) {
+    public PermissionManager(ProtocolVanishProxy plugin){
         this.plugin = plugin;
     }
 
-    public boolean hasPermission(Player player, Permission permission) {
-        if (player.isOp() || player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
+    public boolean hasPermission(ProxiedPlayer player, Permission permission) {
+        if (player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
         return player.hasPermission("protocolvanish." + permission);
     }
 
-    public boolean hasPermissionToVanish(Player player) {
-        if (player.isOp() || player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
+    public boolean hasPermissionToVanish(ProxiedPlayer player) {
+        if (player.hasPermission("protocolvanish." + Permission.ADMIN)) return true;
         return Permission.USE.getPermissionLevel(plugin, player) > 0;
     }
 
-    public boolean hasPermissionToSee(Player hider, Player viewer) {
-        if (!plugin.getSettingsManager().getPermissionSettings().getEnableSeePermission()) return false;
+    public boolean hasPermissionToSee(ProxiedPlayer hider, ProxiedPlayer viewer) {
+        if (!plugin.getSettingsManager().getProxySettings().getPermissionSettings().useSeePermission()) return false;
         int hiderLevel = Permission.USE.getPermissionLevel(plugin, hider);
         int viewerLevel = Permission.SEE.getPermissionLevel(plugin, viewer);
         return viewerLevel >= hiderLevel;
     }
 
-    public enum Permission {
+    public enum Permission{
         USE("use"),
         SEE("see"),
-        CHANGE_NIGHT_VISION("bypass.nightvision"),
-        CHANGE_DAMAGE("bypass.damage"),
-        CHANGE_HUNGER("bypass.hunger"),
-        CHANGE_CREATURE_TARGET("bypass.creaturetarget"),
-        CHANGE_ITEM_PICKUP("bypass.itempickup"),
-        FLY("fly"),
-        KEEP_FLY("fly.keep"),
         ADMIN("admin");
 
         private final String permissionNode;
 
-        Permission(String permissionNode) {
+        Permission(String permissionNode){
             this.permissionNode = permissionNode;
         }
 
-        private int getPermissionLevel(ProtocolVanish plugin, Player player) {
+        private int getPermissionLevel(ProtocolVanishProxy plugin, ProxiedPlayer player) {
             if (permissionNode.equals("use") || permissionNode.equals("see")) {
-                int maxLevel = plugin.getSettingsManager().getPermissionSettings().getMaxLevel();
+                int maxLevel = plugin.getSettingsManager().getProxySettings().getPermissionSettings().getMaxLevel();
                 int level = player.hasPermission("protocolvanish." + this.permissionNode) ? 1 : 0;
                 for (int i = 1; i <= maxLevel; i++) {
                     if (player.hasPermission("protocolvanish." + this.permissionNode + ".level." + i)) {
                         level = i;
                     }
                 }
-                if (level > 0 && !plugin.getSettingsManager().getPermissionSettings().getEnableLayeredPermissions())
+                if (level > 0 && !plugin.getSettingsManager().getProxySettings().getPermissionSettings().getUseLayeredPermissions())
                     return 1;
                 return level;
             }
             return 0;
         }
+
     }
 
 }

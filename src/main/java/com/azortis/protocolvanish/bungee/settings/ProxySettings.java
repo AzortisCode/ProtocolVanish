@@ -19,6 +19,7 @@
 package com.azortis.protocolvanish.bungee.settings;
 
 import com.azortis.protocolvanish.common.messaging.MessagingSettings;
+import com.azortis.protocolvanish.common.settings.PermissionSettings;
 import com.azortis.protocolvanish.common.storage.StorageSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,6 +32,8 @@ public class ProxySettings implements Serializable {
 
     private StorageSettings storageSettings;
     private MessagingSettings messagingSettings;
+    private PermissionSettings permissionSettings;
+    private FeatureSettings featureSettings;
     private String fileVersion;
 
     public StorageSettings getStorageSettings() {
@@ -39,6 +42,14 @@ public class ProxySettings implements Serializable {
 
     public MessagingSettings getMessagingSettings() {
         return messagingSettings;
+    }
+
+    public PermissionSettings getPermissionSettings() {
+        return permissionSettings;
+    }
+
+    public FeatureSettings getFeatureSettings() {
+        return featureSettings;
     }
 
     public String getFileVersion() {

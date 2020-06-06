@@ -24,17 +24,25 @@ import com.azortis.protocolvanish.common.UpdateChecker;
 import com.azortis.protocolvanish.common.storage.DatabaseManager;
 import net.md_5.bungee.api.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
+
 public final class ProtocolVanishProxy extends Plugin {
 
     private PluginVersion pluginVersion;
     private UpdateChecker updateChecker;
     private SettingsManager settingsManager;
     private DatabaseManager databaseManager;
+    private BungeeMessagingService messagingService;
+    private PermissionManager permissionManager;
+
+    private final Collection<UUID> vanishedPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {
         this.pluginVersion = PluginVersion.getVersionFromString(this.getDescription().getVersion());
-        UpdateChecker updateChecker = new UpdateChecker(pluginVersion);
+        updateChecker = new UpdateChecker(pluginVersion);
         if(updateChecker.hasFailed()){
             getLogger().severe("Failed to check for updates!");
         }else if (updateChecker.isUpdateAvailable()){
@@ -45,6 +53,11 @@ public final class ProtocolVanishProxy extends Plugin {
         }
         this.settingsManager = new SettingsManager(this);
         this.databaseManager = new DatabaseManager(settingsManager.getProxySettings().getStorageSettings(), this.getDataFolder());
+        this.vanishedPlayers.addAll(this.databaseManager.getDriver().getVanishedUUIDs());
+        this.messagingService = new BungeeMessagingService(this);
+        this.permissionManager = new PermissionManager(this);
+
+
     }
 
     public PluginVersion getPluginVersion() {
@@ -61,5 +74,17 @@ public final class ProtocolVanishProxy extends Plugin {
 
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
+    }
+
+    public Collection<UUID> getVanishedPlayers(){
+        return vanishedPlayers;
+    }
+
+    public BungeeMessagingService getMessagingService() {
+        return messagingService;
+    }
+
+    public PermissionManager getPermissionManager() {
+        return permissionManager;
     }
 }
