@@ -41,10 +41,10 @@ public class MariaDBDriver implements Driver{
     public MariaDBDriver(StorageSettings storageSettings){
         hikari = new HikariDataSource();
         hikari.setDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
-        hikari.addDataSourceProperty("serverName", storageSettings.getIp());
-        hikari.addDataSourceProperty("port", storageSettings.getPort());
+        hikari.addDataSourceProperty("serverName", storageSettings.getAddress().split(":")[0]);
+        hikari.addDataSourceProperty("port", storageSettings.getAddress().split(":")[1]);
         hikari.addDataSourceProperty("databaseName", storageSettings.getDatabase());
-        hikari.addDataSourceProperty("username", storageSettings.getUsername());
+        hikari.addDataSourceProperty("userName", storageSettings.getUsername());
         hikari.addDataSourceProperty("password", storageSettings.getPassword());
         this.tablePrefix = storageSettings.getTablePrefix();
         createTables();
@@ -117,7 +117,7 @@ public class MariaDBDriver implements Driver{
     public Collection<UUID> getVanishedUUIDs() {
         try(Connection connection = hikari.getConnection()){
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("GET uuid FROM " + tablePrefix + "vanishPlayers WHERE vanished=true");
+            ResultSet resultSet = statement.executeQuery("SELECT uuid FROM " + tablePrefix + "vanishPlayers WHERE vanished=true");
             Collection<UUID> UUIDs = new ArrayList<>();
             while(resultSet.next()){
                 UUID uuid = UUID.fromString(resultSet.getString("uuid"));
@@ -133,7 +133,7 @@ public class MariaDBDriver implements Driver{
     private void createTables(){
         try(Connection connection = hikari.getConnection()){
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished BOOL, playerSettings varchar)");
+            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished boolean, playerSettings TEXT);");
             vanishPlayerStatement.close();
         }catch (SQLException ex){
             ex.printStackTrace();

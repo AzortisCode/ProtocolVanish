@@ -24,6 +24,7 @@ import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProxyPingListener implements Listener {
@@ -39,9 +40,11 @@ public class ProxyPingListener implements Listener {
     public void onProxyPing(ProxyPingEvent event){
         if(plugin.getSettingsManager().getProxySettings().getFeatureSettings().getAdjustPlayerCount()){
             int onlinePlayers = event.getResponse().getPlayers().getOnline();
-            Collection<ProxiedPlayer> onlineVanishedPlayers = plugin.getProxy().getPlayers();
-            onlineVanishedPlayers.removeIf(proxiedPlayer -> plugin.getVanishedPlayers().contains(proxiedPlayer.getUniqueId()));
-            event.getResponse().getPlayers().setOnline(onlinePlayers - onlineVanishedPlayers.size());
+            if(onlinePlayers > 0) {
+                Collection<ProxiedPlayer> onlineVanishedPlayers = new ArrayList<>(plugin.getProxy().getPlayers());
+                onlineVanishedPlayers.removeIf(proxiedPlayer -> plugin.getVanishedPlayers().contains(proxiedPlayer.getUniqueId()));
+                event.getResponse().getPlayers().setOnline(onlinePlayers - onlineVanishedPlayers.size());
+            }
         }
     }
 

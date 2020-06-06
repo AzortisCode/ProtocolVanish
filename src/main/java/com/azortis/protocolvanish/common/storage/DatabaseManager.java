@@ -27,10 +27,12 @@ public class DatabaseManager {
 
     private Driver driver;
 
-    public DatabaseManager(StorageSettings storageSettings, File dataFolder){
+    public DatabaseManager(Object plugin, StorageSettings storageSettings, File dataFolder){
         if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
+            DriverLoader.loadDriver(plugin, dataFolder, "mariadb-driver-2.6.0.jar", "https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/2.6.0/mariadb-java-client-2.6.0.jar");
             driver = new MariaDBDriver(storageSettings);
         }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
+            DriverLoader.loadDriver(plugin, dataFolder, "h2-driver-1.4.200", "https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar");
             driver = new H2Driver(dataFolder);
         }
     }

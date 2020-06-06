@@ -21,7 +21,7 @@ package com.azortis.protocolvanish.common.messaging.message;
 import java.util.UUID;
 
 /**
- * Should only be sent from BungeeCord.
+ * Should only be sent from BungeeCord. Unless a Bukkit instance created an entry
  */
 public class LoadMessage implements Message{
 

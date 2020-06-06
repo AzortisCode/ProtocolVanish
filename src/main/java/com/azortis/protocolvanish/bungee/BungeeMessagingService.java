@@ -21,11 +21,18 @@ package com.azortis.protocolvanish.bungee;
 import com.azortis.protocolvanish.common.messaging.MessagingService;
 import com.azortis.protocolvanish.common.messaging.MessagingSettings;
 import com.azortis.protocolvanish.common.messaging.message.Message;
+import com.azortis.protocolvanish.common.messaging.message.UnloadMessage;
+import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
 import com.azortis.protocolvanish.common.messaging.provider.MessagingProvider;
 import com.azortis.protocolvanish.common.messaging.provider.RedisMessagingProvider;
 import com.azortis.protocolvanish.common.messaging.provider.SQLMessagingProvider;
+import com.azortis.protocolvanish.common.storage.Driver;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class BungeeMessagingService implements MessagingService {
 
@@ -37,11 +44,24 @@ public class BungeeMessagingService implements MessagingService {
         MessagingSettings messagingSettings = plugin.getSettingsManager().getProxySettings().getMessagingSettings();
         if(messagingSettings.getMessagingService().equalsIgnoreCase("sql")){
             provider = new SQLMessagingProvider(this, plugin.getDatabaseManager().getDriver());
+            plugin.getProxy().getScheduler().schedule(plugin, provider.getRunnable(), 0L, 100L, TimeUnit.MILLISECONDS);
         }else if(messagingSettings.getMessagingService().equalsIgnoreCase("redis")){
-            provider = new RedisMessagingProvider();
+            //provider = new RedisMessagingProvider(this, messagingSettings.getRedisSettings());
+            plugin.getLogger().severe("Redis is currently not supported!");
         }else{
             plugin.getLogger().severe("Invalid messaging service!");
         }
+        plugin.getProxy().getScheduler().schedule(plugin, ()-> {
+            Driver driver = plugin.getDatabaseManager().getDriver();
+            try(Connection connection = driver.getConnection()){
+                Statement statement = connection.createStatement();
+                long timeStampsToRemove = System.currentTimeMillis() - 1800000;
+                statement.executeUpdate("DELETE FROM " + driver.getTablePrefix() + "messages WHERE timeStamp < " + timeStampsToRemove);
+                statement.close();
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
+        }, 0L, 1L, TimeUnit.HOURS);
     }
 
     @Override
@@ -51,7 +71,14 @@ public class BungeeMessagingService implements MessagingService {
             UUID playerUUID = UUID.fromString(messageArray[1]);
             boolean vanished = Boolean.parseBoolean(messageArray[2]);
             if(vanished){
-                plugin.getVanishedPlayers().add(playerUUID);
+                if(plugin.getPermissionManager().hasPermissionToVanish(plugin.getProxy().getPlayer(playerUUID))){
+                    plugin.getVanishedPlayers().add(playerUUID);
+                }else{
+                    plugin.getProxy().getScheduler().runAsync(plugin, ()-> {
+                        provider.postMessage(new VanishMessage(playerUUID, false, true));
+                        provider.postMessage(new UnloadMessage(playerUUID));
+                    });
+                }
             }else{
                 plugin.getVanishedPlayers().remove(playerUUID);
             }
@@ -60,7 +87,10 @@ public class BungeeMessagingService implements MessagingService {
 
     @Override
     public void postMessage(Message message) {
-        provider.postMessage(message);
+        plugin.getProxy().getScheduler().runAsync(plugin, () -> provider.postMessage(message));
     }
 
+    public MessagingProvider getProvider() {
+        return provider;
+    }
 }

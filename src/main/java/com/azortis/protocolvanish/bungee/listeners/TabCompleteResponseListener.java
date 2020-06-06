@@ -24,11 +24,11 @@ import net.md_5.bungee.api.event.TabCompleteResponseEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class TabCompleteListener implements Listener {
+public class TabCompleteResponseListener implements Listener {
 
     private final ProtocolVanishProxy plugin;
 
-    public TabCompleteListener(ProtocolVanishProxy plugin){
+    public TabCompleteResponseListener(ProtocolVanishProxy plugin){
         this.plugin = plugin;
         plugin.getProxy().getPluginManager().registerListener(plugin, this);
     }

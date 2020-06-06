@@ -32,8 +32,8 @@ public class SQLMessagingProvider implements MessagingProvider{
     private final Driver driver;
     private final Runnable runnable;
 
-    private final Collection<UUID> sendMessages = new ArrayList<>();
-    private final Collection<UUID> processedMessages = new ArrayList<>();
+    private final transient Collection<UUID> sendMessages = new ArrayList<>();
+    private final transient Collection<UUID> processedMessages = new ArrayList<>();
 
     public SQLMessagingProvider(MessagingService service, Driver driver){
         this.driver = driver;
@@ -57,11 +57,25 @@ public class SQLMessagingProvider implements MessagingProvider{
     }
 
     @Override
+    public void clearMessages() {
+        try(Connection connection = driver.getConnection()){
+            for (UUID sendMessageId : sendMessages){
+                PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM " + driver.getTablePrefix() + "messages WHERE id=?");
+                deleteStatement.setString(1, sendMessageId.toString());
+                deleteStatement.executeUpdate();
+                deleteStatement.close();
+            }
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
     public Runnable getRunnable() {
         return runnable;
     }
 
-    private class SQLRunnable implements Runnable{
+    private static class SQLRunnable implements Runnable{
 
         private final SQLMessagingProvider parent;
         private final MessagingService service;
@@ -96,7 +110,7 @@ public class SQLMessagingProvider implements MessagingProvider{
                         deleteStatement.close();
                     }
                 }
-                processedMessages.removeIf(uuid -> !fetchedMessageIds.contains(uuid));
+                parent.processedMessages.removeIf(uuid -> !fetchedMessageIds.contains(uuid));
             }catch (SQLException ex){
                 ex.printStackTrace();
             }

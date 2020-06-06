@@ -119,12 +119,19 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.200</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Redis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.3.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -161,6 +168,14 @@
                             <pattern>com.azortis.azortislib</pattern>
                             <shadedPattern>com.azortis.protocolvanish.azortislib</shadedPattern>
                         </reloaction>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>com.azortis.protocolvanish.hikari</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>redis.clients.jedis</pattern>
+                            <shadedPattern>com.azortis.protocolvanish.jedis</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
             </plugin>

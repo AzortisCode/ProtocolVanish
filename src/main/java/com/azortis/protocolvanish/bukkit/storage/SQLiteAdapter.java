@@ -195,7 +195,7 @@ public class SQLiteAdapter implements IDatabase {
     private void createTables() {
         try (Connection connection = createConnection()) {
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.execute("CREATE TABLE IF NOT EXISTS vanishPlayers (uuid varchar(36), vanished boolean, playerSettings varchar)");
+            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS vanishPlayers (uuid varchar(36), vanished boolean, playerSettings varchar)");
 
             Statement serverInfoStatement = connection.createStatement();
             serverInfoStatement.execute("CREATE TABLE IF NOT EXISTS serverInfo (serverId SMALLINT, playersInVanish SMALLINT)");

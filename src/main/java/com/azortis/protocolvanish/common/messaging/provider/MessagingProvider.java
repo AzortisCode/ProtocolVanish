@@ -24,6 +24,8 @@ public interface MessagingProvider {
 
     void postMessage(Message message);
 
+    void clearMessages();
+
     Runnable getRunnable();
 
 }

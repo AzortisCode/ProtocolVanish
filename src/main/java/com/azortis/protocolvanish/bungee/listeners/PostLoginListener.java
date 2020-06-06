@@ -41,10 +41,12 @@ public class PostLoginListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
         if(plugin.getVanishedPlayers().contains(player.getUniqueId())){
             if(plugin.getPermissionManager().hasPermissionToVanish(player)){
-                plugin.getMessagingService().postMessage(new LoadMessage(player.getUniqueId()));
+                plugin.getProxy().getScheduler().runAsync(plugin, ()-> plugin.getMessagingService().postMessage(new LoadMessage(player.getUniqueId())));
             }else{
-                plugin.getMessagingService().postMessage(new VanishMessage(player.getUniqueId(), false));
-                plugin.getDatabaseManager().getDriver().deleteVanishPlayer(player.getUniqueId());
+                plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+                    plugin.getMessagingService().postMessage(new VanishMessage(player.getUniqueId(), false, true));
+                    plugin.getDatabaseManager().getDriver().deleteVanishPlayer(player.getUniqueId());
+                });
             }
         }
     }

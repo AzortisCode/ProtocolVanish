@@ -18,9 +18,27 @@
 
 package com.azortis.protocolvanish.common.messaging.provider;
 
+import com.azortis.protocolvanish.common.messaging.MessagingService;
+import com.azortis.protocolvanish.common.messaging.RedisSettings;
 import com.azortis.protocolvanish.common.messaging.message.Message;
+import redis.clients.jedis.Jedis;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 public class RedisMessagingProvider implements MessagingProvider {
+
+    private final Jedis jedis;
+    private final Runnable runnable;
+
+    private final transient Collection<UUID> sendMessages = new ArrayList<>();
+    private final transient Collection<UUID> processedMessages = new ArrayList<>();
+
+    public RedisMessagingProvider(MessagingService service, RedisSettings redisSettings){
+        this.jedis = new Jedis();
+        this.runnable = null;
+    }
 
     @Override
     public void postMessage(Message message) {
@@ -28,7 +46,31 @@ public class RedisMessagingProvider implements MessagingProvider {
     }
 
     @Override
+    public void clearMessages() {
+
+    }
+
+    @Override
     public Runnable getRunnable() {
         return null;
     }
+
+    public static class RedisRunnable implements Runnable {
+
+        private final RedisMessagingProvider parent;
+        private final MessagingService service;
+        private final Jedis jedis;
+
+        public RedisRunnable(RedisMessagingProvider parent, MessagingService service, Jedis jedis){
+            this.parent = parent;
+            this.service = service;
+            this.jedis = jedis;
+        }
+
+        @Override
+        public void run() {
+
+        }
+    }
+
 }

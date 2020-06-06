@@ -18,6 +18,10 @@
 
 package com.azortis.protocolvanish.bungee;
 
+import com.azortis.protocolvanish.bungee.listeners.PlayerDisconnectListener;
+import com.azortis.protocolvanish.bungee.listeners.PostLoginListener;
+import com.azortis.protocolvanish.bungee.listeners.ProxyPingListener;
+import com.azortis.protocolvanish.bungee.listeners.TabCompleteResponseListener;
 import com.azortis.protocolvanish.bungee.settings.SettingsManager;
 import com.azortis.protocolvanish.common.PluginVersion;
 import com.azortis.protocolvanish.common.UpdateChecker;
@@ -52,12 +56,21 @@ public final class ProtocolVanishProxy extends Plugin {
             getLogger().warning("You're using an unreleased version(v" + pluginVersion.getVersionString() + "). Please proceed with caution.");
         }
         this.settingsManager = new SettingsManager(this);
-        this.databaseManager = new DatabaseManager(settingsManager.getProxySettings().getStorageSettings(), this.getDataFolder());
+        this.databaseManager = new DatabaseManager(this, settingsManager.getProxySettings().getStorageSettings(), this.getDataFolder());
         this.vanishedPlayers.addAll(this.databaseManager.getDriver().getVanishedUUIDs());
         this.messagingService = new BungeeMessagingService(this);
         this.permissionManager = new PermissionManager(this);
 
+        //Listeners
+        new PlayerDisconnectListener(this);
+        new PostLoginListener(this);
+        new ProxyPingListener(this);
+        new TabCompleteResponseListener(this);
+    }
 
+    @Override
+    public void onDisable() {
+        this.messagingService.getProvider().clearMessages();
     }
 
     public PluginVersion getPluginVersion() {

@@ -23,10 +23,10 @@ import java.util.UUID;
 public class VanishMessage implements Message{
 
     private final UUID id = UUID.randomUUID();
-    private String message = "setvanished %playerUUID% %vanished%";
+    private String message = "setvanished %playerUUID% %vanished% %fromBungee%";
 
-    public VanishMessage(UUID playerUUID, boolean vanished){
-        message = message.replaceAll("%playerUUID%", playerUUID.toString()).replaceAll("%vanished%", String.valueOf(vanished));
+    public VanishMessage(UUID playerUUID, boolean vanished, boolean fromBungee){
+        message = message.replaceAll("%playerUUID%", playerUUID.toString()).replaceAll("%vanished%", String.valueOf(vanished)).replaceAll("%fromBungee%", String.valueOf(fromBungee));
     }
 
     @Override

@@ -38,7 +38,7 @@ public class PlayerDisconnectListener implements Listener {
     public void onPlayerDisconnect(PlayerDisconnectEvent event){
         ProxiedPlayer player = event.getPlayer();
         if(plugin.getPermissionManager().hasPermissionToVanish(player)){
-            plugin.getMessagingService().postMessage(new UnloadMessage(player.getUniqueId()));
+            plugin.getProxy().getScheduler().runAsync(plugin, ()-> plugin.getMessagingService().postMessage(new UnloadMessage(player.getUniqueId())));
         }
     }
 }

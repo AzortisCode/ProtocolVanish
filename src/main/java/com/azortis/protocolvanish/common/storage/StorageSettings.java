@@ -21,8 +21,7 @@ package com.azortis.protocolvanish.common.storage;
 public class StorageSettings {
 
     private String driver;
-    private String ip;
-    private int port;
+    private String address;
     private String database;
     private String username;
     private String password;
@@ -32,12 +31,8 @@ public class StorageSettings {
         return driver;
     }
 
-    public String getIp() {
-        return ip;
-    }
-
-    public int getPort() {
-        return port;
+    public String getAddress() {
+        return address;
     }
 
     public String getDatabase() {
