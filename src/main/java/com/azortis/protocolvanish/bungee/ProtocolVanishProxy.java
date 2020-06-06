@@ -37,7 +37,7 @@ public final class ProtocolVanishProxy extends Plugin {
     private BungeeMessagingService messagingService;
     private PermissionManager permissionManager;
 
-    private final Collection<UUID> vanishedPlayers = new ArrayList<>();
+    private final transient Collection<UUID> vanishedPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {

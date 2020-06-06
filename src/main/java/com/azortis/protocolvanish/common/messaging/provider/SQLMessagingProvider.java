@@ -30,14 +30,14 @@ import java.util.UUID;
 public class SQLMessagingProvider implements MessagingProvider{
 
     private final Driver driver;
-    private final Thread thread;
+    private final Runnable runnable;
 
     private final Collection<UUID> sendMessages = new ArrayList<>();
     private final Collection<UUID> processedMessages = new ArrayList<>();
 
     public SQLMessagingProvider(MessagingService service, Driver driver){
         this.driver = driver;
-        this.thread = new SQLThread(this, service, driver);
+        this.runnable = new SQLRunnable(this, service, driver);
         createTable();
     }
 
@@ -57,17 +57,17 @@ public class SQLMessagingProvider implements MessagingProvider{
     }
 
     @Override
-    public Thread getRunnable() {
-        return thread;
+    public Runnable getRunnable() {
+        return runnable;
     }
 
-    private class SQLThread extends Thread{
+    private class SQLRunnable implements Runnable{
 
         private final SQLMessagingProvider parent;
         private final MessagingService service;
         private final Driver driver;
 
-        public SQLThread(SQLMessagingProvider parent, MessagingService service, Driver driver) {
+        public SQLRunnable(SQLMessagingProvider parent, MessagingService service, Driver driver) {
             this.parent = parent;
             this.service = service;
             this.driver = driver;

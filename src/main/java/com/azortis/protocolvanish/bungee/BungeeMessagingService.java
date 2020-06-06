@@ -45,7 +45,7 @@ public class BungeeMessagingService implements MessagingService {
     }
 
     @Override
-    public void consumeMessage(String message) {
+    public synchronized void consumeMessage(String message) {
         if(message.startsWith("setvanished")){
             String[] messageArray = message.split(" ");
             UUID playerUUID = UUID.fromString(messageArray[1]);
