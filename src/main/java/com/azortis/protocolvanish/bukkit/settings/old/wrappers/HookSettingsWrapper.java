@@ -16,22 +16,22 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.messaging;
+package com.azortis.protocolvanish.bukkit.settings.old.wrappers;
 
-public class MessagingSettings {
+public class HookSettingsWrapper extends SettingsWrapper {
 
-    private String messagingService;
-    //private RedisSettings redisSettings;
-
-    public String getMessagingService() {
-        return messagingService;
+    public HookSettingsWrapper(SettingsManager parent, Object settingsMap){
+        super(parent, settingsMap, "hookSettings");
     }
 
-    public void setMessagingService(String messagingService) {
-        this.messagingService = messagingService;
+    public boolean isHookEnabled(String hookName){
+        SettingsSection hookSection = getSection(hookName);
+        return getBoolean("enabled", hookSection);
     }
 
-    /*public RedisSettings getRedisSettings() {
-        return redisSettings;
-    }*/
+    public void setHookEnabled(String hookName, boolean enabled){
+        SettingsSection hookSection = getSection(hookName);
+        setBoolean("enabled", enabled, hookSection);
+    }
+
 }

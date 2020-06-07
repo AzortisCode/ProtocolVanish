@@ -8,12 +8,7 @@
     "tablePrefix": "protocolvanish_"
   },
   "messagingSettings": {
-    "messagingService": "SQL",
-    "redisSettings": {
-      "address": "127.0.0.1",
-      "port": 6379,
-      "password": ""
-    }
+    "messagingService": "SQL"
   },
   "permissionSettings": {
     "enableSeePermission": true,

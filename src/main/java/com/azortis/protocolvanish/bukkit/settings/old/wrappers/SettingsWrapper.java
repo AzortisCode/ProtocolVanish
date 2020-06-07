@@ -16,7 +16,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.settings;
+package com.azortis.protocolvanish.bukkit.settings.old.wrappers;
+
+import com.azortis.protocolvanish.bukkit.settings.old.wrappers.SettingsManager;
 
 import java.util.List;
 import java.util.Map;

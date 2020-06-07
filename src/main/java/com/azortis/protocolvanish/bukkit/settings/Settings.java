@@ -16,25 +16,25 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.settings.wrappers;
+package com.azortis.protocolvanish.bukkit.settings;
 
-import com.azortis.protocolvanish.bukkit.settings.SettingsManager;
-import com.azortis.protocolvanish.bukkit.settings.SettingsWrapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-public class HookSettingsWrapper extends SettingsWrapper {
+import java.io.Serializable;
 
-    public HookSettingsWrapper(SettingsManager parent, Object settingsMap){
-        super(parent, settingsMap, "hookSettings");
+public class Settings implements Serializable {
+
+    private final transient Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
+    private String fileVersion;
+
+    public String getFileVersion() {
+        return fileVersion;
     }
 
-    public boolean isHookEnabled(String hookName){
-        SettingsSection hookSection = getSection(hookName);
-        return getBoolean("enabled", hookSection);
+    @Override
+    public String toString() {
+        return gson.toJson(this);
     }
-
-    public void setHookEnabled(String hookName, boolean enabled){
-        SettingsSection hookSection = getSection(hookName);
-        setBoolean("enabled", enabled, hookSection);
-    }
-
 }

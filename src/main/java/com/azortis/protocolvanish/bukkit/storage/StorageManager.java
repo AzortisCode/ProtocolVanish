@@ -21,7 +21,7 @@ package com.azortis.protocolvanish.bukkit.storage;
 import com.azortis.protocolvanish.bukkit.PermissionManager;
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
 import com.azortis.protocolvanish.bukkit.VanishPlayer;
-import com.azortis.protocolvanish.bukkit.settings.wrappers.InvisibilitySettingsWrapper;
+import com.azortis.protocolvanish.bukkit.settings.old.wrappers.InvisibilitySettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

@@ -20,7 +20,7 @@ package com.azortis.protocolvanish.bukkit.listeners;
 
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
 import com.azortis.protocolvanish.bukkit.VanishPlayer;
-import com.azortis.protocolvanish.bukkit.settings.wrappers.MessageSettingsWrapper;
+import com.azortis.protocolvanish.bukkit.settings.old.wrappers.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

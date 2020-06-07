@@ -20,7 +20,7 @@ package com.azortis.protocolvanish.bukkit;
 
 import com.azortis.protocolvanish.bukkit.api.VanishAPI;
 import com.azortis.protocolvanish.bukkit.listeners.*;
-import com.azortis.protocolvanish.bukkit.settings.SettingsManager;
+import com.azortis.protocolvanish.bukkit.settings.old.wrappers.SettingsManager;
 import com.azortis.protocolvanish.bukkit.command.VanishCommand;
 import com.azortis.protocolvanish.bukkit.hooks.HookManager;
 import com.azortis.protocolvanish.bukkit.storage.StorageManager;

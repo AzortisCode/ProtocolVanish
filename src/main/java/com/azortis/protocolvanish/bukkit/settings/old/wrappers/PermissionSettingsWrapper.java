@@ -16,10 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.settings.wrappers;
-
-import com.azortis.protocolvanish.bukkit.settings.SettingsManager;
-import com.azortis.protocolvanish.bukkit.settings.SettingsWrapper;
+package com.azortis.protocolvanish.bukkit.settings.old.wrappers;
 
 @SuppressWarnings("all")
 public class PermissionSettingsWrapper extends SettingsWrapper {

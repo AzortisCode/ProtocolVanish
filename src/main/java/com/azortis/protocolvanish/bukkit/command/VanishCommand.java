@@ -28,7 +28,7 @@ import com.azortis.protocolvanish.bukkit.PermissionManager;
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
 import com.azortis.protocolvanish.bukkit.VanishPlayer;
 import com.azortis.protocolvanish.bukkit.command.subcommands.*;
-import com.azortis.protocolvanish.bukkit.settings.wrappers.CommandSettingsWrapper;
+import com.azortis.protocolvanish.bukkit.settings.old.wrappers.CommandSettingsWrapper;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
