@@ -24,7 +24,6 @@ import com.azortis.protocolvanish.common.messaging.message.Message;
 import com.azortis.protocolvanish.common.messaging.message.UnloadMessage;
 import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
 import com.azortis.protocolvanish.common.messaging.provider.MessagingProvider;
-import com.azortis.protocolvanish.common.messaging.provider.RedisMessagingProvider;
 import com.azortis.protocolvanish.common.messaging.provider.SQLMessagingProvider;
 import com.azortis.protocolvanish.common.storage.Driver;
 

@@ -16,31 +16,26 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.hooks;
+package com.azortis.protocolvanish.bukkit.visibility;
 
-import com.azortis.protocolvanish.bukkit.ProtocolVanish;
+public class ExternalVisibilitySettings {
 
-import java.util.HashMap;
-import java.util.Map;
+    private boolean adjustOnlinePlayerCount;
+    private boolean adjustOnlinePlayerList;
 
-public class HookManager {
-
-    private ProtocolVanish plugin;
-    private Map<String, PluginHook> hookMap = new HashMap<>();
-
-    public HookManager(ProtocolVanish plugin){
-        this.plugin = plugin;
-        plugin.getLogger().info("Loading hooks...");
-        loadHooks();
+    public boolean getAdjustOnlinePlayerCount() {
+        return adjustOnlinePlayerCount;
     }
 
-    public PluginHook getPluginHook(String name){
-        if(hookMap.containsKey(name))return hookMap.get(name);
-        return null;
+    public void setAdjustOnlinePlayerCount(boolean adjustOnlinePlayerCount) {
+        this.adjustOnlinePlayerCount = adjustOnlinePlayerCount;
     }
 
-    private void loadHooks(){
-        hookMap.put("Dynmap", new DynmapHook(plugin));
+    public boolean getAdjustOnlinePlayerList() {
+        return adjustOnlinePlayerList;
     }
 
+    public void setAdjustOnlinePlayerList(boolean adjustOnlinePlayerList) {
+        this.adjustOnlinePlayerList = adjustOnlinePlayerList;
+    }
 }

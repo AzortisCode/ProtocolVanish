@@ -19,31 +19,27 @@
 package com.azortis.protocolvanish.bukkit.listeners;
 
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.bukkit.VanishPlayer;
-import com.azortis.protocolvanish.bukkit.settings.old.wrappers.MessageSettingsWrapper;
+import com.azortis.protocolvanish.bukkit.settings.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class PlayerJoinListener implements Listener {
 
     private final ProtocolVanish plugin;
-    private MessageSettingsWrapper messageSettings;
+    private Messages messages;
 
     public PlayerJoinListener(ProtocolVanish plugin) {
         this.plugin = plugin;
-        this.messageSettings = plugin.getSettingsManager().getMessageSettings();
+        //this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        /*Player player = event.getPlayer();
         if (plugin.getVisibilityManager().isVanished(player.getUniqueId())) {
             VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
             if (vanishPlayer != null && vanishPlayer.getPlayerSettings().doNightVision())
@@ -57,7 +53,8 @@ public class PlayerJoinListener implements Listener {
                     plugin.sendPlayerMessage(viewer, player,"otherJoinedSilently");
                 }
             }
-        }
+        }*/
+
     }
 
 }

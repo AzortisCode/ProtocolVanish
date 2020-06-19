@@ -22,7 +22,6 @@ import com.azortis.azortislib.command.SubCommand;
 import com.azortis.azortislib.command.executors.ISubCommandExecutor;
 import com.azortis.protocolvanish.bukkit.PermissionManager;
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.bukkit.VanishPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Mob;

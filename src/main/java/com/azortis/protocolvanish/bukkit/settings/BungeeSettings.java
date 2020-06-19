@@ -16,22 +16,24 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.settings.old.wrappers;
+package com.azortis.protocolvanish.bukkit.settings;
 
-public class HookSettingsWrapper extends SettingsWrapper {
+import com.azortis.protocolvanish.common.messaging.MessagingSettings;
 
-    public HookSettingsWrapper(SettingsManager parent, Object settingsMap){
-        super(parent, settingsMap, "hookSettings");
+public class BungeeSettings {
+
+    private boolean enabled;
+    private MessagingSettings messagingSettings;
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public boolean isHookEnabled(String hookName){
-        SettingsSection hookSection = getSection(hookName);
-        return getBoolean("enabled", hookSection);
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public void setHookEnabled(String hookName, boolean enabled){
-        SettingsSection hookSection = getSection(hookName);
-        setBoolean("enabled", enabled, hookSection);
+    public MessagingSettings getMessagingSettings() {
+        return messagingSettings;
     }
-
 }

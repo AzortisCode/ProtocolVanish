@@ -26,6 +26,9 @@ import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 @SuppressWarnings("all")
 public class SettingsManager {
@@ -35,17 +38,76 @@ public class SettingsManager {
     private Settings settings;
     private File settingsFile;
 
+    private Messages messages;
+    private File messagesFile;
+
     public SettingsManager(ProtocolVanish plugin){
         if(!plugin.getDataFolder().exists())plugin.getDataFolder().mkdir();
         settingsFile = new File(plugin.getDataFolder(), "settings.json");
         if(!settingsFile.exists()) FileUtils.copy(plugin.getResource("settings.json"), settingsFile);
+        messagesFile = new File(plugin.getDataFolder(), "messages.json");
+        if(!messagesFile.exists()) FileUtils.copy(plugin.getResource("messages.json"), messagesFile);
         try{
             settings = gson.fromJson(new FileReader(settingsFile), Settings.class);
+            messages = gson.fromJson(new FileReader(messagesFile), Messages.class);
         }catch (FileNotFoundException ex){
             ex.printStackTrace();
         }
         if(!plugin.getUpdateChecker().getPluginVersion().getSettingsFileVersion().equals(settings.getFileVersion())){
             plugin.getLogger().severe("You're settingsfile is out of date! Please update otherwise it will break!");
+        }
+
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public File getSettingsFile() {
+        return settingsFile;
+    }
+
+    public void saveSettings(){
+        try{
+            final String json = gson.toJson(settings);
+            settingsFile.delete();
+            Files.write(settingsFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void reloadSettings(){
+        try{
+            settings = gson.fromJson(new FileReader(settingsFile), Settings.class);
+        }catch (FileNotFoundException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public Messages getMessages() {
+        return messages;
+    }
+
+    public File getMessagesFile() {
+        return messagesFile;
+    }
+
+    public void saveMessages(){
+        try{
+            final String json = gson.toJson(messages);
+            messagesFile.delete();
+            Files.write(messagesFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void reloadMessages(){
+        try{
+            messages = gson.fromJson(new FileReader(messagesFile), Messages.class);
+        }catch (FileNotFoundException ex){
+            ex.printStackTrace();
         }
     }
 

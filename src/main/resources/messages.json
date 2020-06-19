@@ -11,20 +11,7 @@
     "reappearMessage": "&e%player_name% joined the game",
     "vanishMessageWithPerm": "&a%player_name% has gone in vanish.",
     "reappearMessageWithPerm": "&a%player_name% has gone out of vanish.",
-    "actionBarMsg": "&aYou're in vanish.",
-    "enabledNightVision": "&aYou've enabled nightVision.",
-    "disabledNightVision": "&aYou've disabled nightVision.",
-    "enabledDamage": "&aYou've enabled damage.",
-    "disabledDamage": "&aYou've disabled damage",
-    "enabledHunger": "&aYou've enabled hunger.",
-    "disabledHunger": "&aYou've disabled hunger",
-    "enabledCreatureTarget": "&aYou've enabled creature target.",
-    "disabledCreatureTarget": "&aYou've disabled creature target.",
-    "enabledItemPickup": "&aYou've enabled item pickup.",
-    "disabledItemPickup": "&aYou've disabled item pickup.",
-    "gameModeSwitched": "&aYou're gamemode has been switched to %player_gamemode%.",
-    "dynmapVanishMessage": "&e%player_name% has left the game",
-    "dynmapReappearMessage": "&e%player_name% joined the game"
+    "actionBarMsg": "&aYou're in vanish."
   },
   "fileVersion": "2"
 }

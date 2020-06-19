@@ -2,12 +2,7 @@
   "bungeeSettings": {
     "enabled": false,
     "messagingSettings": {
-      "messagingService": "SQL",
-      "redisSettings": {
-        "address": "127.0.0.1",
-        "port": 6379,
-        "password": ""
-      }
+      "messagingService": "SQL"
     }
   },
   "storageSettings": {
@@ -18,16 +13,19 @@
     "password": "",
     "tablePrefix": "protocolvanish_"
   },
-  "invisibilitySettings": {
-    "nightVisionEffect": true,
-    "disableDamage": true,
-    "disableHunger": true,
-    "disableCreatureTarget": true,
-    "disableItemPickup": true,
-    "sleepingIgnored": true,
-    "switchGameMode": true,
-    "allowFlight": true,
-    "keepFlight": false
+  "visibilitySettings": {
+    "enabledPacketListeners": [
+      "GeneralEntity",
+      "NamedSound",
+      "PlayerInfo",
+      "ServerInfo",
+      "TabComplete",
+      "WorldParticle"
+    ],
+    "externalVisibilitySettings": {
+      "adjustOnlinePlayerCount": true,
+      "adjustOnlinePlayerList": true
+    }
   },
   "messageSettings": {
     "broadCastFakeQuitOnVanish": true,
@@ -41,28 +39,6 @@
     "enableSeePermission": true,
     "enableLayeredPermissions": true,
     "maxLevel": 100
-  },
-  "visibilitySettings": {
-    "enabledPacketListeners": [
-      "GeneralEntity",
-      "NamedSound",
-      "PlayerInfo",
-      "ServerInfo",
-      "TabComplete",
-      "WorldParticle"
-    ],
-    "externalVisibility": {
-      "adjustOnlinePlayerCount": true,
-      "adjustOnlinePlayerList": true
-    }
-  },
-  "hookSettings": {
-    "dynmapHook": {
-      "enabled": true,
-      "broadCastFakeQuitOnVanish": true,
-      "broadCastFakeJoinOnReappear": true,
-      "hideVanishPlayersOnMap": true
-    }
   },
   "commandSettings": {
     "name": "vanish",

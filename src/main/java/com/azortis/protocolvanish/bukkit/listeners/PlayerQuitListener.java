@@ -19,8 +19,6 @@
 package com.azortis.protocolvanish.bukkit.listeners;
 
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.bukkit.VanishPlayer;
-import com.azortis.protocolvanish.bukkit.settings.old.wrappers.MessageSettingsWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,17 +33,17 @@ import java.util.UUID;
 public class PlayerQuitListener implements Listener {
 
     private final ProtocolVanish plugin;
-    private MessageSettingsWrapper messageSettings;
+    //private MessageSettingsWrapper messageSettings;
 
     public PlayerQuitListener(ProtocolVanish plugin) {
         this.plugin = plugin;
-        this.messageSettings = plugin.getSettingsManager().getMessageSettings();
+        //this.messageSettings = plugin.getSettingsManager().getMessageSettings();
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+        /*Player player = event.getPlayer();
         VanishPlayer vanishPlayer = plugin.getVanishPlayer(player.getUniqueId());
         if (vanishPlayer != null && vanishPlayer.isVanished()) {
             plugin.getVisibilityManager().leaveVanished(player);
@@ -64,7 +62,7 @@ public class PlayerQuitListener implements Listener {
         }
         for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
             plugin.getVisibilityManager().setVanished(Bukkit.getPlayer(uuid), player, false);
-        }
+        }*/
     }
 
 }

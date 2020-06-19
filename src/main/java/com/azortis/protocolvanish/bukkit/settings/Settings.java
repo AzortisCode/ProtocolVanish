@@ -18,23 +18,32 @@
 
 package com.azortis.protocolvanish.bukkit.settings;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.azortis.protocolvanish.bukkit.visibility.VisibilitySettings;
+import com.azortis.protocolvanish.common.storage.StorageSettings;
 
 import java.io.Serializable;
 
 public class Settings implements Serializable {
 
-    private final transient Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
+    private BungeeSettings bungeeSettings;
+    private StorageSettings storageSettings;
+    private VisibilitySettings visibilitySettings;
     private String fileVersion;
+
+    public BungeeSettings getBungeeSettings() {
+        return bungeeSettings;
+    }
+
+    public StorageSettings getStorageSettings() {
+        return storageSettings;
+    }
+
+    public VisibilitySettings getVisibilitySettings() {
+        return visibilitySettings;
+    }
 
     public String getFileVersion() {
         return fileVersion;
     }
 
-    @Override
-    public String toString() {
-        return gson.toJson(this);
-    }
 }

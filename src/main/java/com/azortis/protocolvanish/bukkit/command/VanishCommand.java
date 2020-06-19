@@ -26,7 +26,6 @@ import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
 import com.azortis.protocolvanish.bukkit.PermissionManager;
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.bukkit.VanishPlayer;
 import com.azortis.protocolvanish.bukkit.command.subcommands.*;
 import com.azortis.protocolvanish.bukkit.settings.old.wrappers.CommandSettingsWrapper;
 import org.bukkit.Location;
