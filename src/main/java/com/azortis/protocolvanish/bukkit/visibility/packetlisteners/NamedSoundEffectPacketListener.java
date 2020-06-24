@@ -41,14 +41,14 @@ public class NamedSoundEffectPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
+        if (plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().contains("NamedSound")) {
             if (event.getPacket().getSoundCategories().read(0) == EnumWrappers.SoundCategory.PLAYERS) {
                 int x = event.getPacket().getIntegers().read(0) / 8;
                 int y = event.getPacket().getIntegers().read(1) / 8;
                 int z = event.getPacket().getIntegers().read(2) / 8;
 
                 Player viewer = event.getPlayer();
-                for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
+                for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
                     Player vanishedPlayer = Bukkit.getPlayer(uuid);
                     if (vanishedPlayer != null && plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer, viewer) &&
                             viewer.getWorld().equals(vanishedPlayer.getWorld()) &&

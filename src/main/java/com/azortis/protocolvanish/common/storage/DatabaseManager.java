@@ -18,7 +18,7 @@
 
 package com.azortis.protocolvanish.common.storage;
 
-import com.azortis.protocolvanish.common.storage.drivers.H2Driver;
+import com.azortis.protocolvanish.common.storage.drivers.SQLiteDriver;
 import com.azortis.protocolvanish.common.storage.drivers.MariaDBDriver;
 
 import java.io.File;
@@ -31,9 +31,9 @@ public class DatabaseManager {
         if(storageSettings.getDriver().equalsIgnoreCase("MariaDB")){
             DriverLoader.loadDriver(plugin, dataFolder, "mariadb-driver-2.6.0.jar", "https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/2.6.0/mariadb-java-client-2.6.0.jar");
             driver = new MariaDBDriver(storageSettings);
-        }else if(storageSettings.getDriver().equalsIgnoreCase("H2")){
-            DriverLoader.loadDriver(plugin, dataFolder, "h2-driver-1.4.200", "https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar");
-            driver = new H2Driver(dataFolder);
+        }else if(storageSettings.getDriver().equalsIgnoreCase("SQLite")){
+            DriverLoader.loadDriver(plugin, dataFolder, "sqlite-jdbc-3.32.3.jar", "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.32.3/sqlite-jdbc-3.32.3.jar");
+            driver = new SQLiteDriver(dataFolder);
         }
     }
 

@@ -41,7 +41,7 @@ public class ActionBarRunnable implements Runnable {
 
     @Override
     public void run() {
-        if (plugin.getSettingsManager().getMessageSettings().getDisplayActionBar()) {
+        if (plugin.getSettingsManager().getSettings().getMessageSettings().getDisplayActionBar()) {
             for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
                 if (Bukkit.getPlayer(uuid) != null && Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuid))) {
                     try {
@@ -49,7 +49,7 @@ public class ActionBarRunnable implements Runnable {
                         packetContainer.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
                         packetContainer.getChatComponents().write(0, WrappedChatComponent.fromText
                                 (ChatColor.translateAlternateColorCodes('&',
-                                        plugin.getSettingsManager().getMessageSettings().getMessage("actionBarMsg"))));
+                                        plugin.getSettingsManager().getMessages().getMessage("actionBarMsg"))));
                         ProtocolLibrary.getProtocolManager().sendServerPacket(Bukkit.getPlayer(uuid), packetContainer);
                     } catch (InvocationTargetException ex) {
                         ex.printStackTrace();

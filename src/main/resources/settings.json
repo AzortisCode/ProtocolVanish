@@ -6,7 +6,7 @@
     }
   },
   "storageSettings": {
-    "driver": "H2",
+    "driver": "SQLite",
     "address": "127.0.0.1:3306",
     "database": "",
     "username": "",
@@ -28,6 +28,7 @@
     }
   },
   "messageSettings": {
+    "notifyUpdates": true,
     "broadCastFakeQuitOnVanish": true,
     "broadCastFakeJoinOnReappear": true,
     "announceVanishStateToAdmins": true,
@@ -36,8 +37,8 @@
     "displayActionBar": true
   },
   "permissionSettings": {
-    "enableSeePermission": true,
-    "enableLayeredPermissions": true,
+    "useSeePermission": true,
+    "useLayeredPermissions": true,
     "maxLevel": 100
   },
   "commandSettings": {
@@ -50,5 +51,5 @@
       "protocolvanish"
     ]
   },
-  "fileVersion": "2"
+  "fileVersion": "3"
 }

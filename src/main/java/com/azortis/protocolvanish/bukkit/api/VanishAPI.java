@@ -27,7 +27,7 @@ import java.util.UUID;
 
 public class VanishAPI {
 
-    private static ProtocolVanish plugin;
+    /*private static ProtocolVanish plugin;
 
     public static Collection<UUID> getVanishedPlayers() {
         return plugin.getVisibilityManager().getVanishedPlayers();
@@ -64,5 +64,5 @@ public class VanishAPI {
     public static void setPlugin(ProtocolVanish paramPlugin) {
         plugin = paramPlugin;
         paramPlugin.getLogger().info("Applying VanishAPI...");
-    }
+    }*/
 }

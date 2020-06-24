@@ -38,6 +38,10 @@
               <pattern>com.zaxxer.hikari</pattern>
               <shadedPattern>com.azortis.protocolvanish.hikari</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>redis.clients.jedis</pattern>
+              <shadedPattern>com.azortis.protocolvanish.jedis</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
       </plugin>
@@ -73,16 +77,12 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.13.2-R0.1-SNAPSHOT</version>
+      <version>1.15.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>commons-lang</artifactId>
           <groupId>commons-lang</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>json-simple</artifactId>
-          <groupId>com.googlecode.json-simple</groupId>
         </exclusion>
         <exclusion>
           <artifactId>guava</artifactId>
@@ -105,13 +105,9 @@
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
-      <version>4.4.0</version>
+      <version>4.5.0</version>
       <scope>provided</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>ProtocolLib-API</artifactId>
-          <groupId>com.comphenix.protocol</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>cglib-nodep</artifactId>
           <groupId>cglib</groupId>

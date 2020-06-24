@@ -53,10 +53,12 @@ public class SettingsManager {
         }catch (FileNotFoundException ex){
             ex.printStackTrace();
         }
-        if(!plugin.getUpdateChecker().getPluginVersion().getSettingsFileVersion().equals(settings.getFileVersion())){
+        if(!plugin.getPluginVersion().getSettingsFileVersion().equals(settings.getFileVersion())){
             plugin.getLogger().severe("You're settingsfile is out of date! Please update otherwise it will break!");
         }
-
+        if(!plugin.getPluginVersion().getMessageFileVersion().equals(messages.getFileVersion())){
+            plugin.getLogger().severe("You're messagesfile is out of date! Please update otherwise it will break!");
+        }
     }
 
     public Settings getSettings() {

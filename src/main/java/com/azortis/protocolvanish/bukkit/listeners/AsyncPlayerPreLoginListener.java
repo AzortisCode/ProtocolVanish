@@ -26,11 +26,11 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import java.util.UUID;
 
-public class AsyncPrePlayerLoginListener implements Listener {
+public class AsyncPlayerPreLoginListener implements Listener {
 
     private final ProtocolVanish plugin;
 
-    public AsyncPrePlayerLoginListener(ProtocolVanish plugin){
+    public AsyncPlayerPreLoginListener(ProtocolVanish plugin){
         this.plugin = plugin;
     }
 
@@ -54,9 +54,7 @@ public class AsyncPrePlayerLoginListener implements Listener {
                         }
                     }
                 } else {
-                    if(plugin.getVanishPlayer(playerUUID) == null){
-                        plugin.loadVanishPlayer(playerUUID);
-                    }
+                    plugin.loadVanishPlayer(playerUUID);
                 }
             }
         }

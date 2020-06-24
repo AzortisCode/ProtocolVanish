@@ -86,6 +86,11 @@ public class BukkitMessagingService implements MessagingService {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> provider.postMessage(message));
     }
 
+    @Override
+    public MessagingProvider getProvider() {
+        return provider;
+    }
+
     /**
      * Adds or removes entry for async join threads to know if a player is already loaded or not.
      * Should only be called from main thread.
@@ -106,7 +111,7 @@ public class BukkitMessagingService implements MessagingService {
      * Should not be called from main thread!
      *
      * @param playerUUID The uuid of the player.
-     * @return if the vanishPlayer instance is loaded/
+     * @return if the vanishPlayer instance is loaded.
      */
     public synchronized boolean isLoaded(UUID playerUUID){
         return loadedUUIDs.contains(playerUUID);

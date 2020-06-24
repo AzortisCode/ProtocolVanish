@@ -1,9 +1,7 @@
 name: ProtocolVanish
-authors: [YourPalJake, X1XX]
+author: YourPalJake
 main: com.azortis.protocolvanish.bukkit.ProtocolVanish
 version: 1.0
-api-version: 1.13
-load: STARTUP
+api-version: 1.15
 loadbefore: [Essentials]
 depend: [ProtocolLib, PlaceholderAPI]
-softdepend: [Dynmap]

@@ -41,14 +41,14 @@ public class WorldParticlesPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("WorldParticle")) {
+        if (plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().contains("WorldParticle")) {
             if (event.getPacket().getParticles().read(0) == EnumWrappers.Particle.BLOCK_DUST) {
                 float x = event.getPacket().getFloat().read(0);
                 float y = event.getPacket().getFloat().read(1);
                 float z = event.getPacket().getFloat().read(2);
 
                 Player viewer = event.getPlayer();
-                for (UUID uuid : plugin.getVisibilityManager().getVanishedPlayers()) {
+                for (UUID uuid : plugin.getVisibilityManager().getOnlineVanishedPlayers()) {
                     Player vanishedPlayer = Bukkit.getPlayer(uuid);
                     if (vanishedPlayer != null && plugin.getVisibilityManager().isVanishedFrom(vanishedPlayer,
                             viewer) && viewer.getWorld().equals(vanishedPlayer.getWorld())

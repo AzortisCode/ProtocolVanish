@@ -16,16 +16,20 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.hooks;
+package com.azortis.protocolvanish.bukkit.visibility;
 
-public interface PluginHook {
+import java.util.ArrayList;
 
-    String getName();
+public class VisibilitySettings {
 
-    void enableHook();
+    private ArrayList<String> enabledPacketListeners;
+    private ExternalVisibilitySettings externalVisibilitySettings;
 
-    void disableHook();
+    public ArrayList<String> getEnabledPacketListeners() {
+        return enabledPacketListeners;
+    }
 
-    boolean isEnabled();
-
+    public ExternalVisibilitySettings getExternalVisibilitySettings() {
+        return externalVisibilitySettings;
+    }
 }

@@ -42,9 +42,9 @@ public class PlayerInfoPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("PlayerInfo")) {
+        if (plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().contains("PlayerInfo")) {
             Player receiver = event.getPlayer();
-            Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getVanishedPlayers();
+            Collection<UUID> vanishedPlayers = plugin.getVisibilityManager().getOnlineVanishedPlayers();
             List<PlayerInfoData> playerInfoDataList = event.getPacket().getPlayerInfoDataLists().read(0);
             playerInfoDataList.removeIf((PlayerInfoData playerInfoData) -> {
                 UUID playerInfoUUID = playerInfoData.getProfile().getUUID();

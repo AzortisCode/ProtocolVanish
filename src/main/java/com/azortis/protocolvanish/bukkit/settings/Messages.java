@@ -16,17 +16,26 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.messaging;
+package com.azortis.protocolvanish.bukkit.settings;
 
-import com.azortis.protocolvanish.common.messaging.message.Message;
-import com.azortis.protocolvanish.common.messaging.provider.MessagingProvider;
+import java.io.Serializable;
+import java.util.HashMap;
 
-public interface MessagingService {
+public class Messages implements Serializable {
 
-    void consumeMessage(String message);
+    private HashMap<String, String> messages;
+    private String fileVersion;
 
-    void postMessage(Message message);
+    public HashMap<String, String> getMessages() {
+        return messages;
+    }
 
-    MessagingProvider getProvider();
+    public String getMessage(String message){
+        return messages.get(message);
+    }
+
+    public String getFileVersion() {
+        return fileVersion;
+    }
 
 }

@@ -39,7 +39,7 @@ public class PermissionManager {
     }
 
     public boolean hasPermissionToSee(Player hider, Player viewer) {
-        if (!plugin.getSettingsManager().getPermissionSettings().getEnableSeePermission()) return false;
+        if (!plugin.getSettingsManager().getSettings().getPermissionSettings().getUseSeePermission()) return false;
         int hiderLevel = Permission.USE.getPermissionLevel(plugin, hider);
         int viewerLevel = Permission.SEE.getPermissionLevel(plugin, viewer);
         return viewerLevel >= hiderLevel;
@@ -48,13 +48,13 @@ public class PermissionManager {
     public enum Permission {
         USE("use"),
         SEE("see"),
-        CHANGE_NIGHT_VISION("bypass.nightvision"),
+        /*CHANGE_NIGHT_VISION("bypass.nightvision"),
         CHANGE_DAMAGE("bypass.damage"),
         CHANGE_HUNGER("bypass.hunger"),
         CHANGE_CREATURE_TARGET("bypass.creaturetarget"),
         CHANGE_ITEM_PICKUP("bypass.itempickup"),
         FLY("fly"),
-        KEEP_FLY("fly.keep"),
+        KEEP_FLY("fly.keep"),*/
         ADMIN("admin");
 
         private final String permissionNode;
@@ -65,14 +65,14 @@ public class PermissionManager {
 
         private int getPermissionLevel(ProtocolVanish plugin, Player player) {
             if (permissionNode.equals("use") || permissionNode.equals("see")) {
-                int maxLevel = plugin.getSettingsManager().getPermissionSettings().getMaxLevel();
+                int maxLevel = plugin.getSettingsManager().getSettings().getPermissionSettings().getMaxLevel();
                 int level = player.hasPermission("protocolvanish." + this.permissionNode) ? 1 : 0;
                 for (int i = 1; i <= maxLevel; i++) {
                     if (player.hasPermission("protocolvanish." + this.permissionNode + ".level." + i)) {
                         level = i;
                     }
                 }
-                if (level > 0 && !plugin.getSettingsManager().getPermissionSettings().getEnableLayeredPermissions())
+                if (level > 0 && !plugin.getSettingsManager().getSettings().getPermissionSettings().getUseLayeredPermissions())
                     return 1;
                 return level;
             }

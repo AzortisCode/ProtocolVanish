@@ -89,7 +89,9 @@ public class BungeeMessagingService implements MessagingService {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> provider.postMessage(message));
     }
 
+    @Override
     public MessagingProvider getProvider() {
         return provider;
     }
+
 }

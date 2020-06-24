@@ -16,25 +16,42 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.bukkit.storage;
+package com.azortis.protocolvanish.bukkit.command;
 
-import com.azortis.protocolvanish.bukkit.VanishPlayer;
-import org.bukkit.entity.Player;
+import java.util.List;
 
-public interface IDatabase {
+public class CommandSettings {
 
-    VanishPlayer getVanishPlayer(Player player);
+    private String name;
+    private String description;
+    private String usage;
+    private List<String> aliases;
 
-    VanishPlayer.PlayerSettings getPlayerSettings(Player player);
+    public String getName() {
+        return name;
+    }
 
-    void saveVanishPlayer(VanishPlayer vanishPlayer);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    void savePlayerSettings(VanishPlayer.PlayerSettings playerSettings);
+    public String getDescription() {
+        return description;
+    }
 
-    void createVanishPlayer(VanishPlayer vanishPlayer);
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    void deleteVanishPlayer(VanishPlayer vanishPlayer);
+    public String getUsage() {
+        return usage;
+    }
 
-    void updateServerInfo();
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
 
+    public List<String> getAliases() {
+        return aliases;
+    }
 }

@@ -18,7 +18,9 @@
 
 package com.azortis.protocolvanish.bukkit.settings;
 
+import com.azortis.protocolvanish.bukkit.command.CommandSettings;
 import com.azortis.protocolvanish.bukkit.visibility.VisibilitySettings;
+import com.azortis.protocolvanish.common.settings.PermissionSettings;
 import com.azortis.protocolvanish.common.storage.StorageSettings;
 
 import java.io.Serializable;
@@ -28,6 +30,9 @@ public class Settings implements Serializable {
     private BungeeSettings bungeeSettings;
     private StorageSettings storageSettings;
     private VisibilitySettings visibilitySettings;
+    private MessageSettings messageSettings;
+    private PermissionSettings permissionSettings;
+    private CommandSettings commandSettings;
     private String fileVersion;
 
     public BungeeSettings getBungeeSettings() {
@@ -40,6 +45,18 @@ public class Settings implements Serializable {
 
     public VisibilitySettings getVisibilitySettings() {
         return visibilitySettings;
+    }
+
+    public MessageSettings getMessageSettings() {
+        return messageSettings;
+    }
+
+    public PermissionSettings getPermissionSettings() {
+        return permissionSettings;
+    }
+
+    public CommandSettings getCommandSettings() {
+        return commandSettings;
     }
 
     public String getFileVersion() {

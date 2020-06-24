@@ -49,14 +49,14 @@ public class GeneralEntityPacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        try {
-            Player receiver = event.getPlayer();
-            PacketContainer packet = event.getPacket();
-            if(event.isReadOnly())event.setReadOnly(false);
-            if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
+        if (plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().contains("GeneralEntity")) {
+            try {
+                Player receiver = event.getPlayer();
+                PacketContainer packet = event.getPacket();
+                if (event.isReadOnly()) event.setReadOnly(false);
                 if (packet.getType() == PacketType.Play.Server.NAMED_ENTITY_SPAWN) {
                     UUID playerUUID = packet.getUUIDs().read(0);
-                    if (plugin.getVisibilityManager().getVanishedPlayers().contains(playerUUID)
+                    if (plugin.getVisibilityManager().getOnlineVanishedPlayers().contains(playerUUID)
                             && plugin.getVisibilityManager().isVanishedFrom(Bukkit.getPlayer(playerUUID), receiver))
                         event.setCancelled(true);
                 } else if (packet.getType() == PacketType.Play.Server.ENTITY_DESTROY) {
@@ -86,9 +86,10 @@ public class GeneralEntityPacketListener extends PacketAdapter {
                             && plugin.getVisibilityManager().isVanishedFrom(player, receiver))
                         event.setCancelled(true);
                 }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        }catch (Exception e){
-            if(!e.getMessage().contains("not supported for temporary players"))e.printStackTrace();
         }
     }
 

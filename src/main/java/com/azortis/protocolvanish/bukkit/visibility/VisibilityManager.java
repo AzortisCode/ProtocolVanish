@@ -19,10 +19,9 @@
 package com.azortis.protocolvanish.bukkit.visibility;
 
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.bukkit.VanishPlayer;
-import com.azortis.protocolvanish.bukkit.api.PlayerReappearEvent;
-import com.azortis.protocolvanish.bukkit.api.PlayerVanishEvent;
 import com.azortis.protocolvanish.bukkit.visibility.packetlisteners.*;
+import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
@@ -42,9 +41,11 @@ public class VisibilityManager {
 
     private final HashMap<UUID, Collection<String>> bypassFilterPackets = new HashMap<>(); // For the entityDestroy packet.
 
-    public VisibilityManager(ProtocolVanish plugin) {
+    public VisibilityManager(ProtocolVanish plugin){
         this.plugin = plugin;
         this.visibilityChanger = new VisibilityChanger(plugin);
+        this.vanishedPlayers.addAll(plugin.getDatabaseManager().getDriver().getVanishedUUIDs());
+        validateSettings();
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new ServerInfoPacketListener(plugin));
         protocolManager.addPacketListener(new PlayerInfoPacketListener(plugin));
@@ -55,41 +56,96 @@ public class VisibilityManager {
         new ActionBarRunnable(plugin);
     }
 
+    private void validateSettings(){
+        if(plugin.getSettingsManager().getSettings().getBungeeSettings().isEnabled()){
+            plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().remove("TabComplete");
+            // Will cause the client to crash on BungeeCord when you try to TabComplete. You rather should use BungeeCord its tab filter.
+
+            if(plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().contains("ServerInfo")){
+                plugin.getLogger().warning("You should remove ServerInfo from packet listeners, it might cause issues with BungeeCord");
+                plugin.getLogger().warning("You can easily use the server info module from the BungeeCord version!");
+            }
+            plugin.getSettingsManager().saveSettings();
+        }
+    }
+
     /**
      * Make a player vanish or reappear.
      *
      * @param uuid     The {@link UUID} of player you wan't to vanish.
      * @param vanished If the player should vanish.
      */
-    public void setVanished(UUID uuid, boolean vanished) {
+    public void setVanished(UUID uuid, boolean vanished){
         if (vanishedPlayers.contains(uuid) && vanished) return;
-        if (vanished) {
-            PlayerVanishEvent playerVanishEvent = new PlayerVanishEvent(Bukkit.getPlayer(uuid));
-            Bukkit.getServer().getPluginManager().callEvent(playerVanishEvent);
-            if (!playerVanishEvent.isCancelled()) {
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
-                if (vanishPlayer == null) return; //TODO Log that a player can not vanish if player has no permission.
-                vanishedPlayers.add(uuid);
-                vanishPlayer.setVanished(true);
-                plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                vanishedFromMap.put(vanishPlayer.getPlayer(), new ArrayList<>());
-                visibilityChanger.vanishPlayer(uuid);
-                plugin.getStorageManager().updateServerInfo();
-            }
-        } else {
-            PlayerReappearEvent playerReappearEvent = new PlayerReappearEvent(Bukkit.getPlayer(uuid));
-            Bukkit.getServer().getPluginManager().callEvent(playerReappearEvent);
-            if (!playerReappearEvent.isCancelled()) {
-                VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
-                if (vanishPlayer == null) return;
-                vanishedPlayers.remove(uuid);
-                vanishPlayer.setVanished(false);
-                plugin.getStorageManager().saveVanishPlayer(vanishPlayer);
-                visibilityChanger.showPlayer(uuid);
-                clearVanishedFrom(vanishPlayer.getPlayer());
-                plugin.getStorageManager().updateServerInfo();
-            }
+        VanishPlayer vanishPlayer = plugin.getVanishPlayer(uuid);
+        Player player = Bukkit.getPlayer(uuid);
+        if(vanishPlayer == null || player == null)return;
+        if(vanished){
+            vanishedPlayers.add(uuid);
+            vanishPlayer.setVanished(true);
+            vanishedFromMap.put(player, new ArrayList<>());
+            visibilityChanger.vanishPlayer(uuid);
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+               if(plugin.getSettingsManager().getSettings().getBungeeSettings().isEnabled()){
+                   plugin.getMessagingService().postMessage(new VanishMessage(uuid, true, false));
+               }
+                plugin.getDatabaseManager().getDriver().saveVanishPlayer(vanishPlayer);
+            });
+        }else{
+            vanishedPlayers.remove(uuid);
+            vanishPlayer.setVanished(false);
+            visibilityChanger.showPlayer(uuid);
+            clearVanishedFrom(player);
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, ()->{
+                if(plugin.getSettingsManager().getSettings().getBungeeSettings().isEnabled()){
+                    plugin.getMessagingService().postMessage(new VanishMessage(uuid, false, false));
+                }
+                plugin.getDatabaseManager().getDriver().saveVanishPlayer(vanishPlayer);
+            });
         }
+    }
+
+    /**
+     * Check if a certain player is vanished
+     *
+     * @param uuid The {@link UUID} of the player.
+     * @return if the player is vanished.
+     */
+    public boolean isVanished(UUID uuid) {
+        return vanishedPlayers.contains(uuid);
+    }
+
+    /**
+     * Check if a certain player is vanished
+     *
+     * @param player the {@link Player} instance.
+     * @return if the player is vanished.
+     */
+    public boolean isVanished(Player player) {
+        return isVanished(player.getUniqueId());
+    }
+
+    /**
+     * Get the {@link Collection} of {@link UUID} of vanished players.
+     * This is always in sync with database, for bungee support.
+     *
+     * @return A collection of vanished player's their {@link UUID}
+     */
+    public Collection<UUID> getVanishedPlayers() {
+        return vanishedPlayers;
+    }
+
+    /**
+     * Get the {@link Collection} of {@link UUID} of online vanished players.
+     *
+     * @return A collection of online vanished player's their {@link UUID}
+     */
+    public Collection<UUID> getOnlineVanishedPlayers(){
+        Collection<UUID> onlineVanishedPlayers = new ArrayList<>();
+        vanishedPlayers.forEach(uuid -> {
+            if(Bukkit.getPlayer(uuid) != null)onlineVanishedPlayers.add(uuid);
+        });
+        return onlineVanishedPlayers;
     }
 
     /**
@@ -121,7 +177,6 @@ public class VisibilityManager {
      * @param player The player that is vanished.
      */
     public void joinVanished(Player player) {
-        vanishedPlayers.add(player.getUniqueId());
         vanishedFromMap.put(player, new ArrayList<>());
     }
 
@@ -131,7 +186,6 @@ public class VisibilityManager {
      * @param player The player that is vanished.
      */
     public void leaveVanished(Player player) {
-        vanishedPlayers.remove(player.getUniqueId());
         clearVanishedFrom(player);
     }
 
@@ -147,6 +201,13 @@ public class VisibilityManager {
         return false;
     }
 
+    /**
+     * Check is a certain entityId is vanished from a certain viewer in a certain world.
+     *
+     * @param entityId  The player that is hiding
+     * @param viewer The player that is viewing
+     * @return If the hider is vanished from the viewer.
+     */
     public boolean isVanishedFrom(int entityId, World world, Player viewer){
         for (Player player : Bukkit.getOnlinePlayers()){
             if(player.getEntityId() == entityId && player.getWorld() == world){
@@ -156,6 +217,13 @@ public class VisibilityManager {
         return false;
     }
 
+    /**
+     * Check is a certain player name is vanished from a certain viewer.
+     *
+     * @param hiderName  The name of the player hiding.
+     * @param viewer The player that is viewing
+     * @return If the hider is vanished from the viewer.
+     */
     public boolean isVanishedFrom(String hiderName, Player viewer){
         if(viewer.getName().equals(hiderName))return false;
         for (Player player : Bukkit.getOnlinePlayers()){
@@ -171,37 +239,8 @@ public class VisibilityManager {
      *
      * @param player The player you want to remove from the map.
      */
-    public void clearVanishedFrom(Player player) {
+    private void clearVanishedFrom(Player player) {
         if (!vanishedFromMap.containsKey(player)) vanishedFromMap.remove(player);
-    }
-
-    /**
-     * Check if a certain player is vanished
-     *
-     * @param uuid The {@link UUID} of the player.
-     * @return if the player is vanished.
-     */
-    public boolean isVanished(UUID uuid) {
-        return vanishedPlayers.contains(uuid);
-    }
-
-    /**
-     * Check if a certain player is vanished
-     *
-     * @param player the {@link Player} instance.
-     * @return if the player is vanished.
-     */
-    public boolean isVanished(Player player) {
-        return isVanished(player.getUniqueId());
-    }
-
-    /**
-     * Get the {@link Collection} of {@link UUID} of online vanished players.
-     *
-     * @return A collection of vanished player's their {@link UUID}
-     */
-    public Collection<UUID> getVanishedPlayers() {
-        return vanishedPlayers;
     }
 
     /**
@@ -255,6 +294,14 @@ public class VisibilityManager {
     public boolean bypassFilter(UUID receiverUUID, UUID vanishedUUID, String packetType){
         if(!bypassFilterPackets.containsKey(receiverUUID))return false;
         return bypassFilterPackets.get(receiverUUID).contains(vanishedUUID.toString() + " " + packetType);
+    }
+
+    /**
+     * For internal purposes only!
+     */
+    public void reload(){
+        validateSettings();
+        visibilityChanger.reload();
     }
 
 }

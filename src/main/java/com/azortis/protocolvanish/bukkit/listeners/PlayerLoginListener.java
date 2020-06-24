@@ -49,8 +49,8 @@ public class PlayerLoginListener implements Listener {
                 player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
                 for (Player viewer : Bukkit.getOnlinePlayers())
                     plugin.getVisibilityManager().setVanished(player, viewer, true);
-            }else{
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> plugin.createVanishPlayer(player.getUniqueId()));
+            }else if(!plugin.getSettingsManager().getSettings().getBungeeSettings().isEnabled()) {
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> plugin.loadVanishPlayer(player.getUniqueId()));
             }
         }else if(plugin.getVisibilityManager().isVanished(player) && !plugin.getSettingsManager().getSettings().getBungeeSettings().isEnabled()){
             // Because its not bungee synced, we should just remove every trace of this player in the plugin.

@@ -18,12 +18,13 @@
 
 package com.azortis.protocolvanish.bukkit;
 
-import com.azortis.protocolvanish.bukkit.api.VanishAPI;
-import com.azortis.protocolvanish.bukkit.listeners.*;
 import com.azortis.protocolvanish.bukkit.command.VanishCommand;
+import com.azortis.protocolvanish.bukkit.listeners.*;
 import com.azortis.protocolvanish.bukkit.settings.SettingsManager;
 import com.azortis.protocolvanish.bukkit.visibility.VisibilityManager;
 import com.azortis.protocolvanish.common.PlayerSettings;
+import com.azortis.protocolvanish.common.PluginVersion;
+import com.azortis.protocolvanish.common.UpdateChecker;
 import com.azortis.protocolvanish.common.VanishPlayer;
 import com.azortis.protocolvanish.common.storage.DatabaseManager;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -40,14 +41,17 @@ import java.util.UUID;
 public final class ProtocolVanish extends JavaPlugin {
 
     private Metrics metrics;
+    private PluginVersion pluginVersion;
+    private UpdateChecker updateChecker;
+    private VanishCommand vanishCommand;
 
+    // Managers
     private SettingsManager settingsManager;
     private DatabaseManager databaseManager;
     private BukkitMessagingService messagingService;
     private PermissionManager permissionManager;
     private VisibilityManager visibilityManager;
-    private UpdateChecker updateChecker;
-    private VanishCommand vanishCommand;
+
 
     private final HashMap<UUID, VanishPlayer> vanishPlayerMap = new HashMap<>();
 
@@ -63,7 +67,17 @@ public final class ProtocolVanish extends JavaPlugin {
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        this.updateChecker = new UpdateChecker(this);
+        this.pluginVersion = PluginVersion.getVersionFromString(this.getDescription().getVersion());
+        this.updateChecker = new UpdateChecker(pluginVersion);
+        if(updateChecker.hasFailed()){
+            getLogger().severe("Failed to check for updates!");
+        }else if (updateChecker.isUpdateAvailable()){
+            getLogger().info("A new version(v" + updateChecker.getSpigotVersion().getVersionString() + ") is available on spigot!");
+            getLogger().info("You can download it here: https://www.spigotmc.org/resources/77011/");
+
+        }else if(updateChecker.isUnreleased()){
+            getLogger().warning("You're using an unreleased version(v" + pluginVersion.getVersionString() + "). Please proceed with caution.");
+        }
         this.metrics = new Metrics(this);
         this.settingsManager = new SettingsManager(this);
         this.databaseManager = new DatabaseManager(this, settingsManager.getSettings().getStorageSettings(), this.getDataFolder());
@@ -72,30 +86,35 @@ public final class ProtocolVanish extends JavaPlugin {
         this.visibilityManager = new VisibilityManager(this);
 
         this.getLogger().info("Registering events...");
+        new AsyncPlayerPreLoginListener(this);
         new PlayerLoginListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
 
-        VanishAPI.setPlugin(this);
+        this.vanishCommand = new VanishCommand(this);
     }
 
     @Override
     public void onDisable() {
-
+        this.messagingService.getProvider().clearMessages();
     }
 
     public void reload(){
         settingsManager.reloadSettings();
         settingsManager.reloadMessages();
+        visibilityManager.reload();
+    }
 
+    public Metrics getMetrics() {
+        return metrics;
     }
 
     public UpdateChecker getUpdateChecker(){
         return updateChecker;
     }
 
-    public Metrics getMetrics() {
-        return metrics;
+    public PluginVersion getPluginVersion() {
+        return pluginVersion;
     }
 
     public SettingsManager getSettingsManager() {
@@ -131,12 +150,21 @@ public final class ProtocolVanish extends JavaPlugin {
     public synchronized void loadVanishPlayer(UUID uuid){
         VanishPlayer vanishPlayer = databaseManager.getDriver().getVanishPlayer(uuid);
         if(vanishPlayer == null){
-            createVanishPlayer(uuid);
+            if(!settingsManager.getSettings().getBungeeSettings().isEnabled()){
+                createVanishPlayer(uuid);
+            }
         }else{
             Bukkit.getScheduler().runTask(this, ()-> vanishPlayerMap.put(uuid, vanishPlayer));
         }
     }
 
+    /**
+     * Creates a vanishPlayer entry in the database, and also immediately loads it into cache.
+     * Should not be called in bungee mode.
+     * Should never be called on main thread!
+     *
+     * @param uuid The uuid of the player.
+     */
     public synchronized void createVanishPlayer(UUID uuid){
         VanishPlayer vanishPlayer = new VanishPlayer(uuid, false, new PlayerSettings());
         databaseManager.getDriver().createVanishPlayer(vanishPlayer);

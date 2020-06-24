@@ -21,39 +21,38 @@ package com.azortis.protocolvanish.common.storage.drivers;
 import com.azortis.protocolvanish.common.PlayerSettings;
 import com.azortis.protocolvanish.common.VanishPlayer;
 import com.azortis.protocolvanish.common.storage.Driver;
-import com.azortis.protocolvanish.common.storage.StorageSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zaxxer.hikari.HikariDataSource;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-public class MariaDBDriver implements Driver{
+public class SQLiteDriver implements Driver {
 
-    private final HikariDataSource hikari;
-    private final String tablePrefix;
+    private final File databaseFile;
     private final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-    public MariaDBDriver(StorageSettings storageSettings){
-        hikari = new HikariDataSource();
-        hikari.setDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
-        hikari.addDataSourceProperty("serverName", storageSettings.getAddress().split(":")[0]);
-        hikari.addDataSourceProperty("port", storageSettings.getAddress().split(":")[1]);
-        hikari.addDataSourceProperty("databaseName", storageSettings.getDatabase());
-        hikari.addDataSourceProperty("userName", storageSettings.getUsername());
-        hikari.addDataSourceProperty("password", storageSettings.getPassword());
-        this.tablePrefix = storageSettings.getTablePrefix();
+    public SQLiteDriver(File dataFolder) {
+        databaseFile = new File(dataFolder, "storage.db");
+        if(!databaseFile.exists()){
+            try {
+                databaseFile.createNewFile();
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
         createTable();
     }
 
     @Override
     public VanishPlayer getVanishPlayer(UUID uuid) {
-        try(Connection connection = hikari.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "vanishPlayers WHERE uuid=?");
+        try(Connection connection = getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vanishPlayers WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -75,8 +74,8 @@ public class MariaDBDriver implements Driver{
 
     @Override
     public void saveVanishPlayer(VanishPlayer vanishPlayer) {
-        try(Connection connection = hikari.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + tablePrefix + "vanishPlayers SET vanished=?, playerSettings=? WHERE uuid=?");
+        try(Connection connection = getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE vanishPlayers SET vanished=?, playerSettings=? WHERE uuid=?");
             preparedStatement.setBoolean(1, vanishPlayer.isVanished());
             preparedStatement.setString(2, vanishPlayer.getPlayerSettings().toString());
             preparedStatement.setString(3, vanishPlayer.getUUID().toString());
@@ -89,8 +88,8 @@ public class MariaDBDriver implements Driver{
 
     @Override
     public void deleteVanishPlayer(UUID uuid) {
-        try(Connection connection = hikari.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + tablePrefix + "vanishPlayers WHERE uuid=?");
+        try(Connection connection = getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM vanishPlayers WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -101,8 +100,8 @@ public class MariaDBDriver implements Driver{
 
     @Override
     public void createVanishPlayer(VanishPlayer vanishPlayer) {
-        try(Connection connection = hikari.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + tablePrefix + "vanishPlayers VALUES (?,?,?)");
+        try(Connection connection = getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO vanishPlayers VALUES (?,?,?)");
             preparedStatement.setString(1, vanishPlayer.getUUID().toString());
             preparedStatement.setBoolean(2, vanishPlayer.isVanished());
             preparedStatement.setString(3, vanishPlayer.getPlayerSettings().toString());
@@ -115,9 +114,9 @@ public class MariaDBDriver implements Driver{
 
     @Override
     public Collection<UUID> getVanishedUUIDs() {
-        try(Connection connection = hikari.getConnection()){
+        try(Connection connection = getConnection()){
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT uuid FROM " + tablePrefix + "vanishPlayers WHERE vanished=true");
+            ResultSet resultSet = statement.executeQuery("SELECT uuid FROM vanishPlayers WHERE vanished=true");
             Collection<UUID> UUIDs = new ArrayList<>();
             while(resultSet.next()){
                 UUID uuid = UUID.fromString(resultSet.getString("uuid"));
@@ -130,23 +129,24 @@ public class MariaDBDriver implements Driver{
         return null;
     }
 
+    @Override
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:sqlite:" + databaseFile.toString());
+    }
+
+    @Override
+    public String getTablePrefix() {
+        return "";
+    }
+
     private void createTable(){
-        try(Connection connection = hikari.getConnection()){
+        try(Connection connection = getConnection()){
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished boolean, playerSettings TEXT);");
+            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS vanishPlayers(uuid varchar(36), vanished boolean, playerSettings TEXT);");
             vanishPlayerStatement.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
     }
 
-    @Override
-    public Connection getConnection()throws SQLException {
-        return hikari.getConnection();
-    }
-
-    @Override
-    public String getTablePrefix() {
-        return tablePrefix;
-    }
 }

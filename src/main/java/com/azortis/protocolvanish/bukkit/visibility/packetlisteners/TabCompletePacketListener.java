@@ -37,7 +37,7 @@ public class TabCompletePacketListener extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        if (plugin.getSettingsManager().getVisibilitySettings().getEnabledPacketListeners().contains("TabComplete")) {
+        if (plugin.getSettingsManager().getSettings().getVisibilitySettings().getEnabledPacketListeners().contains("TabComplete")) {
             Suggestions suggestions = event.getPacket().getSpecificModifier(Suggestions.class).read(0);
             boolean writeChanges = false;
             for (Suggestion suggestion : suggestions.getList()){
