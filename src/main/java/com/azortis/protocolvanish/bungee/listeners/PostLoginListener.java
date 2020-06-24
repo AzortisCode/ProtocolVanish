@@ -19,6 +19,8 @@
 package com.azortis.protocolvanish.bungee.listeners;
 
 import com.azortis.protocolvanish.bungee.ProtocolVanishProxy;
+import com.azortis.protocolvanish.common.PlayerSettings;
+import com.azortis.protocolvanish.common.VanishPlayer;
 import com.azortis.protocolvanish.common.messaging.message.LoadMessage;
 import com.azortis.protocolvanish.common.messaging.message.UnloadMessage;
 import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
@@ -31,23 +33,28 @@ public class PostLoginListener implements Listener {
 
     private final ProtocolVanishProxy plugin;
 
-    public PostLoginListener(ProtocolVanishProxy plugin){
+    public PostLoginListener(ProtocolVanishProxy plugin) {
         this.plugin = plugin;
         plugin.getProxy().getPluginManager().registerListener(plugin, this);
     }
 
     @EventHandler
-    public void onPostLogin(PostLoginEvent event){
+    public void onPostLogin(PostLoginEvent event) {
         ProxiedPlayer player = event.getPlayer();
-        if(plugin.getVanishedPlayers().contains(player.getUniqueId())){
-            if(plugin.getPermissionManager().hasPermissionToVanish(player)){
-                plugin.getProxy().getScheduler().runAsync(plugin, ()-> plugin.getMessagingService().postMessage(new LoadMessage(player.getUniqueId())));
-            }else{
-                plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-                    plugin.getMessagingService().postMessage(new VanishMessage(player.getUniqueId(), false, true));
-                    plugin.getDatabaseManager().getDriver().deleteVanishPlayer(player.getUniqueId());
-                });
-            }
+        if (plugin.getPermissionManager().hasPermissionToVanish(player)) {
+            plugin.getLoadedPlayers().add(player.getUniqueId());
+            plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+                if (plugin.getDatabaseManager().getDriver().getVanishPlayer(player.getUniqueId()) == null) {
+                    VanishPlayer vanishPlayer = new VanishPlayer(player.getUniqueId(), false, new PlayerSettings());
+                    plugin.getDatabaseManager().getDriver().createVanishPlayer(vanishPlayer);
+                }
+                plugin.getMessagingService().postMessage(new LoadMessage(player.getUniqueId(), null));
+            });
+        } else {
+            plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+                plugin.getMessagingService().postMessage(new VanishMessage(player.getUniqueId(), false, true));
+                plugin.getDatabaseManager().getDriver().deleteVanishPlayer(player.getUniqueId());
+            });
         }
     }
 

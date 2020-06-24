@@ -20,6 +20,7 @@ package com.azortis.protocolvanish.bukkit.settings;
 
 import com.azortis.azortislib.utils.FileUtils;
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
+import com.azortis.protocolvanish.common.settings.ServerId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -29,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.UUID;
 
 @SuppressWarnings("all")
 public class SettingsManager {
@@ -36,10 +38,13 @@ public class SettingsManager {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private Settings settings;
-    private File settingsFile;
+    private final File settingsFile;
 
     private Messages messages;
-    private File messagesFile;
+    private final File messagesFile;
+
+    private ServerId serverId;
+    private final File serverIdFile;
 
     public SettingsManager(ProtocolVanish plugin){
         if(!plugin.getDataFolder().exists())plugin.getDataFolder().mkdir();
@@ -47,10 +52,21 @@ public class SettingsManager {
         if(!settingsFile.exists()) FileUtils.copy(plugin.getResource("settings.json"), settingsFile);
         messagesFile = new File(plugin.getDataFolder(), "messages.json");
         if(!messagesFile.exists()) FileUtils.copy(plugin.getResource("messages.json"), messagesFile);
+        serverIdFile = new File(plugin.getDataFolder(), "serverId.json");
+        if(!serverIdFile.exists()) FileUtils.copy(plugin.getResource("serverId.json"), serverIdFile);
         try{
             settings = gson.fromJson(new FileReader(settingsFile), Settings.class);
             messages = gson.fromJson(new FileReader(messagesFile), Messages.class);
+            serverId = gson.fromJson(new FileReader(serverIdFile), ServerId.class);
+            if(serverId.getId() == null){
+                serverId.setId(UUID.randomUUID().toString());
+                final String json = gson.toJson(serverId);
+                serverIdFile.delete();
+                Files.write(serverIdFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            }
         }catch (FileNotFoundException ex){
+            ex.printStackTrace();
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         if(!plugin.getPluginVersion().getSettingsFileVersion().equals(settings.getFileVersion())){
@@ -111,6 +127,10 @@ public class SettingsManager {
         }catch (FileNotFoundException ex){
             ex.printStackTrace();
         }
+    }
+
+    public ServerId getServerId() {
+        return serverId;
     }
 
 }

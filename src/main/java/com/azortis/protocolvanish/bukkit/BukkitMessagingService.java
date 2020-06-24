@@ -20,6 +20,7 @@ package com.azortis.protocolvanish.bukkit;
 
 import com.azortis.protocolvanish.common.messaging.MessagingService;
 import com.azortis.protocolvanish.common.messaging.MessagingSettings;
+import com.azortis.protocolvanish.common.messaging.message.BootMessage;
 import com.azortis.protocolvanish.common.messaging.message.Message;
 import com.azortis.protocolvanish.common.messaging.provider.MessagingProvider;
 import com.azortis.protocolvanish.common.messaging.provider.SQLMessagingProvider;
@@ -49,11 +50,13 @@ public class BukkitMessagingService implements MessagingService {
         }else{
             plugin.getLogger().severe("Invalid messaging service!");
         }
+        postMessage(new BootMessage(plugin.getSettingsManager().getServerId().getId()));
     }
 
     @Override
     public synchronized void consumeMessage(String message) {
         String command = message.split(" ")[0];
+        if(command.equals("boot"))return;
         UUID playerUUID = UUID.fromString(message.split(" ")[1]);
         switch (command){
             case "setvanished":
@@ -64,15 +67,19 @@ public class BukkitMessagingService implements MessagingService {
                     if(fromBungee){
                         deniedUUIDs.add(playerUUID);
                         Bukkit.getScheduler().runTaskLater(plugin, ()-> deniedUUIDs.remove(playerUUID), 300L);
+
                     }
                 }else{
                     plugin.getVisibilityManager().getVanishedPlayers().add(playerUUID);
                 }
             case "load":
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
-                   plugin.loadVanishPlayer(playerUUID);
-                   Bukkit.getScheduler().runTask(plugin, ()-> setLoaded(playerUUID, true));
-                });
+                String receiver = message.split(" ")[2];
+                if(receiver.equals("all") || receiver.equals(plugin.getSettingsManager().getServerId().toString())) {
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                        plugin.loadVanishPlayer(playerUUID);
+                        Bukkit.getScheduler().runTask(plugin, () -> setLoaded(playerUUID, true));
+                    });
+                }
             case "unload":
                 plugin.unloadVanishPlayer(playerUUID);
                 setLoaded(playerUUID, false);
@@ -82,7 +89,7 @@ public class BukkitMessagingService implements MessagingService {
     }
 
     @Override
-    public void postMessage(Message message) {
+    public synchronized void postMessage(Message message) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> provider.postMessage(message));
     }
 

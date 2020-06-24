@@ -20,6 +20,7 @@ package com.azortis.protocolvanish.bungee.settings;
 
 import com.azortis.azortislib.utils.FileUtils;
 import com.azortis.protocolvanish.bungee.ProtocolVanishProxy;
+import com.azortis.protocolvanish.common.settings.ServerId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -29,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.UUID;
 
 @SuppressWarnings("all")
 public class SettingsManager {
@@ -38,13 +40,27 @@ public class SettingsManager {
     private ProxySettings proxySettings;
     private final File proxySettingsFile;
 
+    private ServerId serverId;
+    private final File serverIdFile;
+
     public SettingsManager(ProtocolVanishProxy plugin){
         if(!plugin.getDataFolder().exists())plugin.getDataFolder().mkdir();
         proxySettingsFile = new File(plugin.getDataFolder(), "proxySettings.json");
         if(!proxySettingsFile.exists()) FileUtils.copy(plugin.getResourceAsStream("proxySettings.json"), proxySettingsFile);
+        serverIdFile = new File(plugin.getDataFolder(), "serverId.json");
+        if(!serverIdFile.exists()) FileUtils.copy(plugin.getResourceAsStream("serverId.json"), serverIdFile);
         try {
             proxySettings = gson.fromJson(new FileReader(proxySettingsFile), ProxySettings.class);
+            serverId = gson.fromJson(new FileReader(serverIdFile), ServerId.class);
+            if(serverId.getId() == null){
+                serverId.setId(UUID.randomUUID().toString());
+                final String json = gson.toJson(serverId);
+                serverIdFile.delete();
+                Files.write(serverIdFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            }
         }catch (FileNotFoundException ex){
+            ex.printStackTrace();
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         if(!plugin.getPluginVersion().getProxySettingsFileVersion().equals(proxySettings.getFileVersion())){
@@ -76,6 +92,10 @@ public class SettingsManager {
         }catch (FileNotFoundException ex){
             ex.printStackTrace();
         }
+    }
+
+    public ServerId getServerId() {
+        return serverId;
     }
 
 }

@@ -18,25 +18,15 @@
 
 package com.azortis.protocolvanish.common.messaging.message;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.UUID;
 
-/**
- * Should only be sent from BungeeCord.
- */
-public class LoadMessage implements Message{
+public class BootMessage implements Message{
 
     private final UUID id = UUID.randomUUID();
-    private String message = "load %playerUUID% %receiverUUID%";
+    private String message = "boot %serverUUID%";
 
-    public LoadMessage(UUID playerUUID, @Nullable UUID receiverUUID){
-        message = message.replaceAll("%playerUUID%", playerUUID.toString());
-        if(receiverUUID != null){
-            message = message.replaceAll("%receiverUUID%", receiverUUID.toString());
-        }else {
-            message = message.replaceAll("%receiverUUID%", "all");
-        }
+    public BootMessage(UUID serverId){
+        message = message.replaceAll("%serverUUID%", serverId.toString());
     }
 
     @Override

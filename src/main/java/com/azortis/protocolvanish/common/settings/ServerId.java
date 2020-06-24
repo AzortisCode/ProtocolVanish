@@ -16,36 +16,21 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.messaging.message;
+package com.azortis.protocolvanish.common.settings;
 
-import org.jetbrains.annotations.Nullable;
-
+import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * Should only be sent from BungeeCord.
- */
-public class LoadMessage implements Message{
+public class ServerId implements Serializable {
 
-    private final UUID id = UUID.randomUUID();
-    private String message = "load %playerUUID% %receiverUUID%";
+    private String id;
 
-    public LoadMessage(UUID playerUUID, @Nullable UUID receiverUUID){
-        message = message.replaceAll("%playerUUID%", playerUUID.toString());
-        if(receiverUUID != null){
-            message = message.replaceAll("%receiverUUID%", receiverUUID.toString());
-        }else {
-            message = message.replaceAll("%receiverUUID%", "all");
-        }
-    }
-
-    @Override
     public UUID getId() {
-        return id;
+        if(id.equals(""))return null;
+        return UUID.fromString(id);
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -42,6 +42,7 @@ public final class ProtocolVanishProxy extends Plugin {
     private PermissionManager permissionManager;
 
     private final transient Collection<UUID> vanishedPlayers = new ArrayList<>();
+    private final transient Collection<UUID> loadedPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -89,10 +90,6 @@ public final class ProtocolVanishProxy extends Plugin {
         return databaseManager;
     }
 
-    public Collection<UUID> getVanishedPlayers(){
-        return vanishedPlayers;
-    }
-
     public BungeeMessagingService getMessagingService() {
         return messagingService;
     }
@@ -100,4 +97,13 @@ public final class ProtocolVanishProxy extends Plugin {
     public PermissionManager getPermissionManager() {
         return permissionManager;
     }
+
+    public Collection<UUID> getVanishedPlayers(){
+        return vanishedPlayers;
+    }
+
+    public Collection<UUID> getLoadedPlayers() {
+        return loadedPlayers;
+    }
+
 }

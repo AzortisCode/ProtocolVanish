@@ -20,6 +20,7 @@ package com.azortis.protocolvanish.bungee;
 
 import com.azortis.protocolvanish.common.messaging.MessagingService;
 import com.azortis.protocolvanish.common.messaging.MessagingSettings;
+import com.azortis.protocolvanish.common.messaging.message.LoadMessage;
 import com.azortis.protocolvanish.common.messaging.message.Message;
 import com.azortis.protocolvanish.common.messaging.message.UnloadMessage;
 import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
@@ -81,11 +82,16 @@ public class BungeeMessagingService implements MessagingService {
             }else{
                 plugin.getVanishedPlayers().remove(playerUUID);
             }
+        } else if(message.startsWith("boot")){
+            UUID serverId = UUID.fromString(message.split(" ")[1]);
+            for (UUID playerUUID : plugin.getLoadedPlayers()){
+                plugin.getProxy().getScheduler().runAsync(plugin, ()-> postMessage(new LoadMessage(playerUUID, serverId)));
+            }
         }
     }
 
     @Override
-    public void postMessage(Message message) {
+    public synchronized void postMessage(Message message) {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> provider.postMessage(message));
     }
 
