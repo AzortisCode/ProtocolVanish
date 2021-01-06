@@ -23,7 +23,7 @@ import com.azortis.azortislib.command.CommandInjector;
 import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.player.VanishPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;

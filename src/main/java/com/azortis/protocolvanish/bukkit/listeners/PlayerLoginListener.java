@@ -19,7 +19,6 @@
 package com.azortis.protocolvanish.bukkit.listeners;
 
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
-import com.azortis.protocolvanish.common.VanishPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

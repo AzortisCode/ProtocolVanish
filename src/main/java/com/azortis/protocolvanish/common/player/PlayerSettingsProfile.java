@@ -16,35 +16,17 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common;
+package com.azortis.protocolvanish.common.player;
 
 import java.util.UUID;
 
-public class VanishPlayer {
+public class PlayerSettingsProfile {
 
-    private final UUID uuid;
-    private boolean vanished;
-    private final PlayerSettings playerSettings;
+    // Profile identifiers
+    private UUID profileId;
+    private String profileName;
 
-    public VanishPlayer(UUID uuid, boolean vanished, PlayerSettings playerSettings){
-        this.uuid = uuid;
-        this.vanished = vanished;
-        this.playerSettings = playerSettings;
-    }
+    // Profile settings
 
-    public UUID getUUID() {
-        return uuid;
-    }
 
-    public boolean isVanished() {
-        return vanished;
-    }
-
-    public void setVanished(boolean vanished) {
-        this.vanished = vanished;
-    }
-
-    public PlayerSettings getPlayerSettings() {
-        return playerSettings;
-    }
 }

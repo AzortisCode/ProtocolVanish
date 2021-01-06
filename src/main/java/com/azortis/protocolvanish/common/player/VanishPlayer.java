@@ -16,19 +16,35 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common;
+package com.azortis.protocolvanish.common.player;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.UUID;
 
-import java.io.Serializable;
+public class VanishPlayer {
 
-public class PlayerSettings implements Serializable {
+    private final UUID uuid;
+    private boolean vanished;
+    private final PlayerSettings playerSettings;
 
-    private final transient Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    public VanishPlayer(UUID uuid, boolean vanished, PlayerSettings playerSettings){
+        this.uuid = uuid;
+        this.vanished = vanished;
+        this.playerSettings = playerSettings;
+    }
 
-    @Override
-    public String toString() {
-        return gson.toJson(this);
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    public boolean isVanished() {
+        return vanished;
+    }
+
+    public void setVanished(boolean vanished) {
+        this.vanished = vanished;
+    }
+
+    public PlayerSettings getPlayerSettings() {
+        return playerSettings;
     }
 }

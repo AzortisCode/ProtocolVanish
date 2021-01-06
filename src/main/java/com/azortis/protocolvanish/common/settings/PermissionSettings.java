@@ -24,7 +24,8 @@ public class PermissionSettings {
     private boolean useLayeredPermissions;
     private int maxLevel;
 
-    public boolean getUseSeePermission() {
+
+    public boolean useSeePermission() {
         return useSeePermission;
     }
 

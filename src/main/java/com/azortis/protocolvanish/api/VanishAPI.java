@@ -16,29 +16,23 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.api;
 
-import com.azortis.protocolvanish.common.player.VanishPlayer;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.UUID;
 
-public interface Driver {
+public interface VanishAPI {
 
-    VanishPlayer getVanishPlayer(UUID uuid);
+    Collection<UUID> getVanishedPlayers();
 
-    void saveVanishPlayer(VanishPlayer vanishPlayer);
+    Collection<UUID> getOnlineVanishedPlayers();
 
-    void deleteVanishPlayer(UUID uuid);
+    boolean isVanished(UUID playerUUID);
 
-    void createVanishPlayer(VanishPlayer vanishPlayer);
+    void setVanished(UUID playerUUID, boolean vanished);
 
-    Collection<UUID> getVanishedUUIDs();
+    boolean canVanish(UUID playerUUID);
 
-    Connection getConnection() throws SQLException;
-
-    String getTablePrefix();
+    boolean canSee(UUID viewerUUID, UUID hiderUUID);
 
 }

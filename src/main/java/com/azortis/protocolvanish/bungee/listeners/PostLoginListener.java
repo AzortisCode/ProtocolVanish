@@ -19,10 +19,9 @@
 package com.azortis.protocolvanish.bungee.listeners;
 
 import com.azortis.protocolvanish.bungee.ProtocolVanishProxy;
-import com.azortis.protocolvanish.common.PlayerSettings;
-import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.player.PlayerSettings;
+import com.azortis.protocolvanish.common.player.VanishPlayer;
 import com.azortis.protocolvanish.common.messaging.message.LoadMessage;
-import com.azortis.protocolvanish.common.messaging.message.UnloadMessage;
 import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;

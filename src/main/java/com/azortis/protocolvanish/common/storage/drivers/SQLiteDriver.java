@@ -18,8 +18,8 @@
 
 package com.azortis.protocolvanish.common.storage.drivers;
 
-import com.azortis.protocolvanish.common.PlayerSettings;
-import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.player.PlayerSettings;
+import com.azortis.protocolvanish.common.player.VanishPlayer;
 import com.azortis.protocolvanish.common.storage.Driver;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -142,7 +142,7 @@ public class SQLiteDriver implements Driver {
     private void createTable(){
         try(Connection connection = getConnection()){
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS vanishPlayers(uuid varchar(36), vanished boolean, playerSettings TEXT);");
+            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS vanishPlayers(uuid varchar(36), vanished boolean);");
             vanishPlayerStatement.close();
         }catch (SQLException ex){
             ex.printStackTrace();

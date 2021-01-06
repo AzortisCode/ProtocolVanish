@@ -16,29 +16,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.protocolvanish.common.storage;
+package com.azortis.protocolvanish.common.player;
 
-import com.azortis.protocolvanish.common.player.VanishPlayer;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Collection;
 import java.util.UUID;
 
-public interface Driver {
+public class PlayerSettings {
 
-    VanishPlayer getVanishPlayer(UUID uuid);
+    private UUID selectedProfile;
 
-    void saveVanishPlayer(VanishPlayer vanishPlayer);
-
-    void deleteVanishPlayer(UUID uuid);
-
-    void createVanishPlayer(VanishPlayer vanishPlayer);
-
-    Collection<UUID> getVanishedUUIDs();
-
-    Connection getConnection() throws SQLException;
-
-    String getTablePrefix();
+    private transient PlayerSettingsProfile currentProfile;
 
 }

@@ -20,7 +20,7 @@ package com.azortis.protocolvanish.bukkit.visibility;
 
 import com.azortis.protocolvanish.bukkit.ProtocolVanish;
 import com.azortis.protocolvanish.bukkit.visibility.packetlisteners.*;
-import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.player.VanishPlayer;
 import com.azortis.protocolvanish.common.messaging.message.VanishMessage;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;

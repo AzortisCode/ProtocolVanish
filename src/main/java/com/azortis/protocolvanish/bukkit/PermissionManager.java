@@ -39,7 +39,7 @@ public class PermissionManager {
     }
 
     public boolean hasPermissionToSee(Player hider, Player viewer) {
-        if (!plugin.getSettingsManager().getSettings().getPermissionSettings().getUseSeePermission()) return false;
+        if (!plugin.getSettingsManager().getSettings().getPermissionSettings().useSeePermission()) return false;
         int hiderLevel = Permission.USE.getPermissionLevel(plugin, hider);
         int viewerLevel = Permission.SEE.getPermissionLevel(plugin, viewer);
         return viewerLevel >= hiderLevel;

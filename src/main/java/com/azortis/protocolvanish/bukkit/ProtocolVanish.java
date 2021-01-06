@@ -18,14 +18,16 @@
 
 package com.azortis.protocolvanish.bukkit;
 
+import com.azortis.protocolvanish.api.VanishAPI;
+import com.azortis.protocolvanish.bukkit.api.BukkitVanishAPI;
 import com.azortis.protocolvanish.bukkit.command.VanishCommand;
 import com.azortis.protocolvanish.bukkit.listeners.*;
 import com.azortis.protocolvanish.bukkit.settings.SettingsManager;
 import com.azortis.protocolvanish.bukkit.visibility.VisibilityManager;
-import com.azortis.protocolvanish.common.PlayerSettings;
+import com.azortis.protocolvanish.common.player.PlayerSettings;
 import com.azortis.protocolvanish.common.PluginVersion;
 import com.azortis.protocolvanish.common.UpdateChecker;
-import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.player.VanishPlayer;
 import com.azortis.protocolvanish.common.storage.DatabaseManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -39,6 +41,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public final class ProtocolVanish extends JavaPlugin {
+
+    private static VanishAPI vanishAPI;
 
     private Metrics metrics;
     private PluginVersion pluginVersion;
@@ -92,6 +96,8 @@ public final class ProtocolVanish extends JavaPlugin {
         new PlayerQuitListener(this);
 
         this.vanishCommand = new VanishCommand(this);
+
+        vanishAPI = new BukkitVanishAPI(this);
     }
 
     @Override
@@ -209,6 +215,10 @@ public final class ProtocolVanish extends JavaPlugin {
             receiver.spigot().sendMessage(baseComponents);
         }
         receiver.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public static VanishAPI getAPI(){
+        return vanishAPI;
     }
 
 }

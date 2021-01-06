@@ -39,7 +39,7 @@ public class PermissionManager {
     }
 
     public boolean hasPermissionToSee(ProxiedPlayer hider, ProxiedPlayer viewer) {
-        if (!plugin.getSettingsManager().getProxySettings().getPermissionSettings().getUseSeePermission()) return false;
+        if (!plugin.getSettingsManager().getProxySettings().getPermissionSettings().useSeePermission()) return false;
         int hiderLevel = Permission.USE.getPermissionLevel(plugin, hider);
         int viewerLevel = Permission.SEE.getPermissionLevel(plugin, viewer);
         return viewerLevel >= hiderLevel;

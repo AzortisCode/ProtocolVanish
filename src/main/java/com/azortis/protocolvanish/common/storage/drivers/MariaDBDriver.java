@@ -18,8 +18,8 @@
 
 package com.azortis.protocolvanish.common.storage.drivers;
 
-import com.azortis.protocolvanish.common.PlayerSettings;
-import com.azortis.protocolvanish.common.VanishPlayer;
+import com.azortis.protocolvanish.common.player.PlayerSettings;
+import com.azortis.protocolvanish.common.player.VanishPlayer;
 import com.azortis.protocolvanish.common.storage.Driver;
 import com.azortis.protocolvanish.common.storage.StorageSettings;
 import com.google.gson.Gson;
@@ -133,8 +133,11 @@ public class MariaDBDriver implements Driver{
     private void createTable(){
         try(Connection connection = hikari.getConnection()){
             Statement vanishPlayerStatement = connection.createStatement();
-            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished boolean, playerSettings TEXT);");
+            Statement playerSettingsStatement = connection.createStatement();
+            vanishPlayerStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "vanishPlayers(uuid varchar(36), vanished boolean);");
+            playerSettingsStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePrefix + "playerSettings(uuid varchar(36), serverId varchar(36), isGlobal boolean, settings TEXT)");
             vanishPlayerStatement.close();
+            playerSettingsStatement.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }

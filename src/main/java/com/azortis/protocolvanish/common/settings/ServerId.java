@@ -18,10 +18,9 @@
 
 package com.azortis.protocolvanish.common.settings;
 
-import java.io.Serializable;
 import java.util.UUID;
 
-public class ServerId implements Serializable {
+public class ServerId {
 
     private String id;
 
